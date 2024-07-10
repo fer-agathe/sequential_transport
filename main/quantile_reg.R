@@ -69,6 +69,66 @@ train_indices <- sample(seq_len(n), size = n_train, replace = FALSE)
 train_law <- law_data[train_indices, ]
 test_law <- law_data[-train_indices, ]
 
+#train_data <- train_law
+#S_ref <- "female"
+#top_order <- c("lsat","ugpa","Y")
+
+quant_reg <- function(
+    train_data,
+    test_data,
+    S_ref,
+    top_order, # topological order
+    reg_method = NULL,
+    tau = c(0.001, seq(0.005, 0.995, by = 0.01), 0.999) # quantile levels
+) {
+  
+  ind_non_ref <- which(train_data$S != S_ref)
+  train_non_ref <- train_data[ind_non_ref, ]
+  train_ref <- train_data[-ind_non_ref, ]
+  
+  # Transform train
+  new_train <- train_data
+  new_train_non_ref <- train_non_ref
+  
+  # S = ref
+  new_train_non_ref$S <- as.factor(S_ref)
+  
+  for (i_var in 1:length(top_order)) {
+    var = top_order[i_var]
+    if (i_var == 1) {
+      reg_vars <- 1
+    } else {
+      reg_vars <- top_order[1:(i_var-1)]
+    }
+    formula <- paste(var, "~", paste(reg_vars, collapse = " + "))
+    # Convert the string to a formula object
+    formula <- as.formula(formula)
+    reg_ref <- rq(formula, data = train_ref, tau = tau)
+    reg_non_ref <- rq(formula, data = train_non_ref, tau = tau)
+    
+    # Transform variable
+    quant_non_ref <- predict(reg_non_ref, newdata = train_non_ref)
+    quant_ref <- predict(reg_ref, newdata = new_train_non_ref)
+    eval_non_ref <- train_non_ref[[var]]
+    tau_non_ref <- vapply(
+      seq_len(nrow(train_non_ref)),
+      function(x) ecdf(quant_non_ref[x,]) (eval_non_ref[x]),
+      numeric(1))
+    infer_quant <- vapply(
+      seq_len(nrow(quant_ref)),
+      function(x) quantile(quant_ref[x,], tau_non_ref[x]),
+      numeric(1))
+    
+    # Transform variable in a new dataset
+    new_train_non_ref[[var]] <- infer_quant
+    new_train[ind_non_ref, ] <- new_train_non_ref
+  }
+  tibble(
+    new_train_data = new_train,
+    new_test_data = NULL
+  )
+}
+
 # Linear quantile regression: transform "male" to "female"
 ind_male <- which(train_law$S == "male")
 train_law_male <- train_law[ind_male, ]
@@ -139,4 +199,10 @@ new_train_law_male$Y <- infer_quant_Y
 
 new_train_law[ind_male, ] <- new_train_law_male
 
-# Apply it on test set
+# With the function
+tibble_train <- quant_reg(
+  train_law,
+  test_law,
+  "female",
+  c("lsat","ugpa","Y")
+)
