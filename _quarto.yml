@@ -1,0 +1,36 @@
+project:
+  type: book
+
+book:
+  title: "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness"
+  author:
+  - name: Arthur Charpentier
+    orcid: 0000-0003-3654-6286
+    affiliations:
+      - name: Université du Québec à Montréal
+  - name: Agathe Fernandes Machado
+    orcid: 0009-0002-9743-9708
+    affiliations:
+      - name: Université du Québec à Montréal
+  - name: Ewen Gallic
+    orcid: 0000-0003-3740-2620
+    affiliations:
+      - name: Aix-Marseille School of Economics, Aix-Marseille Univ.
+  date: "7/26/2024"
+  chapters:
+    - index.qmd
+    - law_dataset.qmd
+    - references.qmd
+
+bibliography: ./biblio.bib
+
+fig-cap-location: top
+
+format:
+  html:
+    theme: litera
+    html-math-method: mathjax
+    include-in-header:
+    - file: mathjax-color.html
+
+editor: source

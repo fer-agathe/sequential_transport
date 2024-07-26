@@ -1,109 +1,52 @@
 # Import packages
 library(dplyr)
-library(ggplot2)
-library(fairadapt)
 library(quantreg)
-set.seed(2024)
-#library(CASdatasets)
 
-# Import data
-law_data <- read.csv("data/bar_pass_prediction.csv")
-
-# Select variables
-law_data <- law_data %>% 
-  select(
-    #pass_bar,
-    zfygpa, # normalized gpa first year
-    lsat,
-    ugpa,
-    gender
-  )
-str(law_data)
-law_data <- na.omit(law_data)
-# Missing values
-which(is.na(law_data), arr.ind=TRUE) # no NA
-ind_delete <- which(law_data$gender=="")
-law_data <- law_data[-ind_delete,]
-
-# Target variable
-#law_data$pass_bar <- as.factor(law_data$pass_bar)
-# Sensitive attribute
-law_data$gender <- as.factor(law_data$gender)
-
-# Rename variables
-law_data <- law_data %>% 
-  rename(
-    Y = zfygpa,
-    S = gender
-  )
-
-# Specify the causal graph
-law_data <- law_data %>% 
-  select(
-    S,
-    lsat,
-    ugpa,
-    Y
-  )
-variables <- colnames(law_data)
-# Adjacency matrix: upper triangular
-adj <- matrix(
-  c(0, 1, 1, 1,
-    0, 0, 1, 1,
-    0, 0, 0, 1,
-    0, 0, 0, 0),
-  ncol = length(variables), 
-  dimnames = rep(list(variables), 2),
-  byrow = TRUE)
-# See the graph
-causal_graph <- graphModel(adj)
-plot(causal_graph)
-
-# Linear quantile regression
-# Split train/test set
-n <- nrow(law_data)
-n_train <- round(0.8*n)
-train_indices <- sample(seq_len(n), size = n_train, replace = FALSE)
-
-# Split the data into training and testing sets
-train_law <- law_data[train_indices, ]
-test_law <- law_data[-train_indices, ]
-
-#train_data <- train_law
-#S_ref <- "female"
-#top_order <- c("lsat","ugpa","Y")
-
+#' Computes the counterfactuals given an input value of the sensitive attribute S.
+#'
+#' This function computes the mean of the given numeric vector,
+#' ignoring any NA values present in the vector.
+#'
+#' @param train_data A dataset to learn the quantile and cumulative distribution functions.
+#' @param test_data A dataset to test the results of quantile regression.
+#' @param S_input The input value for S. Observations with a sensitive attribute different
+#' from `S_input` will be transported. Otherwise, no changes.
+#' @param top_order Topological order to perform quantile regression.
+#' @param reg_method Regression method to use, either "linear" or with "splines".
+#' The default is "linear".
+#' @param tau Quantile levels to perform quantile regression.
+#' #' The default is TRUE.
+#' @return A tibble with `S_input`, transported `train_data` and `test_data`.
 quant_reg <- function(
     train_data,
     test_data,
-    S_ref,
-    top_order, # topological order
-    reg_method = NULL,
+    S_input,
+    top_order,
+    reg_method = "linear",
     tau = c(0.001, seq(0.005, 0.995, by = 0.01), 0.999) # quantile levels
 ) {
   
-  ind_non_ref <- which(train_data$S != S_ref)
-  train_non_ref <- train_data[ind_non_ref, ]
-  train_ref <- train_data[-ind_non_ref, ]
+  # Data rows with S equal to S_input: to be transported
+  ind_t <- which(train_data$S == S_input)
+  train_t <- train_data[ind_t, ]
+  # Data rows with S different from S_input: no changes
+  train_input <- train_data[-ind_t, ]
   
   # Transform train
   new_train <- train_data
-  new_train_non_ref <- train_non_ref
+  new_train_t <- train_t
   
-  # S = ref
-  new_train_non_ref$S <- as.factor(S_ref)
+  # Put S value to its intervention
+  new_train_t$S <- as.factor(S_input)
   
-  for (i_var in 1:length(top_order)) {
-    var = top_order[i_var]
-    if (i_var == 1) {
-      reg_vars <- 1
-    } else {
-      reg_vars <- top_order[1:(i_var-1)]
-    }
+  for (i_var in 2:length(top_order)) {
+    var <- top_order[i_var]
+    # S is considered as root node
+    reg_vars <- top_order
     formula <- paste(var, "~", paste(reg_vars, collapse = " + "))
     # Convert the string to a formula object
     formula <- as.formula(formula)
-    reg_ref <- rq(formula, data = train_ref, tau = tau)
+    reg_input <- rq(formula, data = train_input, tau = tau)
     reg_non_ref <- rq(formula, data = train_non_ref, tau = tau)
     
     # Transform variable
@@ -124,6 +67,7 @@ quant_reg <- function(
     new_train[ind_non_ref, ] <- new_train_non_ref
   }
   tibble(
+    S_input = S_input,
     new_train_data = new_train,
     new_test_data = NULL
   )

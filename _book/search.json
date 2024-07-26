@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness",
+    "section": "",
+    "text": "Introduction\nThis ebook provides the replication codes to the project titled ‘Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.’\nxxx\n\n\n\n\n\n\nNote\n\n\n\nAll the codes are written in R. The codes were adapted from Plečko, Bennett, and Meinshausen (2021).\n\n\n\n\nAbstract\nxxx\nKeywords: xxx\n\n\n\n\nPlečko, Drago, Nicolas Bennett, and Nicolai Meinshausen. 2021. “Fairadapt: Causal Reasoning for Fair Data Pre-Processing.” arXiv Preprint arXiv:2110.10200."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Plečko, Drago, Nicolas Bennett, and Nicolai Meinshausen. 2021.\n“Fairadapt: Causal Reasoning for Fair Data Pre-Processing.”\narXiv Preprint arXiv:2110.10200."
+  },
+  {
+    "objectID": "law_dataset.html",
+    "href": "law_dataset.html",
+    "title": "1  Law Dataset",
+    "section": "",
+    "text": "Display the setting codes\n# Required packages----\nlibrary(wesanderson)\n\n# Graphs----\nfont_main = font_title = 'Times New Roman'\nextrafont::loadfonts(quiet = T)\nface_text='plain'\nface_title='plain'\nsize_title = 14\nsize_text = 11\nlegend_size = 11\n\nglobal_theme &lt;- function() {\n  theme_minimal() %+replace%\n    theme(\n      text = element_text(family = font_main, size = size_text, face = face_text),\n      legend.text = element_text(family = font_main, size = legend_size),\n      axis.text = element_text(size = size_text, face = face_text), \n      plot.title = element_text(\n        family = font_title, \n        size = size_title, \n        hjust = 0.5\n      ),\n      plot.subtitle = element_text(hjust = 0.5)\n    )\n}\n\n# Colours\ncolors_ &lt;- wes_palette('Rushmore1')"
+  }
+]

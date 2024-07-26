@@ -1,0 +1,133 @@
+# Law Dataset
+
+The dataset was downloaded from the github repository (@de2024transport): <https://github.com/lucasdelara/PI-Fair.git>.
+
+```{r setup, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the setting codes
+
+# Required packages----
+library(wesanderson)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(fairadapt)
+library(quantreg)
+
+# Graphs----
+font_main = font_title = 'Times New Roman'
+extrafont::loadfonts(quiet = T)
+face_text='plain'
+face_title='plain'
+size_title = 14
+size_text = 11
+legend_size = 11
+
+global_theme <- function() {
+  theme_minimal() %+replace%
+    theme(
+      text = element_text(family = font_main, size = size_text, face = face_text),
+      legend.text = element_text(family = font_main, size = legend_size),
+      axis.text = element_text(size = size_text, face = face_text), 
+      plot.title = element_text(
+        family = font_title, 
+        size = size_title, 
+        hjust = 0.5
+      ),
+      plot.subtitle = element_text(hjust = 0.5)
+    )
+}
+
+# Colours
+colors_ <- wes_palette('Rushmore1')
+
+# Seed
+set.seed(2025)
+```
+
+## Data Pre-Processing
+
+```{r load-data, message=FALSE, warning=FALSE}
+df <- read_csv('data/law_data.csv')
+df <- df %>%
+  select(
+    race,
+    sex, # we can take S = gender
+    LSAT, # or S = race (white/black)
+    UGPA,
+    ZFYA # Y
+  )
+
+# Table for S = race
+df_race <- df %>% 
+  select(
+    race,
+    LSAT,
+    UGPA,
+    ZFYA
+  ) %>%
+  filter(
+    race %in% c("White", "Black")
+  ) %>%
+  rename(
+    S = race,
+    X1 = LSAT,
+    X2 = UGPA,
+    Y = ZFYA
+  ) # no NA values
+df_race$S <- as.factor(df_race$S)
+
+# Table for S = gender
+df_gender <- df %>% 
+  select(
+    sex,
+    LSAT,
+    UGPA,
+    ZFYA
+  ) %>%
+  rename(
+    S = sex,
+    X1 = LSAT,
+    X2 = UGPA,
+    Y = ZFYA
+  ) # no NA values
+df_gender$S <- as.factor(df_gender$S)
+  
+```
+
+## Causal graph
+
+```{r causal-set-up, message=FALSE, warning=FALSE}
+variables <- colnames(df_race)
+# Adjacency matrix: upper triangular
+adj <- matrix(
+  c(0, 1, 1, 1,
+    0, 0, 1, 1,
+    0, 0, 0, 1,
+    0, 0, 0, 0),
+  ncol = length(variables), 
+  dimnames = rep(list(variables), 2),
+  byrow = TRUE)
+# See the graph
+causal_graph <- graphModel(adj)
+plot(causal_graph)
+
+# Topological order
+top_order <- variables
+
+```
+
+## Linear quantile regression
+
+```{r lin-quant-reg, message=FALSE, warning=FALSE}
+
+# Split train/test set
+n <- nrow(df_race)
+n_train <- round(0.7*n)
+train_indices <- sample(seq_len(n), size = n_train, replace = FALSE)
+
+# Split the data into training and testing sets
+train_df_race <- df_race[train_indices, ]
+test_df_race <- df_race[-train_indices, ]
+```
+

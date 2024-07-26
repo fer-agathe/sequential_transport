@@ -1,0 +1,15 @@
+# Introduction {.unnumbered}
+
+This ebook provides the replication codes to the project titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
+
+xxx
+
+::: callout-note
+All the codes are written in R. The codes were adapted from @plevcko2021fairadapt.
+:::
+
+# Abstract
+
+xxx
+
+**Keywords**: xxx

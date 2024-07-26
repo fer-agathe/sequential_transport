@@ -1,0 +1,14 @@
+{
+  "hash": "930774c668302827a461099057aa4027",
+  "result": {
+    "markdown": "# Law Dataset\n\n\n::: {.cell}\n\n```{.r .cell-code  code-fold=\"true\" code-summary=\"Display the setting codes\"}\n# Required packages----\nlibrary(wesanderson)\n\n# Graphs----\nfont_main = font_title = 'Times New Roman'\nextrafont::loadfonts(quiet = T)\nface_text='plain'\nface_title='plain'\nsize_title = 14\nsize_text = 11\nlegend_size = 11\n\nglobal_theme <- function() {\n  theme_minimal() %+replace%\n    theme(\n      text = element_text(family = font_main, size = size_text, face = face_text),\n      legend.text = element_text(family = font_main, size = legend_size),\n      axis.text = element_text(size = size_text, face = face_text), \n      plot.title = element_text(\n        family = font_title, \n        size = size_title, \n        hjust = 0.5\n      ),\n      plot.subtitle = element_text(hjust = 0.5)\n    )\n}\n\n# Colours\ncolors_ <- wes_palette('Rushmore1')\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
