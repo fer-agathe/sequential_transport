@@ -13,6 +13,8 @@ library(dplyr)
 library(ggplot2)
 library(fairadapt)
 library(quantreg)
+library(latex2exp)
+library(T4transport)
 
 # Graphs----
 font_main = font_title = 'Times New Roman'
@@ -43,6 +45,11 @@ colors_ <- wes_palette('Rushmore1')
 
 # Seed
 set.seed(2025)
+
+# Use defined functions
+source("functions/utils.R")
+#source("functions/quantile_reg.R")
+source("functions/graphs.R")
 ```
 
 ## Data Pre-Processing
@@ -95,7 +102,27 @@ df_gender$S <- as.factor(df_gender$S)
   
 ```
 
+```{r plot-data, message=FALSE, warning=FALSE}
+ggplot(df_race, aes(x = Y, fill = S)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.5) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Race",
+       x = "Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(df_gender, aes(x = Y, fill = S)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.5) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Gender",
+       x = "Y",
+       y = "Density") +
+  global_theme()
+```
+
 ## Causal graph
+
+The assumed causal graph is different from the different papers @de2024transport, @Kusner17, @black2020fliptest.
 
 ```{r causal-set-up, message=FALSE, warning=FALSE}
 variables <- colnames(df_race)
@@ -109,7 +136,7 @@ adj <- matrix(
   dimnames = rep(list(variables), 2),
   byrow = TRUE)
 # See the graph
-causal_graph <- graphModel(adj)
+causal_graph <- fairadapt::graphModel(adj)
 plot(causal_graph)
 
 # Topological order
@@ -117,7 +144,355 @@ top_order <- variables
 
 ```
 
-## Linear quantile regression
+## Classification
+
+Following @Kusner17, we will train logistic regression. To transform $Y$ into a categorical variable, as in @black2020fliptest, we will simply use the median as a threshold. We will use the race as sensitive attribute $S$ with two modalities: White and Black. The dataset will be splitted into train and test sets in order to first train classifier and calculate the different quantities useful for counterfactual inference (train set), and then, predict classifier and counterfactual quantities. The results of counterfactual will also be compared on train set because Optimal Transport in the multivariate case can't be computed for new samples, compared to the methodology fairadapt (@plevcko2021fairadapt), and the one that we developped in the paper.
+
+```{r train-classif, message=FALSE, warning=FALSE}
+# Transform Y into a binary variable
+med <- median(df_race$Y)
+df_race_c <- df_race %>%
+  mutate(
+    Y_c = ifelse(Y > med, 1, 0)
+  ) %>% select(S, X1, X2, Y_c) %>% rename(Y = Y_c)
+
+df_race_c$Y <- as.factor(df_race_c$Y)
+
+# Split dataset into train/test sets
+seed <- 2025
+sets <- split_dataset(df_race_c, seed)
+data_train <- sets$data_train
+data_test <- sets$data_test
+
+# Unaware logistic regression classifier (model without S)
+pred_unaware <- log_reg_train(data_train, data_test, type = "unaware")
+pred_unaware_train <- pred_unaware$pred_train
+pred_unaware_test <- pred_unaware$pred_test
+
+# Aware logistic regression classifier (model with S)
+pred_aware <- log_reg_train(data_train, data_test, type = "aware")
+pred_aware_train <- pred_aware$pred_train
+pred_aware_test <- pred_aware$pred_test
+
+```
+
+```{r plot-pred, message=FALSE, warning=FALSE}
+# Dataframes with test predictions
+df_test_unaware <- data.frame(
+  S = data_test$S, 
+  pred = pred_unaware_test
+  )
+
+df_test_aware <- data.frame(
+  S = data_test$S, 
+  pred = pred_aware_test
+  )
+
+# Plot density of predictions
+ggplot(df_test_unaware, aes(x = pred, fill = S)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model unaware: Race",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(df_test_aware, aes(x = pred, fill = S)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model aware: Race",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+```
+
+## Counterfactual inference
+
+### Fairadapt
+
+Adapted code from @plevcko2021fairadapt to deal with test set (we don't want to estimate cumulative distribution and quantile functions on test set, otherwise, it means that we need to recalculate quantile regression functions each time we have new samples).
+
+
+1) Without discerning train/test sets
+```{r fairadapt-application, message=FALSE, warning=FALSE}
+# We don't need to adapt Y here
+adj_wo_Y <- adj[-4,-4]
+df_race_fpt <- df_race_c %>% select(S, X1, X2)
+levels(df_race_fpt$S)
+
+# White (factuals) --> Black (counterfactuals)
+fpt_model_white <- fairadapt(X2 ~ ., 
+                             train.data = df_race_fpt,
+                             prot.attr = "S", adj.mat = adj_wo_Y,
+                             quant.method = linearQuants)
+adapt_df_white <- adaptedData(fpt_model_white)
+
+# Black (factuals) --> White (counterfactuals)
+df_race_fpt$S <- factor(df_race_fpt$S, levels = c("White", "Black"))
+fpt_model_black <- fairadapt(X2 ~ ., 
+                             train.data = df_race_fpt,
+                             prot.attr = "S", adj.mat = adj_wo_Y,
+                             quant.method = linearQuants)
+adapt_df_black <- adaptedData(fpt_model_black)
+```
+
+```{r fairadapt-plot-unaware, message=FALSE, warning=FALSE}
+model_unaware <- pred_unaware$model
+pred_unaware_all <- predict(model_unaware, newdata = df_race_fpt, type = "response")
+factuals_unaware <- data.frame(
+  S = df_race_fpt$S,
+  X1 = df_race_fpt$X1,
+  X2 = df_race_fpt$X2,
+  pred = pred_unaware_all
+)
+
+write.csv(factuals_unaware, file = "factuals_unaware.csv", row.names = FALSE)
+
+ind_white <- which(df_race_fpt$S == "White")
+ind_black <- which(df_race_fpt$S == "Black")
+df_counterfactuals <- factuals_unaware %>% select(-pred)
+df_counterfactuals[ind_white, ] <- adapt_df_white %>% select(S, X1, X2)
+df_counterfactuals[ind_black, ] <- adapt_df_black %>% select(S, X1, X2)
+pred <- predict(model_unaware, newdata = df_counterfactuals, type = "response")
+counterfactuals_unaware <- data.frame(
+  S = df_counterfactuals$S,
+  X1 = df_counterfactuals$X1,
+  X2 = df_counterfactuals$X2,
+  pred = pred
+)
+
+factuals_unaware <- factuals_unaware %>% mutate(type = "factual")
+counterfactuals_unaware <- counterfactuals_unaware %>% mutate(type = "counterfactual")
+unaware_fpt <- rbind(factuals_unaware, counterfactuals_unaware)
+
+unaware_fpt_white <- unaware_fpt %>% filter(S == "White") 
+unaware_fpt_black <- unaware_fpt %>% filter(S == "Black")
+
+ggplot(unaware_fpt_white, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model unaware: Race - White",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(unaware_fpt_black, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model unaware: Race - Black",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+```
+```{r fairadapt-plot-aware, message=FALSE, warning=FALSE}
+model_aware <- pred_aware$model
+pred_aware_all <- predict(model_aware, newdata = df_race_fpt, type = "response")
+factuals_aware <- data.frame(
+  S = df_race_fpt$S,
+  X1 = df_race_fpt$X1,
+  X2 = df_race_fpt$X2,
+  pred = pred_aware_all
+)
+
+write.csv(factuals_aware, file = "factuals_aware.csv", row.names = FALSE)
+
+ind_white <- which(df_race_fpt$S == "White")
+ind_black <- which(df_race_fpt$S == "Black")
+df_counterfactuals <- factuals_aware %>% select(-pred)
+df_counterfactuals[ind_white, ] <- adapt_df_white %>% select(S, X1, X2)
+df_counterfactuals[ind_black, ] <- adapt_df_black %>% select(S, X1, X2)
+pred <- predict(model_aware, newdata = df_counterfactuals, type = "response")
+counterfactuals_aware <- data.frame(
+  S = df_counterfactuals$S,
+  X1 = df_counterfactuals$X1,
+  X2 = df_counterfactuals$X2,
+  pred = pred
+)
+
+factuals_aware <- factuals_aware %>% mutate(type = "factual")
+counterfactuals_aware <- counterfactuals_aware %>% mutate(type = "counterfactual")
+aware_fpt <- rbind(factuals_aware, counterfactuals_aware)
+
+aware_fpt_white <- aware_fpt %>% filter(S == "White") 
+aware_fpt_black <- aware_fpt %>% filter(S == "Black")
+
+ggplot(aware_fpt_white, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model aware: Race - White",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(aware_fpt_black, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model aware: Race - Black",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+```
+
+```{r fairadapt-comparison-indiv, message=FALSE, warning=FALSE}
+
+# Unaware
+indiv_factuals <- factuals_unaware[24:25, ]
+indiv_counterfactuals <- counterfactuals_unaware[24:25, ]
+indiv <- rbind(indiv_factuals, indiv_counterfactuals)
+indiv$pred[1] - indiv$pred[3]
+indiv$pred[2] - indiv$pred[4]
+
+# Aware
+indiv_factuals <- factuals_aware[24:25, ]
+indiv_counterfactuals <- counterfactuals_aware[24:25, ]
+indiv <- rbind(indiv_factuals, indiv_counterfactuals)
+indiv$pred[1] - indiv$pred[3]
+indiv$pred[2] - indiv$pred[4]
+
+```
+
+```{r fairadapt-indicator-fairness, message=FALSE, warning=FALSE}
+
+# DP unaware
+mean(
+  factuals_unaware$pred[which(factuals_unaware$S=="White")] - 
+    factuals_unaware$pred[which(factuals_unaware$S=="Black")]
+  )
+
+# Counterfactual fairness unaware
+mean(factuals_unaware$pred-counterfactuals_unaware$pred)
+
+# DP aware
+mean(
+  factuals_aware$pred[which(factuals_aware$S=="White")] - 
+    factuals_aware$pred[which(factuals_aware$S=="Black")]
+  )
+
+# Counterfactual fairness aware
+mean(factuals_aware$pred-counterfactuals_aware$pred)
+```
+
+### Multivariate OT
+
+Code from the methodology developped in the paper @de2024transport. In this case, we can't deal with new samples because of the multivariate OT. Counterfactuals will only be calculated on train set. We use the library "T4transport".
+
+```{r multi-ot-application, message=FALSE, warning=FALSE}
+#dist_white <- df_race_fpt %>% filter(S == "White") %>% select(-S) # 18285 obs.
+#dist_black <- df_race_fpt %>% filter(S == "Black") %>% select(-S) # 1282 obs.
+
+#mat_white <- as.matrix(dist_white)
+#mat_black <- as.matrix(dist_black)
+
+#Wxy <- wasserstein(mat_white, mat_black) # Ca plante
+#Wxy$distance
+#round(Wxy$plan, 2)
+```
+
+We do the transportation with Python.
+
+```{r multi-ot-application-py, message=FALSE, warning=FALSE}
+counterfactuals_ot <- read_csv('data/counterfactuals_ot.csv')
+counterfactuals_ot <- counterfactuals_ot %>% mutate(S = counterfactuals_unaware$S)
+
+# Model aware
+pred <- predict(model_aware, newdata = counterfactuals_ot, type = "response")
+counterfactuals_ot_aware <- counterfactuals_ot %>% mutate(pred = pred,
+                                                          type = "counterfactual")
+aware_ot <- rbind(factuals_aware, counterfactuals_ot_aware)
+aware_ot_white <- aware_ot %>% filter(S == "White") 
+aware_ot_black <- aware_ot %>% filter(S == "Black")
+
+ggplot(aware_ot_white, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model aware: Race - White",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(aware_ot_black, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model aware: Race - Black",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+# Model unaware
+pred <- predict(model_unaware, newdata = counterfactuals_ot, type = "response")
+counterfactuals_ot_unaware <- counterfactuals_ot %>% mutate(pred = pred,
+                                                            type = "counterfactual")
+unaware_ot <- rbind(factuals_unaware, counterfactuals_ot_unaware)
+unaware_ot_white <- unaware_ot %>% filter(S == "White") 
+unaware_ot_black <- unaware_ot %>% filter(S == "Black")
+
+ggplot(unaware_ot_white, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model unaware: Race - White",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+
+ggplot(unaware_ot_black, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = ..density..), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Model unaware: Race - Black",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+```
+```{r multi-ot-comparison-indiv, message=FALSE, warning=FALSE}
+
+# Unaware
+indiv_factuals <- factuals_unaware[24:25, ]
+indiv_counterfactuals <- counterfactuals_ot_unaware[24:25, ]
+indiv <- rbind(indiv_factuals, indiv_counterfactuals)
+indiv$pred[1] - indiv$pred[3]
+indiv$pred[2] - indiv$pred[4]
+
+# Aware
+indiv_factuals <- factuals_aware[24:25, ]
+indiv_counterfactuals <- counterfactuals_ot_aware[24:25, ]
+indiv <- rbind(indiv_factuals, indiv_counterfactuals)
+indiv$pred[1] - indiv$pred[3]
+indiv$pred[2] - indiv$pred[4]
+
+```
+```{r multi-ot-indicator-fairness, message=FALSE, warning=FALSE}
+
+# DP unaware
+mean(
+  factuals_unaware$pred[which(factuals_unaware$S=="White")] - 
+    factuals_unaware$pred[which(factuals_unaware$S=="Black")]
+  )
+
+# Counterfactual fairness unaware
+mean(factuals_unaware$pred-counterfactuals_ot_unaware$pred)
+
+# DP aware
+mean(
+  factuals_aware$pred[which(factuals_aware$S=="White")] - 
+    factuals_aware$pred[which(factuals_aware$S=="Black")]
+  )
+
+# Counterfactual fairness aware
+mean(factuals_aware$pred-counterfactuals_ot_aware$pred)
+```
+
+### Sequential transport
+
+
+
+## Linear quantile regression: fairadapt
 
 ```{r lin-quant-reg, message=FALSE, warning=FALSE}
 
