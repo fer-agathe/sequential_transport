@@ -16,10 +16,19 @@ book:
     orcid: 0000-0003-3740-2620
     affiliations:
       - name: Aix-Marseille School of Economics, Aix-Marseille Univ.
-  date: "7/26/2024"
+  date: "8/1/2024"
   chapters:
     - index.qmd
-    - law_dataset.qmd
+    # - part: Simulated Data
+    #   chapters:
+    - part: Counterfactuals with Law Dataset
+      chapters:
+      - data.qmd
+      - classifier.qmd
+      - cf-fairadapt.qmd
+      - cf-ot.qmd
+      - cf-seq-transport.qmd
+      - cf-comparison.qmd
     - references.qmd
 
 bibliography: ./biblio.bib

@@ -5,11 +5,20 @@ This ebook provides the replication codes to the project titled *'Sequential Con
 xxx
 
 ::: callout-note
-All the codes are written in R. The codes were adapted from @plevcko2021fairadapt.
+All the codes are written in R, except for multivariate transport where we switch to python.
 :::
 
-# Abstract
+## Abstract
 
 xxx
 
 **Keywords**: xxx
+
+## Outline
+
+@sec-data
+@sec-classifier
+@sec-cf-fairadapt
+@sec-cf-ot
+@sec-cf-seq-t
+@sec-cf-comparison

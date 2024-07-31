@@ -1,0 +1,249 @@
+# Data {#sec-data}
+
+
+
+::: callout-note
+
+## Objectives
+
+This chapter presents the law school dataset (@Wightman1998LSACNL) used in the next chapters to illustrates the different methodologies. It then presents the causal graph assumed in the upcoming examples.
+
+:::
+
+```{r setup, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the setting codes
+
+# Required packages----
+library(tidyverse)
+
+# Graphs----
+font_main = font_title = 'Times New Roman'
+extrafont::loadfonts(quiet = T)
+face_text='plain'
+face_title='plain'
+size_title = 14
+size_text = 11
+legend_size = 11
+
+global_theme <- function() {
+  theme_minimal() %+replace%
+    theme(
+      text = element_text(family = font_main, size = size_text, face = face_text),
+      legend.text = element_text(family = font_main, size = legend_size),
+      axis.text = element_text(size = size_text, face = face_text), 
+      plot.title = element_text(
+        family = font_title, 
+        size = size_title, 
+        hjust = 0.5
+      ),
+      plot.subtitle = element_text(hjust = 0.5)
+    )
+}
+
+# Seed
+set.seed(2025)
+
+# source("functions/graphs.R")
+```
+
+
+This law school dataset contains information collected through a survey conducted from 1991 through 1997 by the Law School Admission Council across 163 law schools in the United States of America (@Wightman1998LSACNL). In total, 21,790 law students were tracked through law school, graduation, and sittings for bar exams.
+
+We use the formatted data from @de2024transport, also used by @delara2021transportbased (see the github associated to the paper: <https://github.com/lucasdelara/PI-Fair.git>).
+
+Each row from the raw data gives information for a student. The following characteristics are available:
+
+- `race`: Race of the student (character: Amerindian, Asian, Black, Hispanic, Mexican, Other, Puertorican, White).
+- `sex`: Sex of the student (numeric: 1 female, 2 male).
+- `LSAT`: LSAT score received by the student (numeric).
+- `UGPA`: Undergraduate GPA of the student (numeric).
+- `region_first`: region in which the student took their first bar examination (Far West, Great Lakes, Midsouth, Midwest, Mountain West, Northeast, New England, Northwest, South Central, South East) (character)
+- `ZFYA`: standardized first-year law school grades (first year average grade, FYA) (numeric).
+- `sander_index`: Sander index of the student: weighted average of normalized UGPA and LSAT scores (however, no details are given for this specific dataset, see @sander2004systemic, p. 393) (numeric)
+- `first_pf`: Probably a binary variable that indicates whether the student passed on their first trial ? No information is given about this variable... (numeric 0/1).
+
+
+## Data Pre-Processing
+
+We load the data:
+```{r load-data, message=FALSE, warning=FALSE}
+df <- read_csv('data/law_data.csv')
+```
+
+Here is some summary information on this dataset:
+```{r summary-df}
+summary(df)
+```
+
+
+
+Then, we focus on a subset of variables of interest:
+```{r select-subset-col}
+df <- df |> 
+  select(
+    race,
+    sex, # we can take S = gender
+    LSAT, # or S = race (white/black)
+    UGPA,
+    ZFYA # Y
+  )
+```
+
+We create a dataset where the only protected class is the race, and we focus on Black individuals and White individuals only:
+```{r create-df_race}
+# Table for S = race
+df_race <- df |> 
+  select(
+    race,
+    UGPA,
+    LSAT,
+    ZFYA
+  ) |> 
+  filter(
+    race %in% c("Black", "White")
+  ) |> 
+  rename(
+    S = race,
+    X1 = UGPA,
+    X2 = LSAT,
+    Y = ZFYA
+  ) |>  # no NA values
+  mutate(
+    S = as.factor(S)
+  )
+```
+
+And another dataset in which the only protected class is the sex:
+```{r create-df_gender, message=FALSE, warning=FALSE}
+# Table for S = gender
+df_gender <- df |> 
+  select(
+    sex,
+    UGPA,
+    LSAT,
+    ZFYA
+  ) |> 
+  rename(
+    S = sex,
+    X1 = UGPA,
+    X2 = LSAT,
+    Y = ZFYA
+  ) |>  # no NA values
+  mutate(
+    S = as.factor(S)
+  )
+```
+
+:::{.panel-tabset}
+
+### S = Race
+
+```{r plot-density-race, message=FALSE, warning=FALSE}
+#| fig-cap: Distribution of the standardized first-year law school grades among the two groups, when $S$ is the race
+#| label: fig-density-zfya-race
+ggplot(
+  data = df_race, 
+  mapping = aes(x = Y, fill = S)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.5
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Race",
+    x = "Y",
+    y = "Density"
+  ) +
+  global_theme()
+```
+
+
+### S = Gender
+
+```{r plot-density-gender, message=FALSE, warning=FALSE}
+#| fig-cap: Distribution of the standardized first-year law school grades among the two groups, when $S$ is the gender
+#| label: fig-density-zfya-gender
+ggplot(
+  data = df_gender, 
+  mapping = aes(x = Y, fill = S)) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.5
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Gender",
+    x = "Y",
+    y = "Density"
+  ) +
+  global_theme()
+```
+
+:::
+
+
+## Causal graph
+
+The assumed causal graph we use here is different from that of the different papers @de2024transport, @Kusner17, @black2020fliptest using the same dataset.
+
+We make the following assumptions:
+
+- The sensitive attribute, \(S\) (race), has no parents.
+- The two other explanatory variables, \(X_1\) (UGPA) and \(X_2\) (LSAT), both directly depend on the sensitive attribute.
+- The second variable, \(X_2\) (LSAT), also depends on the first variable, \(X_1\) (UGPA). This is done for illustrative purposes, assuming that the score obtained on the LSAT is influenced by the UGPA.
+- The two variables, \(X_1\) (UGPA) and \(X_2\) (LSAT), cause the target variable \(Y\), i.e., whether the student obtained a high standardized first-year average (ZFYA).
+
+The corresponding Structural Equation Model writes:
+
+$$
+\begin{cases}
+S: \text{ sensitive attribute (race)} \\
+X_1 = h_1(S, U_1): \text{ UGPA, dependent on } S \\
+X_2 = h_2(S, X_1, U_2): \text{ LSAT, dependent on } S \text{ and } X_1 \\
+Y = h_3(X_1, X_2, U_Y): \text{ ZFYA, dependent on } X_1 \text{ and } X_2 \\
+\end{cases}
+$$
+
+where \(U_1\), \(U_2\), and \(U_Y\) are independent error terms.
+
+In R, we construct the upper triangular adjacency matrix to reflect our assumed causal structure:
+```{r causal-set-up, message=FALSE, warning=FALSE}
+variables <- colnames(df_race)
+# Adjacency matrix: upper triangular
+adj <- matrix(
+  c(0, 1, 1, 1,
+    0, 0, 1, 1,
+    0, 0, 0, 1,
+    0, 0, 0, 0),
+  ncol = length(variables), 
+  dimnames = rep(list(variables), 2),
+  byrow = TRUE
+)
+```
+
+Which can be visualized as follows:
+
+```{r}
+#| fig-cap: Causal Graph
+#| label: fig-causal-graph-race
+causal_graph <- fairadapt::graphModel(adj)
+plot(causal_graph)
+```
+
+The topological order:
+```{r}
+top_order <- variables
+top_order
+```
+
+
+## Saving objects {#sec-data-save}
+
+```{r}
+save(df_race, file = "data/df_race.rda")
+save(df_gender, file = "data/df_gender.rda")
+save(adj, file = "data/adj.rda")
+```
+

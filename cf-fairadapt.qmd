@@ -1,0 +1,447 @@
+# Fairadapt {#sec-cf-fairadapt}
+
+
+
+::: callout-note
+
+## Objectives
+
+This chapter uses fairadapt (@plevcko2020fair) to make counterfactual inference.
+
+:::
+
+
+In the article, we use three methods to create counterfactuals:
+
+1. Fairadapt (this chapter)
+2. Multivariate optimal transport ([Chapter -@sec-cf-ot])
+3. Sequential transport (the methodology we develop in the paper, see [Chapter -@sec-cf-seq-t]).
+
+
+```{r setup, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the setting codes
+
+# Required packages----
+library(tidyverse)
+library(fairadapt)
+
+# Graphs----
+font_main = font_title = 'Times New Roman'
+extrafont::loadfonts(quiet = T)
+face_text='plain'
+face_title='plain'
+size_title = 14
+size_text = 11
+legend_size = 11
+
+global_theme <- function() {
+  theme_minimal() %+replace%
+    theme(
+      text = element_text(family = font_main, size = size_text, face = face_text),
+      legend.text = element_text(family = font_main, size = legend_size),
+      axis.text = element_text(size = size_text, face = face_text), 
+      plot.title = element_text(
+        family = font_title, 
+        size = size_title, 
+        hjust = 0.5
+      ),
+      plot.subtitle = element_text(hjust = 0.5)
+    )
+}
+
+# Seed
+set.seed(2025)
+
+source("functions/utils.R")
+# source("functions/graphs.R")
+```
+
+## Load Data and Classifier
+
+We load the dataset where the sensitive attribute (\(S\)) is the race, obtained [Chapter -@sec-data-save]:
+```{r}
+load("data/df_race.rda")
+```
+
+
+We also load the dataset where the sensitive attribute is also the race, but where where the target variable (\(Y\), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in [Chapter -@sec-classifier-save]:
+```{r}
+load("data/df_race_c.rda")
+```
+
+We also need the predictions made by the classifier (see [Chapter -@sec-classifier]):
+```{r}
+# Predictions on train/test sets
+load("data/pred_aware.rda")
+load("data/pred_unaware.rda")
+# Predictions on the factuals, on the whole dataset
+load("data/pred_aware_all.rda")
+load("data/pred_unaware_all.rda")
+```
+
+
+We load the adjacency matrix that translates the assumed causal structure, obtained in @[Chapter -@sec-data-save]:
+```{r}
+load("data/adj.rda")
+```
+
+
+## Counterfactuals with fairadapt
+
+We adapt the code from @plevcko2021fairadapt to handle the test set. This avoids estimating cumulative distribution and quantile functions on the test set, which would otherwise necessitate recalculating quantile regression functions for each new sample.
+
+We do not need to adapt Y here, so we need to remove it from the adjacency matrix:
+```{r define-fairadapt-adj_wo_Y}
+adj_wo_Y <- adj[-4,-4]
+adj_wo_Y
+```
+
+We create a dataset with the sensitive attribute and the two other predictors:
+```{r define-fairadapt-df_race_fpt}
+df_race_fpt <- df_race_c |> select(S, X1, X2)
+```
+
+Let us have a look at the levels of our sensitive variable:
+```{r show-levels-sensitive}
+levels(df_race_fpt$S)
+```
+
+The reference class here consists of Black individuals.
+
+Two configurations will be considered in turn:
+
+1. The reference class consists of Black individuals, and FairAdapt will be used to obtain the counterfactual UGPA and LSAT scores for White individuals as if they had been Black.
+2. The reference class consists of White individuals, and FairAdapt will be used to obtain the counterfactual UGPA and LSAT scores for Black individuals as if they had been White.
+
+
+```{r fairadapt-application, message=FALSE, warning=FALSE}
+# White (factuals) --> Black (counterfactuals)
+fpt_model_white <- fairadapt(
+  X2 ~ ., 
+  train.data = df_race_fpt,
+  prot.attr = "S", adj.mat = adj_wo_Y,
+  quant.method = linearQuants
+)
+adapt_df_white <- adaptedData(fpt_model_white)
+
+# Black (factuals) --> White (counterfactuals)
+df_race_fpt$S <- factor(df_race_fpt$S, levels = c("White", "Black"))
+fpt_model_black <- fairadapt(
+  X2 ~ ., 
+  train.data = df_race_fpt,
+  prot.attr = "S", adj.mat = adj_wo_Y,
+  quant.method = linearQuants
+)
+adapt_df_black <- adaptedData(fpt_model_black)
+```
+
+Let us wrap up:
+
+- we have two predictive models for the FYA (above median = 1, or below median = 0): 
+
+  - unaware (without S)
+  - aware (with S)
+
+- we have the counterfactual characteristics obtained with fairadapt in two situations depending on the reference class:
+
+  - Black individuals as reference
+  - White individuals as reference.
+  
+The predictive models will be used to compare predictions made using:
+
+- Raw characteristics (initial characteristics).
+- Characteristics possibly altered through FairAdapt for individuals who were not in the reference group (i.e., using counterfactuals).
+
+
+### Unaware Model
+
+The predicted values using the initial characteristics (the factuals), for the unaware model are stored in the object `pred_unaware_all`. We put in a table the initial characteristics (factuals) and the prediction made by the unaware model:
+```{r define-fairadapt-factuals_unaware}
+factuals_unaware <- tibble(
+  S = df_race$S,
+  X1 = df_race$X1,
+  X2 = df_race$X2,
+  pred = pred_unaware_all,
+  type = "factual"
+)
+```
+
+Let us save this dataset in a csv file (this file will be used to perform multivariate transport in python).
+```{r write-fairadapt-factuals_unaware}
+write.csv(
+  factuals_unaware, 
+  file = "data/factuals_unaware.csv", row.names = FALSE
+)
+```
+
+
+Let us build a dataset containing only counterfactual characteristics (obtained with fairadapt): values for $X_1$ and $X_2$ of White individuals as if they had been Black, and values for $X_1$ and $X_2$ of Black individuals as if they had been White.
+```{r define-fairadapt-df_counterfactuals}
+ind_white <- which(df_race_fpt$S == "White")
+ind_black <- which(df_race_fpt$S == "Black")
+df_counterfactuals_fpt <- factuals_unaware |> select(-pred, -type)
+df_counterfactuals_fpt[ind_white, ] <- 
+  adapt_df_white[ind_white, ] |> select(S, X1, X2)
+df_counterfactuals_fpt[ind_black, ] <- 
+  adapt_df_black[ind_black,] |> select(S, X1, X2)
+```
+
+Let us get the predicted values for the counterfactuals, using the unaware model:
+```{r define-fairadapt-pred-unaware-counterfactuals}
+model_unaware <- pred_unaware$model
+pred_unaware_fpt <- predict(
+  model_unaware, newdata = df_counterfactuals_fpt, type = "response"
+)
+```
+
+We create a table with the counterfactual characteristics and the prediction by the unaware model:
+```{r define-fairadapt-counterfactuals_unaware_fpt}
+counterfactuals_unaware_fpt <- tibble(
+  S = df_counterfactuals_fpt$S,
+  X1 = df_counterfactuals_fpt$X1,
+  X2 = df_counterfactuals_fpt$X2,
+  pred = pred_unaware_fpt,
+  type = "counterfactual"
+)
+```
+
+We merge the two datasets, `factuals_unaware` and `counterfactuals_unaware_fpt` in a single one.
+```{r define-fairadapt-unaware_fpt}
+# dataset with counterfactuals, for unaware model
+unaware_fpt <- bind_rows(factuals_unaware, counterfactuals_unaware_fpt)
+```
+
+Now, we can visualize the distribution of the values predicted by the unaware model within each group defined by the sensitive attribute. 
+```{r define-fairadapt-unaware_fpt_white}
+unaware_fpt_white <- unaware_fpt |> filter(S == "White") 
+unaware_fpt_black <- unaware_fpt |> filter(S == "Black")
+```
+
+:::{.panel-tabset}
+
+#### Ref: Black
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-fpt-unaware-race-ref-black
+ggplot(unaware_fpt_black, aes(x = pred, fill = type)) +
+  geom_histogram(
+    aes(y = after_stat(density)), alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Unaware model, Sensitive: Race, Reference: Black individuals",
+       x = "Predictions for Y",
+       y = "Density") +
+  global_theme()
+```
+
+#### Ref: White
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-unaware-race-ref-white
+ggplot(
+  data = unaware_fpt_white,
+  mapping = aes(x = pred, fill = type)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Unaware model, Sensitive: Race, Reference: White individuals",
+       x = "Predictions for Y",
+       y = "Density"
+  ) +
+  global_theme()
+```
+
+:::
+
+
+### Aware Model
+
+Now, we turn to the model that includes the sensitive attribute, i.e., the aware model.
+
+The predicted values by the model, on the initial characteristics (on the factuals) are stored in the `pred_aware_all` object.
+
+We create a tibble with the factuals and the predictions by the aware model:
+```{r define-fairadapt-factuals_aware}
+factuals_aware <- tibble(
+  S = df_race$S,
+  X1 = df_race$X1,
+  X2 = df_race$X2,
+  pred = pred_aware_all,
+  type = "factual"
+)
+```
+
+
+Let us save this table in a CSV file (this file will be used to perform multivariate transport in python):
+```{r}
+write.csv(factuals_aware, file = "data/factuals_aware.csv", row.names = FALSE)
+```
+
+Recall we created an object called `df_counterfactuals_fpt` which contains the counterfactual characteristics of all students, obtained with fairadapt:
+```{r show-df_counterfactuals_fpt}
+df_counterfactuals_fpt
+```
+
+We make predictions with the aware model on these counterfactuals:
+```{r predict-fairadapt-aware-counterfactuals}
+model_aware <- pred_aware$model
+pred_aware_fpt <- predict(
+  model_aware, newdata = df_counterfactuals_fpt, type = "response"
+)
+```
+
+Then, we create a table with the counterfactuals and the predicted value by the aware model:
+```{r define-fairadapt-counterfactuals_aware}
+counterfactuals_aware_fpt <- tibble(
+  S = df_counterfactuals_fpt$S,
+  X1 = df_counterfactuals_fpt$X1,
+  X2 = df_counterfactuals_fpt$X2,
+  pred = pred_aware_fpt,
+  type = "counterfactual"
+)
+```
+
+
+We bind together the table with the factuals and the counterfactuals (as well as their predicted values by the aware model):
+```{r define-fairadapt-aware_fpt}
+aware_fpt <- bind_rows(factuals_aware, counterfactuals_aware_fpt)
+```
+
+Lastly, we can visualize the distribution of predicted values by the aware model once the characteristics of the individuals who are not on the reference group have been modified using fairadapt.
+```{r fairadapt-aware-ftp_white-black}
+aware_fpt_white <- aware_fpt %>% filter(S == "White") 
+aware_fpt_black <- aware_fpt %>% filter(S == "Black")
+```
+
+:::{.panel-tabset}
+
+#### Ref: Black
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Aware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-fpt-aware-race-ref-black
+ggplot(
+  data = aware_fpt_black, 
+  mapping = aes(x = pred, fill = type)) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: Black individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme()
+```
+
+#### Ref: White
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Aware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-aware-race-ref-white
+
+ggplot(
+  data = aware_fpt_white, 
+  mapping = aes(x = pred, fill = type)) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme()
+```
+
+:::
+
+
+## Comparison for Two Individuals
+
+Let us focus on two individuals: the 24th (Black) and the 25th (White) of the dataset.
+```{r define-fairadapt-indiv_factuals}
+(indiv_factuals_unaware <- factuals_unaware[24:25, ])
+```
+The characteristics of these two individuals would be, according to what was estimated using fairadapt, if the reference group was the one in which they do not belong:
+```{r define-fairadapt-indiv_counterfactuals}
+(indiv_counterfactuals_unaware_fpt <- counterfactuals_unaware_fpt[24:25, ])
+```
+
+We put the factuals and counterfactuals in a single table:
+```{r definefairadapt--indiv}
+indiv_unaware_fpt <- bind_rows(
+  indiv_factuals_unaware |> mutate(id = c(24, 25)), 
+  indiv_counterfactuals_unaware_fpt |> mutate(id = c(24, 25))
+)
+indiv_unaware_fpt
+```
+
+The difference between the counterfactual and the factual for these two individuals:
+```{r fairadapt-show-indiv}
+indiv_unaware_fpt |> select(id , type, pred) |> 
+  pivot_wider(names_from = type, values_from = pred) |> 
+  mutate(diff_fpt = counterfactual - factual)
+```
+We apply the same procedure with the aware model:
+```{r define-fairadapt-indiv-aware}
+indiv_aware_fpt <- bind_rows(
+  factuals_aware[c(24, 25),] |> mutate(id = c(24, 25)),
+  counterfactuals_aware_fpt[c(24, 25),] |> mutate(id = c(24, 25))
+)
+indiv_aware_fpt
+```
+
+The difference between the counterfactual and the factual for these two individuals, when using the aware model:
+```{r fairadapt-show-indiv_aware_fpt}
+indiv_aware_fpt |> select(id , type, pred) |> 
+  pivot_wider(names_from = type, values_from = pred) |> 
+  mutate(diff = counterfactual - factual)
+```
+
+## Demographic Parity
+
+
+Let us assume here that the reference group is "White individuals" (i.e., the group with the most individuals in the dataset). We focus on the minority, i.e., Black individuals. We consider here that the model is fair towards the minority class if:
+$$
+P(\hat{Y}_{S \leftarrow \text{White}} = 1 | S = \text{Black}, X_1, X_2) = P(\hat{Y} = 1 | S = \text{White}, X_1, X_2)
+$$
+If the model is fair with respect to this criterion, the proportion of Black individuals predicted to have grades above the median should be the same as if they had been white.
+
+
+For predictions made with the unaware model:
+```{r define-dp_unaware_fpt}
+dp_unaware_fpt <- mean(
+  counterfactuals_unaware_fpt |> filter(S == "White") |> pull("pred") - 
+    factuals_unaware |> filter(S == "Black") |> pull("pred")
+)
+dp_unaware_fpt
+```
+
+We do the same with the aware model:
+```{r define-dp_fpt_aware}
+dp_aware_fpt <- mean(
+  counterfactuals_aware_fpt |> filter(S == "White") |> pull("pred") - 
+    factuals_aware |> filter(S == "Black") |> pull("pred")
+)
+dp_aware_fpt
+```
+
+## Saving Objects {#sec-cf-fairadapt-save}
+
+```{r}
+save(factuals_unaware, file = "data/factuals_unaware.rda")
+save(factuals_aware, file = "data/factuals_aware.rda")
+save(counterfactuals_unaware_fpt, file = "data/counterfactuals_unaware_fpt.rda")
+save(counterfactuals_aware_fpt, file = "data/counterfactuals_aware_fpt.rda")
+```
+
