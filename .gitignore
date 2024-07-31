@@ -61,3 +61,5 @@ docs/
 # Output files
 *.out
 *.log
+
+/.quarto/
