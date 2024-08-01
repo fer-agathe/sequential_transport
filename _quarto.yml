@@ -21,6 +21,10 @@ book:
     - index.qmd
     # - part: Simulated Data
     #   chapters:
+    - part: Simulations
+      chapters: 
+        - gaussian.qmd
+        - regression.qmd
     - part: Counterfactuals with Law Dataset
       chapters:
       - data.qmd

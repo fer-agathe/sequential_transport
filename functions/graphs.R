@@ -1,205 +1,97 @@
-
-getDescendants <- function(var, adj.mat, top.ord = NULL) {
-  
-  if (is.null(adj.mat)) {
-    
-    pos <- which(top.ord == var)
-    
-    if (pos == length(top.ord)) {
-      return(character(0))
-    }
-    
-    return(top.ord[seq.int(pos + 1L, length(top.ord))])
-  }
-  
-  if (is.null(adj.mat)) {
-    return(top.ord[seq.int(which(top.ord == var) + 1L, length(top.ord))])
-  }
-  
-  num.walks <- adj.mat
-  
-  for (i in seq_row(adj.mat)) {
-    num.walks <- adj.mat + num.walks %*% adj.mat
-  }
-  
-  colnames(adj.mat)[num.walks[var, ] > 0]
+# helper functions to convert between radians and degrees
+deg2rad <- function (deg){
+  stopifnot(is.numeric(deg))
+  (rad <- (pi/180) * deg)
 }
 
-getAncestors <- function(var, adj.mat, top.ord = NULL) {
-  
-  if (is.null(adj.mat)) {
-    
-    pos <- which(top.ord == var)
-    
-    if (pos == 1) {
-      return(character(0L))
-    }
-    
-    return(top.ord[seq_len(pos - 1L)])
-  }
-  
-  num.walks <- adj.mat
-  
-  for (i in seq_row(adj.mat)) {
-    num.walks <- adj.mat + num.walks %*% adj.mat
-  }
-  
-  colnames(adj.mat)[num.walks[, var] > 0]
+rad2deg <- function (rad){
+  stopifnot(is.numeric(rad))
+  (deg <- rad/(pi/180))
 }
 
-getParents <- function(var, adj.mat, top.ord = NULL) {
+# function to calculate the points on an arc between two points
+# position 1: x0, y0
+# position 2: x1, y1
+# number of points in resulting arc line: n
+# degrees of the arc connecting the points (positive is counter-clockwise, 
+# negative is clockwise): arcdeg
+calcArc <- function(x0 = 1, y0 = 1, x1 = 4, y1 = 6, arcdeg = 30, n = 50){
   
-  if (is.null(adj.mat)) {
-    return(getAncestors(var, adj.mat, top.ord))
-  }
+  if(abs(arcdeg)>-359.9 & abs(arcdeg)>359.9){stop("angle of arc (arcdeg) must be between -359.9 and 359.9")}
   
-  if (length(var) > 1) {
-    return(Reduce(c, lapply(var, getParents, adj.mat)))
-  }
+  anglerad <- atan2(y = y1-y0, x = x1-x0) # angle between points
+  midpt <- list(x = mean(c(x0,x1)), y = mean(c(y0,y1))) # midpoint coordinates of chord
+  arcrad <- deg2rad(deg = arcdeg) # angle of arc in radians
+  chordlength <- sqrt((x1-x0)^2 + (y1-y0)^2) # length between points
+  r <- abs((chordlength/2) / sin(arcrad/2)) # radius of circle
   
-  unique(row.names(adj.mat)[adj.mat[, var] == 1])
-}
-
-getChildren <- function(var, adj.mat, top.ord = NULL) {
+  # angle from midpoint to circle center
+  lut <- data.frame(
+    lessthan180 = c(TRUE, TRUE, FALSE, FALSE), 
+    sign = c(1, -1, 1, -1), 
+    rotation = c(90, -90, -90, 90))
+  hit <- which(lut$lessthan180 == (abs(arcdeg) < 180) & lut$sign == sign(arcdeg))
+  anglecen <- anglerad + deg2rad(lut$rotation[hit])
   
-  if (is.null(adj.mat)) {
-    return(getDescendants(var, adj.mat, top.ord))
-  }
+  # length of midpoint to circle center
+  midpt2cenpt <- sqrt(r^2 - (chordlength/2)^2) 
   
-  if (length(var) > 1) {
-    return(Reduce(c, lapply(var, getChildren, adj.mat)))
-  }
+  # calculate center point
+  cenpt <- list(x = midpt$x + midpt2cenpt*cos(anglecen), 
+                y = midpt$y + midpt2cenpt*sin(anglecen))
   
-  unique(row.names(adj.mat)[adj.mat[var, ] == 1])
-}
-
-confoundedComponent <- function(var, cfd.matrix) {
+  # angle from circle center to arc
+  anglecen2arc <- anglecen + ifelse(abs(arcdeg)<180, deg2rad(180), 0)
   
-  assert_that(identical(cfd.matrix, t(cfd.matrix)))
-  
-  num.walks <- cfd.matrix
-  
-  cfd.matrix <- cfd.matrix + diag(dim(cfd.matrix)[1L])
-  
-  for (i in seq_len(nrow(cfd.matrix) + 1L)) {
-    num.walks <- cfd.matrix + num.walks %*% cfd.matrix
-  }
-  
-  colnames(cfd.matrix)[num.walks[var, ] > 0]
-}
-
-adjustmentSet <- function(var, adj.mat, cfd.mat, top.ord) {
-  
-  if (is.null(adj.mat)) {
-    return(top.ord[seq_len(which(top.ord == var) - 1)])
-  }
-  
-  cc <- confoundedComponent(var, cfd.mat)
-  
-  intersect(
-    getAncestors(var, adj.mat),
-    union(
-      cc,
-      getParents(cc, adj.mat)
+  # produce vector of arc with n points
+  arc <- data.frame(
+    rad = seq(
+      from = anglecen2arc - arcrad/2,
+      to = anglecen2arc + arcrad/2, 
+      length.out = n
     )
   )
+  arc$x <- cenpt$x + r*cos(arc$rad)
+  arc$y <- cenpt$y + r*sin(arc$rad)
+  
+  return(arc)
 }
 
-topologicalOrdering <- function(adj.mat) {
+# function drawing the results of calcArc as a line or arrow.
+# makes a conversion in plotting region units in order to maintain a circular arc
+addArc <- function(x0 = 1, y0 = 1, x1 = 4, y1 = 6, arcdeg = 30, n = 50, 
+                   t = "l", col = 1, lty = 1, lwd = 1, 
+                   arrowlength = NULL, arrowangle = 30, arrowcode = 2,
+                   result = FALSE,
+                   ...){
   
-  nrw <- nrow(adj.mat)
-  num.walks <- adj.mat
+  # calculate arc
+  arc <- calcArc(x0 = x0, y0 = y0, x1 = x1, y1 = y1, arcdeg = arcdeg, n = n)
   
-  for (i in seq_len(nrw + 1L)) {
-    num.walks <- adj.mat + num.walks %*% adj.mat
+  # calculate arc in device units
+  FROM = "user"
+  TO = "chars"
+  
+  x0 <- grconvertX(x0, from = FROM, to = TO)
+  x1 <- grconvertX(x1, from = FROM, to = TO)
+  y0 <- grconvertY(y0, from = FROM, to = TO)
+  y1 <- grconvertY(y1, from = FROM, to = TO)
+  arc2 <- calcArc(x0 = x0, y0 = y0, x1 = x1, y1 = y1, arcdeg = arcdeg, n = n)
+  names(arc2) <- c("rad", "xusr", "yusr")
+  
+  arc <- cbind(arc, arc2[,c("xusr", "yusr")])
+  
+  # convert back to user coordinates
+  arc$xusr <- grconvertX(arc$xusr, from = TO, to = FROM)
+  arc$yusr <- grconvertY(arc$yusr, from = TO, to = FROM)
+  
+  lines(yusr ~ xusr, data = arc, t = t, 
+        col = col, lty = lty, lwd = lwd, ...)
+  if(!is.null(arrowlength)){
+    arrows(x0 = arc$xusr[n-1], x1 = arc$xusr[n], y0 = arc$yusr[n-1], y1 = arc$yusr[n], 
+           length = arrowlength, code = arrowcode, angle = arrowangle, 
+           col = col, lty = lty, lwd = lwd, ...)
   }
   
-  comparison.matrix <- num.walks > 0
-  
-  top.order <- colnames(adj.mat)
-  
-  for (i in seq_len(nrw - 1L)) {
-    
-    for (j in seq.int(i + 1L, nrw)) {
-      
-      if (comparison.matrix[top.order[j], top.order[i]]) {
-        top.order <- swap(top.order, i, j)
-      }
-    }
-    
-  }
-  
-  top.order
-}
-
-nonId <- function(iv, adj.mat, cfd.mat) {
-  
-  nonIdImpl <- function(var) {
-    length(intersect(getChildren(var, adj.mat),
-                     confoundedComponent(var, cfd.mat))) > 0
-  }
-  
-  any(vapply(iv, nonIdImpl, logical(1L)))
-}
-
-#' Obtaining the graphical causal model (GCM)
-#'
-#' @param adj.mat Matrix of class `matrix` encoding the relationships in
-#' the causal graph. `M[i,j] == 1L` implies the existence of an edge from
-#' node i to node j.
-#' @param cfd.mat Symmetric matrix of class `matrix` encoding the
-#' bidirected edges in the causal graph. `M[i,j] == M[j, i] == 1L`
-#' implies the existence of a bidirected edge between nodes i and j.
-#' @param res.vars A vector of class `character` listing all the resolving
-#' variables, which should not be changed by the adaption procedure. Default
-#' value is `NULL`, corresponding to no resolving variables. Resolving
-#' variables should be a subset of `colnames(adj.mat)`. Resolving
-#' variables are marked with a different color in the output.
-#'
-#' @return An object of class `igraph`, containing the causal graphical,
-#' with directed and bidirected edges.
-#'
-#' @examples
-#' adj.mat <- cfd.mat <- array(0L, dim = c(3, 3))
-#' colnames(adj.mat) <- rownames(adj.mat) <-
-#'   colnames(cfd.mat) <- rownames(cfd.mat) <- c("A", "X", "Y")
-#'
-#' adj.mat["A", "X"] <- adj.mat["X", "Y"] <-
-#'   cfd.mat["X", "Y"] <- cfd.mat["Y", "X"] <- 1L
-#'
-#' gcm <- graphModel(adj.mat, cfd.mat, res.vars = "X")
-#'
-#' @importFrom igraph graph_from_adjacency_matrix as_edgelist add_edges
-#' @importFrom igraph E E<- V V<-
-#' @export
-graphModel <- function(adj.mat, cfd.mat = NULL, res.vars = NULL) {
-  
-  if (is.null(cfd.mat)) {
-    cfd.mat <- matrix(0L, nrow = nrow(adj.mat), ncol = ncol(adj.mat),
-                      dimnames = dimnames(adj.mat))
-  } else {
-    cfd.mat <- cfd.mat[colnames(adj.mat), colnames(adj.mat)]
-  }
-  
-  res <- graph_from_adjacency_matrix(adj.mat)
-  
-  E(res)$curved <- 0
-  E(res)$lty <- "solid"
-  
-  diag(cfd.mat) <- 0
-  
-  cfg <- graph_from_adjacency_matrix(cfd.mat)
-  
-  e.list <- as_edgelist(cfg, names = FALSE)
-  curved <- (e.list[, 1] < e.list[, 2]) - 0.5
-  
-  lty <- ifelse((e.list[, 1] < e.list[, 2]), "dashed", "blank")
-  res <- add_edges(res, as.vector(t(e.list)), curved = curved, lty = lty)
-  
-  E(res)$color <- "black"
-  E(res)$arrow.size <- 0.35
-  V(res)$color <- "white"
-  V(res)$color[which(names(V(res)) %in% res.vars)] <- "red"
-  
-  res
+  if(result){return(arc)}
 }
