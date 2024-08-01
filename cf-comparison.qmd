@@ -180,7 +180,7 @@ tb_indiv_aware
 ```{r}
 #| fig-cap: Predictions by the unaware model for three Black individuals.
 #| label: fig-example-3-black-inviv-unaware
-#| fig-width: 5
+#| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
 par(mar = c(2, 2, 0, 0))
@@ -317,7 +317,8 @@ text(
 )
 legend(
   "topleft", 
-  pch = 19, col = colours_all, legend = names(colours_all)
+  pch = 19, col = colours_all, legend = names(colours_all),
+  box.lty=0
 )
 ```
 
@@ -455,7 +456,8 @@ text(
 )
 legend(
   "topleft", 
-  pch = 19, col = colours_all, legend = names(colours_all)
+  pch = 19, col = colours_all, legend = names(colours_all),
+  box.lty=0
 )
 ```
 
