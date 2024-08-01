@@ -471,7 +471,7 @@ indiv_aware_ot |> select(id , type, pred) |>
   mutate(diff = counterfactual - factual)
 ```
 
-## Demographic Parity
+## Counterfactual Demographic Parity
 
 As for the counterfactuals obtained with fairadapt, we assume here that the reference group is "White individuals" (i.e., the group with the most individuals in the dataset). We focus on the minority, i.e., Black individuals. We consider here that the model is fair towards the minority class if:
 $$

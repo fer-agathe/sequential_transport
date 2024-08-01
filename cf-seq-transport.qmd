@@ -431,7 +431,7 @@ indiv_aware_seq <- bind_rows(
 indiv_aware_seq
 ```
 
-## Demographic Parity
+## Counterfactual Demographic Parity
 
 For the unaware model:
 ```{r}

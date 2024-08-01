@@ -408,7 +408,7 @@ indiv_aware_fpt |> select(id , type, pred) |>
   mutate(diff = counterfactual - factual)
 ```
 
-## Demographic Parity
+## Counterfactual Demographic Parity
 
 
 Let us assume here that the reference group is "White individuals" (i.e., the group with the most individuals in the dataset). We focus on the minority, i.e., Black individuals. We consider here that the model is fair towards the minority class if:
