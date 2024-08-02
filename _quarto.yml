@@ -21,7 +21,7 @@ book:
     - index.qmd
     # - part: Simulated Data
     #   chapters:
-    - gaussian-ot.qmd
+    # - gaussian-ot.qmd
     - part: Simulations
       chapters:
         - gaussian.qmd
