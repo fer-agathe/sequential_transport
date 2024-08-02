@@ -37,21 +37,24 @@ log_reg_train <- function(train_data, test_data, type = c("aware", "unaware")) {
 #' Sequential transport
 #'
 #' @param data dataset with three columns:
-#'  - S: sensitive attribute, factor White/Black
+#'  - S: sensitive attribute
 #'  - X1: first predictor, assumed to be causally linked to S
 #'  - X2: second predictor, assumed to be causally linked to S and X1
+#' @param S_0 value for the sensitive attribute for the source distribution
 #' @param number of cells in each dimension (default to 15)
 #' @param h small value added to extend the area covered by the grid (default
 #'  to .2)
 #' @param d neighborhood weight when conditioning by x1 (default to .5)
 fonction_transport <- function(data,
+                               S_0,
                                n_grid = 15,
                                h = .2,
-                               d = .5) {
+                               d = .5
+                               ) {
 
   # Subset of the data: 0 for Black, 1 for White
-  D_SXY_0 <- data[data$S =="Black", ]
-  D_SXY_1 <- data[data$S =="White", ]
+  D_SXY_0 <- data[data$S ==S_0, ]
+  D_SXY_1 <- data[data$S!= S_0, ]
 
   # Coordinates of the cells of the grid on subset of 0 (Black)
   vx1_0 <- seq(min(D_SXY_0$X1) - h, max(D_SXY_0$X1) + h, length = n_grid + 1)
