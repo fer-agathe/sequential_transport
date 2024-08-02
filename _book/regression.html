@@ -211,7 +211,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./gaussian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gaussian simulations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gaussian Simulations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -434,19 +434,19 @@ m(x_1,x_2,s)=\big(1+\exp\big[-\big((x_1+x_2)/2 + \boldsymbol{1}(s=1)\big)\big]\b
 <section id="algorithm-sequential-conditional-transport" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="algorithm-sequential-conditional-transport"><span class="header-section-number">2.3</span> Algorithm: Sequential Conditional Transport</h2>
 <p>To obtain the counterfactuals based on the methodology presented in the article, i.e., on sequential transport using a causal graph, we can use <a href="#alg-1" class="quarto-xref">Algorithm 2.1</a>.</p>
-<div id="alg-1" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-no-end="false" data-line-number-punc=":" data-pseudocode-number="1" data-indent-size="1.2em" data-line-number="true" data-chapter-level="2">
+<div id="alg-1" class="pseudocode-container quarto-float" data-chapter-level="2" data-line-number-punc=":" data-indent-size="1.2em" data-comment-delimiter="//" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-no-end="false" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Sequential transport on causal graph} \begin{algorithmic} \Require graph \(\mathcal{G}\) on \((s,\boldsymbol{x})\), with adjacency matrix \(\boldsymbol{A}\) \Require dataset \((s_i,\boldsymbol{x}_i)\) and one individual \((s=0,\boldsymbol{a})\) \Require bandwidths \(\boldsymbol{h}\) and \(\boldsymbol{b}_j\)'s \State \((s,\boldsymbol{v})\gets\boldsymbol{A}\) the topological ordering of vertices (DFS) \State \(T_s\gets\text{identity}\) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{p}(j) \gets \text{parents}(j)\) \State \(T_j(\boldsymbol{a}_{\boldsymbol{p}(j)})\gets (T_{\boldsymbol{p}(j)_1}(\boldsymbol{a}_{\boldsymbol{p}(j)}),\cdots,T_{\boldsymbol{p}(j)_{k_j}}(\boldsymbol{a}_{\boldsymbol{p}(j)}))\) \State \((x_{i,j|s},\boldsymbol{x}_{i,\boldsymbol{p}(j)|s})\gets\) subsets when \(s\in\{0,1\}\) \State \(w_{i,j|0}\gets \phi(\boldsymbol{x}_{i,\boldsymbol{p}(j)|0};\boldsymbol{a}_{\boldsymbol{p}(j)},\boldsymbol{b}_j)\) (Gaussian kernel) \State \(w_{i,j|1}\gets \phi(\boldsymbol{x}_{i,\boldsymbol{p}(j)|1};T_j(\boldsymbol{a}_{\boldsymbol{p}(j)}),\boldsymbol{b}_j)\) \State \(\hat{f}_{h_j|s}\gets \text{density estimator}\) of \(x_{\cdot,j|s}\), weights \(w_{\cdot,j|s}\). \State \(\hat{F}_{h_j|s}(\cdot)\gets\displaystyle\int^{~\cdot}_{-\infty}\hat{f}_{h_j|s}(u)\mathrm{d}u\), c.d.f. \State \(\hat{Q}_{h_j|s}\gets \hat{F}_{h_j|s}^{-1}\), quantile \State \(\hat{T}_{j}(\cdot)\gets\hat{Q}_{h_j|1}\circ \hat{F}_{h_j|0}(\cdot)\) \EndFor \State \(\boldsymbol{a}^\star\gets (T_{1}(\boldsymbol{a}_{1}),\cdots,T_{d}(\boldsymbol{a}_{d}))\)\\ \Return \((s=1,\boldsymbol{a}^\star)\), counterfactual of \((s=0,\boldsymbol{a})\) \end{algorithmic} \end{algorithm}
 </div>
 </div>
 <p>While <a href="#alg-1" class="quarto-xref">Algorithm 2.1</a> is intuitive, it becomes inefficient when computing counterfactuals for thousands of individuals, as conditional densities, c.d.f.’s and quantile functions should be computed for each individual. An alternative is to compute these quantities on a grid, store them, and then retrieve them as needed. These objects are generated using <a href="#alg-3" class="quarto-xref">Algorithm 2.2</a></p>
 <p>In <a href="#alg-3" class="quarto-xref">Algorithm 2.2</a> if <span class="math inline">\(j\)</span> has no parents, <span class="math inline">\(\mathrm{parents}(j)=\varnothing\)</span>, <span class="math inline">\(d_j=0\)</span> and then <span class="math inline">\(F_{j|s}\)</span> and <span class="math inline">\(Q_{j|s}\)</span> are vectors (of length <span class="math inline">\(k\)</span>). In <a href="#alg-4" class="quarto-xref">Algorithm 2.3</a>, in that case, <span class="math inline">\(\boldsymbol{i}_0=\boldsymbol{i}_1=\varnothing\)</span>.</p>
-<div id="alg-3" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-no-end="false" data-line-number-punc=":" data-pseudocode-number="2" data-indent-size="1.2em" data-line-number="true" data-chapter-level="2">
+<div id="alg-3" class="pseudocode-container quarto-float" data-chapter-level="2" data-line-number-punc=":" data-indent-size="1.2em" data-comment-delimiter="//" data-caption-prefix="Algorithm" data-pseudocode-number="2" data-no-end="false" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Faster sequential transport on causal graph (1)} \begin{algorithmic} \Require graph on \((s,\boldsymbol{x})\), with adjacency matrix \(\boldsymbol{A}\) \Require dataset \((s_i,\boldsymbol{x}_i)\) and \(k\in\mathbb{N}\) some grid size, \Require grids \(\boldsymbol{g}_{j|s}=({g}_{j,1|s},\cdots,{g}_{j,k|s})\), for all variable \(j\) \Require grid \(\boldsymbol{u}=(1,\cdots,k)/(k+1)\), for all \(j\) \State \((s,\boldsymbol{v})\gets\boldsymbol{A}\) the topological ordering of vertices (DFS) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{p}(j) \gets \text{parents}(j)\), dimension \(d_j\) \State \(\mathcal{G}_{j|s}\gets\) grid \(\boldsymbol{g}_{\boldsymbol{p}(j)_1|s}\times\cdots\times\boldsymbol{g}_{\boldsymbol{p}(j)_{d_j}|s}\) \State \(F_{j|s}\gets\) tensors \(k\times k^{d_j}\), taking values in \(\boldsymbol{u}\) \State \(Q_{j|s}\gets\) tensors \(k\times k^{d_j}\), taking values in \(\boldsymbol{g}_{j|s}\) \For{\(\boldsymbol{i}=(i_1,\cdots,i_{d_j})\in\{1,\cdots,k\}^{d_j}\)} \State \(F_{j|s}[\cdot,\boldsymbol{i}]\gets\) c.d.f. of \(X_j|\boldsymbol{X}_{\boldsymbol{p}(j)}=\boldsymbol{g}_{\boldsymbol{i}|s},S=s\) \State \(Q_{j|s}[\cdot,\boldsymbol{i}]\gets\) quantile of \(X_j|\boldsymbol{X}_{\boldsymbol{p}(j)}=\boldsymbol{g}_{\boldsymbol{i}|s},S=s\) \EndFor \EndFor \end{algorithmic} \end{algorithm}
 </div>
 </div>
-<div id="alg-4" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-no-end="false" data-line-number-punc=":" data-pseudocode-number="3" data-indent-size="1.2em" data-line-number="true" data-chapter-level="2">
+<div id="alg-4" class="pseudocode-container quarto-float" data-chapter-level="2" data-line-number-punc=":" data-indent-size="1.2em" data-comment-delimiter="//" data-caption-prefix="Algorithm" data-pseudocode-number="3" data-no-end="false" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Counterfactual calculation on causal graph (2)} \begin{algorithmic} \Require \(F_{1|s},\cdots,F_{d|s}\) and \(Q_{d|s},\cdots,Q_{d|s}\) \Require grids \(\boldsymbol{g}_{1|s},\cdots,\boldsymbol{g}_{d|s}\), \(\mathcal{G}_{1|s},\cdots,\mathcal{G}_{d|s}\) and \(\boldsymbol{u}\) \Require features \(\boldsymbol{a}\in\mathbb{R}^d\) (group 0) \State \(\boldsymbol{b}\gets \boldsymbol{a}\) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{i}_0\gets \boldsymbol{a}_{\boldsymbol{p}(j)}\) on grid \(\mathcal{G}_{j|0}\) \State \(k_0\gets a_j\) on grid \(\boldsymbol{g}_{j|0}\) \State \(p\gets F_{j|0}[k_0,\boldsymbol{i}_0]\) \State \(\boldsymbol{i}_1\gets \boldsymbol{b}_{\boldsymbol{p}(j)}\) on grid \(\mathcal{G}_{j|1}\) \State \(k_1\gets p\) on grid \(\boldsymbol{u}\) \State \(b_j\gets Q_{j|1}[k_1,\boldsymbol{i}_1]\) \EndFor \Return \(\boldsymbol{b}\) (counterfactual in group 1) \end{algorithmic} \end{algorithm}
 </div>
@@ -1481,148 +1481,173 @@ Figure&nbsp;2.10: The conditional quantiles of <span class="math inline">\(x_2 |
 <span id="cb73-21"><a href="#cb73-21" aria-hidden="true" tabindex="-1"></a>Qtl2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X2, x))</span>
 <span id="cb73-22"><a href="#cb73-22" aria-hidden="true" tabindex="-1"></a>q2_1 <span class="ot">&lt;-</span> <span class="fu">Qtl2_1</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Then we loop on the cells of the grid of <span class="math inline">\(x_1\)</span> to compute the conditional c.d.f. in group 0 and 1, and the quantiles in group 0 and 1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_grid) {</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  idx1_0 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_0<span class="sc">$</span>X1 <span class="sc">-</span> vx1_0_mid[i]) <span class="sc">&lt;</span> d)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  FdR2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X2[idx1_0] <span class="sc">&lt;=</span> x))</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  F2_0[, i] <span class="ot">&lt;-</span> <span class="fu">FdR2_0</span>(vx2_0_mid)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>  Qtl2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X2[idx1_0], x))</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  Q2_0[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl2_0</span>(u)</span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>  idx2_0 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_0<span class="sc">$</span>X2 <span class="sc">-</span> vx2_0_mid[i]) <span class="sc">&lt;</span> d)</span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>  FdR1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X1[idx2_0] <span class="sc">&lt;=</span> x))</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>  F1_0[, i] <span class="ot">&lt;-</span> <span class="fu">FdR1_0</span>(vx1_0_mid)</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>  Qtl1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X1[idx2_0], x))</span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>  Q1_0[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl1_0</span>(u)</span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>  idx1_1 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_1<span class="sc">$</span>X1 <span class="sc">-</span> vx1_1_mid[i]) <span class="sc">&lt;</span> d)</span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>  FdR2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X2[idx1_1] <span class="sc">&lt;=</span> x))</span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>  F2_1[, i] <span class="ot">&lt;-</span> <span class="fu">FdR2_1</span>(vx2_1_mid)</span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>  Qtl2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X2[idx1_1], x))</span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>  Q2_1[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl2_1</span>(u)</span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>  idx2_1 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_1<span class="sc">$</span>X2 <span class="sc">-</span> vx2_1_mid[i]) <span class="sc">&lt;</span> d)</span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>  FdR1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X1[idx2_1] <span class="sc">&lt;=</span> x))</span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a>  F1_1[, i] <span class="ot">&lt;-</span> <span class="fu">FdR1_1</span>(vx1_1_mid)</span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a>  Qtl1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X1[idx2_1], x))</span>
+<span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a>  Q1_1[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl1_1</span>(u) </span>
+<span id="cb74-22"><a href="#cb74-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Let us make predictions with the model presented in <a href="#sec-regression-model" class="quarto-xref"><span>Section 2.2</span></a> on a grid:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>vx0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length =</span> <span class="dv">251</span>)</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>data_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> vx0, <span class="at">y =</span> vx0)</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>L0 <span class="ot">&lt;-</span> <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> data_grid<span class="sc">$</span>x, <span class="at">x2 =</span> data_grid<span class="sc">$</span>y, <span class="at">s =</span> <span class="dv">0</span>)</span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>L1 <span class="ot">&lt;-</span> <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> data_grid<span class="sc">$</span>x, <span class="at">x2 =</span> data_grid<span class="sc">$</span>y, <span class="at">s =</span> <span class="dv">1</span>)</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co"># as a grid:</span></span>
-<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>dlogistique0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(L0, <span class="fu">length</span>(vx0), <span class="fu">length</span>(vx0))</span>
-<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>dlogistique1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(L1, <span class="fu">length</span>(vx0), <span class="fu">length</span>(vx0))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>vx0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length =</span> <span class="dv">251</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>data_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> vx0, <span class="at">y =</span> vx0)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>L0 <span class="ot">&lt;-</span> <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> data_grid<span class="sc">$</span>x, <span class="at">x2 =</span> data_grid<span class="sc">$</span>y, <span class="at">s =</span> <span class="dv">0</span>)</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>L1 <span class="ot">&lt;-</span> <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> data_grid<span class="sc">$</span>x, <span class="at">x2 =</span> data_grid<span class="sc">$</span>y, <span class="at">s =</span> <span class="dv">1</span>)</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="co"># as a grid:</span></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>dlogistique0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(L0, <span class="fu">length</span>(vx0), <span class="fu">length</span>(vx0))</span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>dlogistique1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(L1, <span class="fu">length</span>(vx0), <span class="fu">length</span>(vx0))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As in the illustrative example, we estimate the multivariate densities using kernel estimators. This will only be useful for visualization purposes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Computation of smoothing parameters (bandwidth) for kernel density estimation</span></span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY0[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>H1 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY1[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating multivariate densities in each group</span></span>
-<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>f0_2d <span class="ot">&lt;-</span> <span class="fu">kde</span>(D_SXY0[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)], <span class="at">H =</span> H0, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>f1_2d <span class="ot">&lt;-</span> <span class="fu">kde</span>(D_SXY1[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)], <span class="at">H =</span> H1, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Computation of smoothing parameters (bandwidth) for kernel density estimation</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY0[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>H1 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY1[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating multivariate densities in each group</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>f0_2d <span class="ot">&lt;-</span> <span class="fu">kde</span>(D_SXY0[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)], <span class="at">H =</span> H0, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>f1_2d <span class="ot">&lt;-</span> <span class="fu">kde</span>(D_SXY1[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)], <span class="at">H =</span> H1, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="functions-for-sequential-transport" class="level3" data-number="2.5.1">
 <h3 data-number="2.5.1" class="anchored" data-anchor-id="functions-for-sequential-transport"><span class="header-section-number">2.5.1</span> Functions for Sequential Transport</h3>
 <p>Let us define a function to perform the transport of <span class="math inline">\(x_0\)</span> from <span class="math inline">\(s=0\)</span> to <span class="math inline">\(s_1\)</span>, i.e., <span class="math inline">\(T_1^*(x_1)\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport of x1 from s=0 to s=1</span></span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 vector of x2's values</span></span>
-<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @descriptions</span></span>
-<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
-<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - f1_0: c.d.f. values for x1 in group s=0</span></span>
-<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - u: quantile levels</span></span>
-<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - q1_1: quantile values for x1 in group s=1</span></span>
-<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>transport_x1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1) {</span>
-<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell of the grid to the coordinates of x1 in group s=0</span></span>
-<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for that cell, in group s=0</span></span>
-<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> f1_0[i]</span>
-<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
-<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
-<span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a>  x1star <span class="ot">&lt;-</span> q1_1[i]</span>
-<span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a>  x1star</span>
-<span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Another function to transport <span class="math inline">\(x_2\)</span> from <span class="math inline">\(s=0\)</span> to <span class="math inline">\(s=1\)</span>, i.e., <span class="math inline">\(T_2^*(x_2)\)</span>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport of x2 from s=0 to s=1</span></span>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport of x1 from s=0 to s=1</span></span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 vector of x2's values</span></span>
 <span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @descriptions</span></span>
-<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
-<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - f2_0: c.d.f. values for x2 in group s=0</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - f1_0: c.d.f. values for x1 in group s=0</span></span>
 <span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - u: quantile levels</span></span>
-<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - q2_1: quantile values of x2 in group s=1</span></span>
-<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>transport_x2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x2) {</span>
-<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell of the grid to the coordinates of x2 in group s=0</span></span>
-<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - q1_1: quantile values for x1 in group s=1</span></span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>transport_x1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1) {</span>
+<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell of the grid to the coordinates of x1 in group s=0</span></span>
+<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
 <span id="cb77-12"><a href="#cb77-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for that cell, in group s=0</span></span>
-<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> f2_0[i]</span>
+<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> f1_0[i]</span>
 <span id="cb77-14"><a href="#cb77-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
 <span id="cb77-15"><a href="#cb77-15" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
 <span id="cb77-16"><a href="#cb77-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
-<span id="cb77-17"><a href="#cb77-17" aria-hidden="true" tabindex="-1"></a>  x2star <span class="ot">&lt;-</span> q2_1[i]</span>
-<span id="cb77-18"><a href="#cb77-18" aria-hidden="true" tabindex="-1"></a>  x2star</span>
+<span id="cb77-17"><a href="#cb77-17" aria-hidden="true" tabindex="-1"></a>  x1star <span class="ot">&lt;-</span> q1_1[i]</span>
+<span id="cb77-18"><a href="#cb77-18" aria-hidden="true" tabindex="-1"></a>  x1star</span>
 <span id="cb77-19"><a href="#cb77-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Another function to transport <span class="math inline">\(x_2\)</span> from <span class="math inline">\(s=0\)</span> to <span class="math inline">\(s=1\)</span>, i.e., <span class="math inline">\(T_2^*(x_2)\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport of x2 from s=0 to s=1</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 vector of x2's values</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @descriptions</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - f2_0: c.d.f. values for x2 in group s=0</span></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - u: quantile levels</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - q2_1: quantile values of x2 in group s=1</span></span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>transport_x2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x2) {</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell of the grid to the coordinates of x2 in group s=0</span></span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for that cell, in group s=0</span></span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> f2_0[i]</span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
+<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
+<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
+<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>  x2star <span class="ot">&lt;-</span> q2_1[i]</span>
+<span id="cb78-18"><a href="#cb78-18" aria-hidden="true" tabindex="-1"></a>  x2star</span>
+<span id="cb78-19"><a href="#cb78-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A function to transport <span class="math inline">\(x_1\)</span> conditionnaly on <span class="math inline">\(x_2\)</span>, i.e., <span class="math inline">\(T_1^*(x_1 | x_2)\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport for x1 conditional on x2, from s=0 to s=1</span></span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
-<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x1 numerical vector with x1's values</span></span>
-<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 numerical vector with x2's values</span></span>
-<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @description</span></span>
-<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
-<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_1_mid: coordinates of center of cells (axis x2, s=1)</span></span>
-<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
-<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>transport_x1_cond_x2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1, x2) {</span>
-<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x2 coordinate</span></span>
-<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>  k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
-<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=1 for transported x2 coordinate</span></span>
-<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>  k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_1_mid <span class="sc">-</span> <span class="fu">transport_x2</span>(x2)))</span>
-<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x1 coordinate</span></span>
-<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>  i_0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for the closest cell in s=0 for x1 coordinates</span></span>
-<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> F1_0[i_0, k0]</span>
-<span id="cb78-18"><a href="#cb78-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
-<span id="cb78-19"><a href="#cb78-19" aria-hidden="true" tabindex="-1"></a>  i_1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb78-20"><a href="#cb78-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
-<span id="cb78-21"><a href="#cb78-21" aria-hidden="true" tabindex="-1"></a>  x1star <span class="ot">&lt;-</span> Q1_1[i_1, k1]</span>
-<span id="cb78-22"><a href="#cb78-22" aria-hidden="true" tabindex="-1"></a>  x1star</span>
-<span id="cb78-23"><a href="#cb78-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>And a last function to transport <span class="math inline">\(x_2\)</span> conditionally on <span class="math inline">\(x_1\)</span>, i.e., <span class="math inline">\(T_2^*(x_2 |x_1)\)</span>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport for x2 conditional on x1, from s=0 to s=1</span></span>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport for x1 conditional on x2, from s=0 to s=1</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
-<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 numerical vector with x2's values</span></span>
-<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x1 numerical vector with x1's values</span></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x1 numerical vector with x1's values</span></span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 numerical vector with x2's values</span></span>
 <span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @description</span></span>
-<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
-<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_1_mid: coordinates of center of cells (axis x1, s=1)</span></span>
-<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
-<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>transport_x2_cond_x1 <span class="ot">&lt;-</span>  <span class="cf">function</span>(x2, x1){</span>
-<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x1 coordinate</span></span>
-<span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>  k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=1 for transported x1 coordinate</span></span>
-<span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a>  k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_1_mid <span class="sc">-</span> <span class="fu">transport_x1</span>(x1)))</span>
-<span id="cb79-14"><a href="#cb79-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x2 coordinate</span></span>
-<span id="cb79-15"><a href="#cb79-15" aria-hidden="true" tabindex="-1"></a>  i_0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
-<span id="cb79-16"><a href="#cb79-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for the closest cell in s=0 for x2 coordinates</span></span>
-<span id="cb79-17"><a href="#cb79-17" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> F2_0[i_0, k0]</span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_1_mid: coordinates of center of cells (axis x2, s=1)</span></span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>transport_x1_cond_x2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1, x2) {</span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x2 coordinate</span></span>
+<span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>  k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
+<span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=1 for transported x2 coordinate</span></span>
+<span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a>  k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_1_mid <span class="sc">-</span> <span class="fu">transport_x2</span>(x2)))</span>
+<span id="cb79-14"><a href="#cb79-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x1 coordinate</span></span>
+<span id="cb79-15"><a href="#cb79-15" aria-hidden="true" tabindex="-1"></a>  i_0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
+<span id="cb79-16"><a href="#cb79-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for the closest cell in s=0 for x1 coordinates</span></span>
+<span id="cb79-17"><a href="#cb79-17" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> F1_0[i_0, k0]</span>
 <span id="cb79-18"><a href="#cb79-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
 <span id="cb79-19"><a href="#cb79-19" aria-hidden="true" tabindex="-1"></a>  i_1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
 <span id="cb79-20"><a href="#cb79-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
-<span id="cb79-21"><a href="#cb79-21" aria-hidden="true" tabindex="-1"></a>  x2star <span class="ot">&lt;-</span>  Q2_1[i_1, k1]</span>
-<span id="cb79-22"><a href="#cb79-22" aria-hidden="true" tabindex="-1"></a>  x2star</span>
+<span id="cb79-21"><a href="#cb79-21" aria-hidden="true" tabindex="-1"></a>  x1star <span class="ot">&lt;-</span> Q1_1[i_1, k1]</span>
+<span id="cb79-22"><a href="#cb79-22" aria-hidden="true" tabindex="-1"></a>  x1star</span>
 <span id="cb79-23"><a href="#cb79-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And a last function to transport <span class="math inline">\(x_2\)</span> conditionally on <span class="math inline">\(x_1\)</span>, i.e., <span class="math inline">\(T_2^*(x_2 |x_1)\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Transport for x2 conditional on x1, from s=0 to s=1</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 numerical vector with x2's values</span></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x1 numerical vector with x1's values</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @description</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_0_mid: coordinates of center of cells (axis x1, s=0)</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx1_1_mid: coordinates of center of cells (axis x1, s=1)</span></span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - vx2_0_mid: coordinates of center of cells (axis x2, s=0)</span></span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>transport_x2_cond_x1 <span class="ot">&lt;-</span>  <span class="cf">function</span>(x2, x1){</span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x1 coordinate</span></span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a>  k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=1 for transported x1 coordinate</span></span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>  k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_1_mid <span class="sc">-</span> <span class="fu">transport_x1</span>(x1)))</span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest cell in s=0 for x2 coordinate</span></span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>  i_0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># c.d.f. for the closest cell in s=0 for x2 coordinates</span></span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> F2_0[i_0, k0]</span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># identify closest quantile level</span></span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a>  i_1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
+<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># corresponding quantile in group s=1</span></span>
+<span id="cb80-21"><a href="#cb80-21" aria-hidden="true" tabindex="-1"></a>  x2star <span class="ot">&lt;-</span>  Q2_1[i_1, k1]</span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a>  x2star</span>
+<span id="cb80-23"><a href="#cb80-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,<span class="at">col=</span>scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], <span class="dv">1</span>),</span>
-<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model</span></span>
-<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
-<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
-<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>  dlogistique0,</span>
-<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd =</span> <span class="fl">1.6</span>,</span>
-<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,<span class="at">col=</span>scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], <span class="dv">1</span>),</span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model</span></span>
+<span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
+<span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
+<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>  dlogistique0,</span>
+<span id="cb81-15"><a href="#cb81-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb81-16"><a href="#cb81-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd =</span> <span class="fl">1.6</span>,</span>
+<span id="cb81-17"><a href="#cb81-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb81-18"><a href="#cb81-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-level-curves-m0" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -1640,27 +1665,27 @@ Figure&nbsp;2.11: Level curves for <span class="math inline">\((x_1, x_2) \right
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
-<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], <span class="dv">1</span>),</span>
-<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model</span></span>
-<span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
-<span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
-<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>  dlogistique1, </span>
-<span id="cb81-15"><a href="#cb81-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
-<span id="cb81-16"><a href="#cb81-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb81-17"><a href="#cb81-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb81-18"><a href="#cb81-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="fl">1.6</span></span>
-<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb81-21"><a href="#cb81-21" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], <span class="dv">1</span>),</span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model</span></span>
+<span id="cb82-11"><a href="#cb82-11" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb82-12"><a href="#cb82-12" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
+<span id="cb82-13"><a href="#cb82-13" aria-hidden="true" tabindex="-1"></a>  vx0,</span>
+<span id="cb82-14"><a href="#cb82-14" aria-hidden="true" tabindex="-1"></a>  dlogistique1, </span>
+<span id="cb82-15"><a href="#cb82-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
+<span id="cb82-16"><a href="#cb82-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb82-17"><a href="#cb82-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb82-18"><a href="#cb82-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="fl">1.6</span></span>
+<span id="cb82-19"><a href="#cb82-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb82-20"><a href="#cb82-20" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb82-21"><a href="#cb82-21" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-level-curves-m1" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -1677,7 +1702,7 @@ Figure&nbsp;2.12: Level curves for <span class="math inline">\((x_1, x_2) \right
 </div>
 <p>Let us focus on individual <span class="math inline">\((s, -2, 1)\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>xystart <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>xystart <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let us make multiple predictions for that individual, given the assumed structural model.</p>
 <div class="cell">
@@ -1709,212 +1734,296 @@ Figure&nbsp;2.14: Causal network with two legitimate mitigating variables <span 
 </div>
 </div>
 <ul>
-<li><code>x2_then_x1</code>: <span class="math inline">\(T_1^*(x1 | x2), T_2^*(x2)\)</span>, the transported value when assuming</li>
+<li><code>x2_then_x1</code>: <span class="math inline">\(T_1^*(x1 | x2), T_2^*(x2)\)</span>, the transported value when assuming the structural model shown in <a href="#fig-DAG-b" class="quarto-xref">Figure&nbsp;<span>2.14</span></a></li>
+<li><code>x1_then_x2</code>: <span class="math inline">\(T_1^*(x1), T_2^*(x2|x_1)\)</span>, the transported value when assuming the structural model shown in <a href="#fig-DAG-a" class="quarto-xref">Figure&nbsp;<span>2.13</span></a></li>
+<li><code>x1_intermediaire</code>: <span class="math inline">\((T_1^*(x1), x2)\)</span>, the transported value for <span class="math inline">\(x_1\)</span> only</li>
+<li><code>x2_intermediaire</code>: <span class="math inline">\((x1, T_2^*(x2))\)</span>, the transported value for <span class="math inline">\(x_2\)</span> only.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">start =</span> xystart, <span class="co"># (x1, x2)</span></span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Computing (T_1(x1 | x2), T_2(x2))</span></span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">x2_then_x1 =</span> <span class="fu">c</span>(</span>
-<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x1_cond_x2</span>(<span class="at">x1 =</span> xystart[<span class="dv">1</span>], <span class="at">x2 =</span> xystart[<span class="dv">2</span>]),</span>
-<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x2</span>(xystart[<span class="dv">2</span>])</span>
-<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Computing (T_1(x1), T_2(x2 | x1))</span></span>
-<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1_then_x2 =</span> <span class="fu">c</span>(</span>
-<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x1</span>(xystart[<span class="dv">1</span>]), </span>
-<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x2_cond_x1</span>(<span class="at">x2 =</span> xystart[<span class="dv">1</span>], <span class="at">x1 =</span> xystart[<span class="dv">2</span>])</span>
-<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (T_1(x1), x2)</span></span>
-<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1_intermediaire =</span> <span class="fu">c</span>(<span class="fu">transport_x1</span>(<span class="at">x1 =</span> xystart[<span class="dv">1</span>]), xystart[<span class="dv">2</span>]),</span>
-<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (x1, T_2(x2))</span></span>
-<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">x2_intermediaire =</span> <span class="fu">c</span>(xystart[<span class="dv">1</span>], <span class="fu">transport_x2</span>(xystart[<span class="dv">2</span>]))</span>
-<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in data.frame(start = xystart, x2_then_x1 = c(transport_x1_cond_x2(x1 =
-xystart[1], : row names were found from a short variable and have been
-discarded</code></pre>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. (x1, x2)</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">start =</span> xystart,</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. (T_1(x1 | x2), T_2(x2))</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x2_then_x1 =</span> <span class="fu">c</span>(</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x1_cond_x2</span>(<span class="at">x1 =</span> xystart[<span class="dv">1</span>], <span class="at">x2 =</span> xystart[<span class="dv">2</span>]),</span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x2</span>(xystart[<span class="dv">2</span>])</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. (T_1(x1), T_2(x2 | x1))</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1_then_x2 =</span> <span class="fu">c</span>(</span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x1</span>(xystart[<span class="dv">1</span>]), </span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transport_x2_cond_x1</span>(<span class="at">x2 =</span> xystart[<span class="dv">1</span>], <span class="at">x1 =</span> xystart[<span class="dv">2</span>])</span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. (T_1(x1), x2)</span></span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1_intermediaire =</span> <span class="fu">c</span>(<span class="fu">transport_x1</span>(<span class="at">x1 =</span> xystart[<span class="dv">1</span>]), xystart[<span class="dv">2</span>]),</span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. (x1, T_2(x2))</span></span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">x2_intermediaire =</span> <span class="fu">c</span>(xystart[<span class="dv">1</span>], <span class="fu">transport_x2</span>(xystart[<span class="dv">2</span>]))</span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<p>Then, we make predictions for all these points using the model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix)</span>
-<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction at initial values (S=0, x1, x2)</span></span>
-<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">x2 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">s =</span> <span class="dv">0</span>),</span>
-<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction if (S=1, x1, x2)</span></span>
-<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="dv">1</span>),</span>
-<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction if (S = 1, T_1(x1), T_2(x2 | x1))</span></span>
-<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="dv">1</span>),</span>
-<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction if (S = 1, T_1(x1 | x2), T_2(x2))</span></span>
-<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="dv">1</span>),</span>
-<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction if (S = 1, T_1(x1), x2)</span></span>
-<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x1_intermediaire[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_intermediaire[<span class="dv">2</span>], <span class="dv">1</span>),</span>
-<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction if (S = 1, x1, T_2(x2))</span></span>
-<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x2_intermediaire[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_intermediaire[<span class="dv">2</span>], <span class="dv">1</span>)</span>
-<span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>CeX <span class="ot">&lt;-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Prediction at initial values (S=0, x1, x2)</span></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(<span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">x2 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">s =</span> <span class="dv">0</span>),</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Prediction if (S=1, x1, x2)</span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="dv">1</span>),</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Prediction if (S = 1, T_1(x1), T_2(x2 | x1))</span></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="dv">1</span>),</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Prediction if (S = 1, T_1(x1 | x2), T_2(x2))</span></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="dv">1</span>),</span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Prediction if (S = 1, T_1(x1), x2)</span></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x1_intermediaire[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_intermediaire[<span class="dv">2</span>], <span class="dv">1</span>),</span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 6. Prediction if (S = 1, x1, T_2(x2))</span></span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistique_reg</span>(prediction<span class="sc">$</span>x2_intermediaire[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_intermediaire[<span class="dv">2</span>], <span class="dv">1</span>)</span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>v</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.18242552 0.07585818 0.40945028 0.54065719 0.25576437 0.23658466</code></pre>
 </div>
+</div>
+<p>Let us first explore the <em>mutatis mutandis</em> difference <span class="math inline">\(m(s=1, x_1^*, x_2^*) - m(s = 0, x1, x_2)\)</span>. If we assume the causal structure as in <a href="#fig-DAG-a" class="quarto-xref">Figure&nbsp;<span>2.13</span></a>, it is equal to:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
-<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
-<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
-<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
-<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
-<span id="cb86-12"><a href="#cb86-12" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb86-13"><a href="#cb86-13" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb86-14"><a href="#cb86-14" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb86-15"><a href="#cb86-15" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
-<span id="cb86-16"><a href="#cb86-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb86-17"><a href="#cb86-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb86-18"><a href="#cb86-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb86-19"><a href="#cb86-19" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique0,</span>
-<span id="cb86-20"><a href="#cb86-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)<span class="sc">/</span><span class="dv">10</span>,</span>
-<span id="cb86-21"><a href="#cb86-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
-<span id="cb86-22"><a href="#cb86-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,<span class="at">lwd =</span> <span class="dv">2</span></span>
-<span id="cb86-23"><a href="#cb86-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb86-24"><a href="#cb86-24" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb86-25"><a href="#cb86-25" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb86-26"><a href="#cb86-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb86-27"><a href="#cb86-27" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb86-28"><a href="#cb86-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (S=0, x1=-2, x2=-1)</span></span>
-<span id="cb86-29"><a href="#cb86-29" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb86-30"><a href="#cb86-30" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb86-31"><a href="#cb86-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
-<span id="cb86-32"><a href="#cb86-32" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb86-33"><a href="#cb86-33" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>],</span>
-<span id="cb86-34"><a href="#cb86-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
-<span id="cb86-35"><a href="#cb86-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
-<span id="cb86-36"><a href="#cb86-36" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] <span class="sc">-</span> v[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2270248</code></pre>
+</div>
+</div>
+<p>This can be decomposed as follows:</p>
+<ol type="1">
+<li>the change du to the impact of <span class="math inline">\(s\)</span> only, <span class="math inline">\(m(s=1,x_1,x_2) - m(s=0,x_1,x_2)\)</span> (i.e., the <em>ceteris paribus</em> impact):</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] <span class="sc">-</span> v[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.1065673</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>the change due to the impact of <span class="math inline">\(s\)</span> on <span class="math inline">\(x_1\)</span>, i.e., <span class="math inline">\(m(s=1,x^\star_1,x_2) - m(s=1,x_1,x_2)\)</span>:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">5</span>] <span class="sc">-</span> v[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1799062</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>the change due to the impact of both <span class="math inline">\(s\)</span> and <span class="math inline">\(x_1\)</span> on <span class="math inline">\(x_2\)</span>, i.e., <span class="math inline">\(m(s=1,x^\star_1,x^\star_2) - m(s=1,x^\star_1,x_2)\)</span>:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] <span class="sc">-</span> v[<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1536859</code></pre>
+</div>
+</div>
+<p>If, instead, we assume the causal structure as in <a href="#fig-DAG-b" class="quarto-xref">Figure&nbsp;<span>2.14</span></a>, the <em>mutatis mutandis</em> effect, <span class="math inline">\(m(s=1, x_1^*, x_2^*) - m(s = 0, x1, x_2)\)</span>, would be:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] <span class="sc">-</span> v[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3582317</code></pre>
+</div>
+</div>
+<p>This can be decomposed as follows:</p>
+<ol type="1">
+<li>the change du to the impact of <span class="math inline">\(s\)</span> only, <span class="math inline">\(m(s=1,x_1,x_2) - m(s=0,x_1,x_2)\)</span> (i.e., the <em>ceteris paribus</em> impact):</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] <span class="sc">-</span> v[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.1065673</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>the change due to the impact of <span class="math inline">\(s\)</span> on <span class="math inline">\(x_2\)</span>, i.e., <span class="math inline">\(m(s=1,x_1,x_2^*) - m(s=1,x_1,x_2)\)</span>:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">6</span>] <span class="sc">-</span> v[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1607265</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>the change due to the impact of both <span class="math inline">\(s\)</span> and <span class="math inline">\(x_2\)</span> on <span class="math inline">\(x_1\)</span>, i.e., <span class="math inline">\(m(s=1,x^\star_1,x^\star_2) - m(s=1,x_1,x_2^*)\)</span>:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] <span class="sc">-</span> v[<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3040725</code></pre>
+</div>
+</div>
+<p>Let us visualize this ! We begin with the predicted value by the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>CeX <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
+<span id="cb103-10"><a href="#cb103-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
+<span id="cb103-11"><a href="#cb103-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb103-12"><a href="#cb103-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
+<span id="cb103-13"><a href="#cb103-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
+<span id="cb103-14"><a href="#cb103-14" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb103-15"><a href="#cb103-15" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb103-16"><a href="#cb103-16" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb103-17"><a href="#cb103-17" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
+<span id="cb103-18"><a href="#cb103-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb103-19"><a href="#cb103-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb103-20"><a href="#cb103-20" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb103-21"><a href="#cb103-21" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique0,</span>
+<span id="cb103-22"><a href="#cb103-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)<span class="sc">/</span><span class="dv">10</span>,</span>
+<span id="cb103-23"><a href="#cb103-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
+<span id="cb103-24"><a href="#cb103-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,<span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb103-25"><a href="#cb103-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb103-26"><a href="#cb103-26" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb103-27"><a href="#cb103-27" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb103-28"><a href="#cb103-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-29"><a href="#cb103-29" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb103-30"><a href="#cb103-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (S=0, x1=-2, x2=-1)</span></span>
+<span id="cb103-31"><a href="#cb103-31" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb103-32"><a href="#cb103-32" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb103-33"><a href="#cb103-33" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
+<span id="cb103-34"><a href="#cb103-34" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb103-35"><a href="#cb103-35" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>],</span>
+<span id="cb103-36"><a href="#cb103-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
+<span id="cb103-37"><a href="#cb103-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
+<span id="cb103-38"><a href="#cb103-38" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="regression_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="384"></p>
+<div id="fig-gauss-logistic-predicted" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-gauss-logistic-predicted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.15: The predicted value by the model, <span class="math inline">\(m(s=0, x_1, x_2)\)</span>
+</figcaption>
+<div aria-describedby="fig-gauss-logistic-predicted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="regression_files/figure-html/fig-gauss-logistic-predicted-1.png" class="img-fluid figure-img" width="384">
+</div>
 </figure>
 </div>
 </div>
 </div>
+<p>And then we can show the the predictions made on the counterfactuals depending on the causal assumption.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
-<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
-<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
-<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-10"><a href="#cb87-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
-<span id="cb87-11"><a href="#cb87-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
-<span id="cb87-12"><a href="#cb87-12" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb87-13"><a href="#cb87-13" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb87-14"><a href="#cb87-14" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb87-15"><a href="#cb87-15" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
-<span id="cb87-16"><a href="#cb87-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb87-17"><a href="#cb87-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-18"><a href="#cb87-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-19"><a href="#cb87-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model for s=1</span></span>
-<span id="cb87-20"><a href="#cb87-20" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb87-21"><a href="#cb87-21" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique1,</span>
-<span id="cb87-22"><a href="#cb87-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb87-23"><a href="#cb87-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd=</span><span class="dv">2</span>,</span>
-<span id="cb87-24"><a href="#cb87-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb87-25"><a href="#cb87-25" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-26"><a href="#cb87-26" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb87-27"><a href="#cb87-27" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb87-28"><a href="#cb87-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-29"><a href="#cb87-29" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-30"><a href="#cb87-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (s=0, x1=-2, x2=-1)</span></span>
-<span id="cb87-31"><a href="#cb87-31" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-32"><a href="#cb87-32" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-33"><a href="#cb87-33" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
-<span id="cb87-34"><a href="#cb87-34" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-35"><a href="#cb87-35" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> .<span class="dv">3</span>, prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span> <span class="sc">-</span> .<span class="dv">3</span>,</span>
-<span id="cb87-36"><a href="#cb87-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
-<span id="cb87-37"><a href="#cb87-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
-<span id="cb87-38"><a href="#cb87-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-39"><a href="#cb87-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-40"><a href="#cb87-40" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-41"><a href="#cb87-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x1 and then x2, i.e.,</span></span>
-<span id="cb87-42"><a href="#cb87-42" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
-<span id="cb87-43"><a href="#cb87-43" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-44"><a href="#cb87-44" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>],prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-45"><a href="#cb87-45" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb87-46"><a href="#cb87-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb87-47"><a href="#cb87-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb87-48"><a href="#cb87-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb87-49"><a href="#cb87-49" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-50"><a href="#cb87-50" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb87-51"><a href="#cb87-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
-<span id="cb87-52"><a href="#cb87-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb87-53"><a href="#cb87-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb87-54"><a href="#cb87-54" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-55"><a href="#cb87-55" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
-<span id="cb87-56"><a href="#cb87-56" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-57"><a href="#cb87-57" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-58"><a href="#cb87-58" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-59"><a href="#cb87-59" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span>,</span>
-<span id="cb87-60"><a href="#cb87-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">5</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb87-61"><a href="#cb87-61" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-62"><a href="#cb87-62" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for # (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
-<span id="cb87-63"><a href="#cb87-63" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-64"><a href="#cb87-64" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
-<span id="cb87-65"><a href="#cb87-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">3</span>]<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>),<span class="st">"%"</span>,<span class="at">sep=</span><span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb87-66"><a href="#cb87-66" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-67"><a href="#cb87-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-68"><a href="#cb87-68" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-69"><a href="#cb87-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x2 and then x1, i.e.,</span></span>
-<span id="cb87-70"><a href="#cb87-70" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
-<span id="cb87-71"><a href="#cb87-71" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-72"><a href="#cb87-72" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>],prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],<span class="at">pch=</span><span class="dv">19</span>,<span class="at">cex=</span>CeX)</span>
-<span id="cb87-73"><a href="#cb87-73" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb87-74"><a href="#cb87-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>],</span>
-<span id="cb87-75"><a href="#cb87-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb87-76"><a href="#cb87-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb87-77"><a href="#cb87-77" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-78"><a href="#cb87-78" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb87-79"><a href="#cb87-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb87-80"><a href="#cb87-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb87-81"><a href="#cb87-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb87-82"><a href="#cb87-82" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-83"><a href="#cb87-83" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
-<span id="cb87-84"><a href="#cb87-84" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-85"><a href="#cb87-85" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb87-86"><a href="#cb87-86" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-87"><a href="#cb87-87" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb87-88"><a href="#cb87-88" aria-hidden="true" tabindex="-1"></a>     <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">6</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb87-89"><a href="#cb87-89" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-90"><a href="#cb87-90" aria-hidden="true" tabindex="-1"></a><span class="do">## New predicted value for (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
-<span id="cb87-91"><a href="#cb87-91" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-92"><a href="#cb87-92" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb87-93"><a href="#cb87-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">4</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb87-94"><a href="#cb87-94" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-95"><a href="#cb87-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-96"><a href="#cb87-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-97"><a href="#cb87-97" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-98"><a href="#cb87-98" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for (do(s=1), x1, x2), no transport</span></span>
-<span id="cb87-99"><a href="#cb87-99" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb87-100"><a href="#cb87-100" aria-hidden="true" tabindex="-1"></a>ry <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
-<span id="cb87-101"><a href="#cb87-101" aria-hidden="true" tabindex="-1"></a><span class="fu">draw.circle</span>(</span>
-<span id="cb87-102"><a href="#cb87-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> ry, <span class="at">y =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> ry, </span>
-<span id="cb87-103"><a href="#cb87-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">radius =</span> ry <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)</span>
-<span id="cb87-104"><a href="#cb87-104" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb87-105"><a href="#cb87-105" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb87-106"><a href="#cb87-106" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">42</span>,</span>
-<span id="cb87-107"><a href="#cb87-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb87-108"><a href="#cb87-108" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
+<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
+<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
+<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-11"><a href="#cb104-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
+<span id="cb104-12"><a href="#cb104-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
+<span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
+<span id="cb104-17"><a href="#cb104-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-19"><a href="#cb104-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model for s=1</span></span>
+<span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique1,</span>
+<span id="cb104-23"><a href="#cb104-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb104-24"><a href="#cb104-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb104-25"><a href="#cb104-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb104-26"><a href="#cb104-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-27"><a href="#cb104-27" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb104-28"><a href="#cb104-28" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb104-29"><a href="#cb104-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-30"><a href="#cb104-30" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-31"><a href="#cb104-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (s=0, x1=-2, x2=-1)</span></span>
+<span id="cb104-32"><a href="#cb104-32" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-33"><a href="#cb104-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-34"><a href="#cb104-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
+<span id="cb104-35"><a href="#cb104-35" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-36"><a href="#cb104-36" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> .<span class="dv">3</span>, prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span> <span class="sc">-</span> .<span class="dv">3</span>,</span>
+<span id="cb104-37"><a href="#cb104-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
+<span id="cb104-38"><a href="#cb104-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
+<span id="cb104-39"><a href="#cb104-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-40"><a href="#cb104-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-41"><a href="#cb104-41" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-42"><a href="#cb104-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x1 and then x2, i.e.,</span></span>
+<span id="cb104-43"><a href="#cb104-43" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
+<span id="cb104-44"><a href="#cb104-44" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-45"><a href="#cb104-45" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>],prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-46"><a href="#cb104-46" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb104-47"><a href="#cb104-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb104-48"><a href="#cb104-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb104-49"><a href="#cb104-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb104-50"><a href="#cb104-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-51"><a href="#cb104-51" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb104-52"><a href="#cb104-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
+<span id="cb104-53"><a href="#cb104-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb104-54"><a href="#cb104-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb104-55"><a href="#cb104-55" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-56"><a href="#cb104-56" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
+<span id="cb104-57"><a href="#cb104-57" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-58"><a href="#cb104-58" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-59"><a href="#cb104-59" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-60"><a href="#cb104-60" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span>,</span>
+<span id="cb104-61"><a href="#cb104-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">5</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb104-62"><a href="#cb104-62" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-63"><a href="#cb104-63" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for # (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
+<span id="cb104-64"><a href="#cb104-64" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-65"><a href="#cb104-65" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], prediction<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
+<span id="cb104-66"><a href="#cb104-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">3</span>]<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>),<span class="st">"%"</span>,<span class="at">sep=</span><span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb104-67"><a href="#cb104-67" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-68"><a href="#cb104-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-69"><a href="#cb104-69" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-70"><a href="#cb104-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x2 and then x1, i.e.,</span></span>
+<span id="cb104-71"><a href="#cb104-71" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
+<span id="cb104-72"><a href="#cb104-72" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-73"><a href="#cb104-73" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>],prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],<span class="at">pch=</span><span class="dv">19</span>,<span class="at">cex=</span>CeX)</span>
+<span id="cb104-74"><a href="#cb104-74" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb104-75"><a href="#cb104-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>],</span>
+<span id="cb104-76"><a href="#cb104-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb104-77"><a href="#cb104-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb104-78"><a href="#cb104-78" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-79"><a href="#cb104-79" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb104-80"><a href="#cb104-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], <span class="at">y0 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb104-81"><a href="#cb104-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb104-82"><a href="#cb104-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb104-83"><a href="#cb104-83" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-84"><a href="#cb104-84" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
+<span id="cb104-85"><a href="#cb104-85" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-86"><a href="#cb104-86" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb104-87"><a href="#cb104-87" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-88"><a href="#cb104-88" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb104-89"><a href="#cb104-89" aria-hidden="true" tabindex="-1"></a>     <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">6</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb104-90"><a href="#cb104-90" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-91"><a href="#cb104-91" aria-hidden="true" tabindex="-1"></a><span class="do">## New predicted value for (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
+<span id="cb104-92"><a href="#cb104-92" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-93"><a href="#cb104-93" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], prediction<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb104-94"><a href="#cb104-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">4</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb104-95"><a href="#cb104-95" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-96"><a href="#cb104-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-97"><a href="#cb104-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-98"><a href="#cb104-98" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-99"><a href="#cb104-99" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for (do(s=1), x1, x2), no transport</span></span>
+<span id="cb104-100"><a href="#cb104-100" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb104-101"><a href="#cb104-101" aria-hidden="true" tabindex="-1"></a>ry <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
+<span id="cb104-102"><a href="#cb104-102" aria-hidden="true" tabindex="-1"></a><span class="fu">draw.circle</span>(</span>
+<span id="cb104-103"><a href="#cb104-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> prediction<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> ry, <span class="at">y =</span> prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> ry, </span>
+<span id="cb104-104"><a href="#cb104-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">radius =</span> ry <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)</span>
+<span id="cb104-105"><a href="#cb104-105" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb104-106"><a href="#cb104-106" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb104-107"><a href="#cb104-107" aria-hidden="true" tabindex="-1"></a>  prediction<span class="sc">$</span>start[<span class="dv">1</span>], prediction<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">42</span>,</span>
+<span id="cb104-108"><a href="#cb104-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb104-109"><a href="#cb104-109" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="regression_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="384"></p>
+<div id="fig-gauss-logistic-predicted-decomposition" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-gauss-logistic-predicted-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.16: Two counterfactuals, based on either the causal assumption from <a href="#fig-DAG-a" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> (bottom right path) or on the causal assumption from <a href="#fig-DAG-b" class="quarto-xref">Figure&nbsp;<span>2.14</span></a> (top left path)
+</figcaption>
+<div aria-describedby="fig-gauss-logistic-predicted-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="regression_files/figure-html/fig-gauss-logistic-predicted-decomposition-1.png" class="img-fluid figure-img" width="384">
+</div>
 </figure>
 </div>
 </div>
@@ -2336,8 +2445,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./gaussian.html" class="pagination-link" aria-label="Gaussian simulations">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gaussian simulations</span></span>
+      <a href="./gaussian.html" class="pagination-link" aria-label="Gaussian Simulations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gaussian Simulations</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
