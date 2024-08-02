@@ -222,7 +222,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Simulations</span></a>
+ <span class="menu-text">Optimal Transport</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -230,10 +230,21 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./gaussian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Gaussian Simulations</span></span></a>
+  <a href="./optimal-transport.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Optimal Transport</span></span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Simulations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./regression.html" class="sidebar-item-text sidebar-link">
@@ -244,13 +255,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
  <span class="menu-text">Counterfactuals with Law Dataset</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
@@ -349,14 +360,14 @@ Objectives
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter uses multivariate optimal transport (<span class="citation" data-cites="de2024transport">De Lara et al. (<a href="#ref-de2024transport" role="doc-biblioref">2024</a>)</span>) to make counterfactual inference.</p>
+<p>This chapter uses multivariate optimal transport (<span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>) to make counterfactual inference.</p>
 </div>
 </div>
 <p>In the article, we use three methods to create counterfactuals:</p>
 <ol type="1">
-<li>Fairadapt (<a href="#sec-cf-fairadapt" class="quarto-xref">Chapter&nbsp;<span class="quarto-unresolved-ref ref-noprefix">sec-cf-fairadapt</span></a>)</li>
+<li>Fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>5</span></a>)</li>
 <li>Multivariate optimal transport (this chapter)</li>
-<li>Sequential transport (the methodology we develop in the paper, see <a href="#sec-cf-seq-t" class="quarto-xref">Chapter&nbsp;<span class="quarto-unresolved-ref ref-noprefix">sec-cf-seq-t</span></a>).</li>
+<li>Sequential transport (the methodology we develop in the paper, see <a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>).</li>
 </ol>
 <div class="cell">
 <details class="code-fold">
@@ -398,15 +409,15 @@ Objectives
 </div>
 <section id="load-data-and-classifier" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">6.1</span> Load Data and Classifier</h2>
-<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="#sec-data-save" class="quarto-xref">Chapter&nbsp;<span class="quarto-unresolved-ref ref-noprefix">sec-data-save</span></a>:</p>
+<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>3.3</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/df_race.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable ((Y), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span class="quarto-unresolved-ref ref-noprefix">sec-classifier-save</span></a>:</p>
+<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable ((Y), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="classifier.html#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span>4.5</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/df_race_c.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also need the predictions made by the classifier (see <a href="#sec-classifier" class="quarto-xref">Chapter&nbsp;<span class="quarto-unresolved-ref ref-noprefix">sec-classifier</span></a>):</p>
+<p>We also need the predictions made by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>4</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on train/test sets</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/pred_aware.rda"</span>)</span>
@@ -418,7 +429,7 @@ Objectives
 </section>
 <section id="counterfactuals-with-multivariate-optimal-transport" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="counterfactuals-with-multivariate-optimal-transport"><span class="header-section-number">6.2</span> Counterfactuals with Multivariate Optimal Transport</h2>
-<p>We apply multivariate optimal transport (OT), following the methodology developed in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. Note that with OT, it is not possible to handle new cases. Counterfactuals will only be calculated on the train set.</p>
+<p>We apply multivariate optimal transport (OT), following the methodology developed in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. Note that with OT, it is not possible to handle new cases. Counterfactuals will only be calculated on the train set.</p>
 <p>The codes are run in python. We use the {reticulate} R package to call python in this notebook.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -989,7 +1000,7 @@ P(\hat{Y}_{S \leftarrow \text{White}} = 1 | S = \text{Black}, X_1, X_2) = P(\hat
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-de2024transport" class="csl-entry" role="listitem">
 De Lara, Lucas, Alberto González-Sanz, Nicholas Asher, Laurent Risser, and Jean-Michel Loubes. 2024. <span>“Transport-Based Counterfactual Models.”</span> <em>Journal of Machine Learning Research</em> 25 (136): 1–59.
 </div>

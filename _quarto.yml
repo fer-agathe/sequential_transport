@@ -19,12 +19,12 @@ book:
   date: "8/1/2024"
   chapters:
     - index.qmd
-    # - part: Simulated Data
-    #   chapters:
-    # - gaussian-ot.qmd
+    - part: Optimal Transport
+      chapters:
+      - optimal-transport.qmd
     - part: Simulations
       chapters:
-        - gaussian.qmd
+        # - gaussian.qmd
         - regression.qmd
     - part: Counterfactuals with Law Dataset
       chapters:
