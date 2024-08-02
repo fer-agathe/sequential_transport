@@ -1,229 +1,254 @@
-# Gaussian (original)
+# Optimal Transport {#sec-optimal-transport}
 
-```{r transport-aaai-1, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
-limA = c(-5, 5)
-limB = c(-5, 5) 
-limY = c(0, .5)
-lab = c("A", "B")
-sub = 6
+::: callout-note
 
-vy1 = dnorm(vx,-1,1.2)
-vy2 = dnorm(vx,1.5,.9)
+## Objectives
 
-    d_A = data.frame(x = vx, y = vy1)
-    d_B = data.frame(x = vx, y = vy2)
-    {
-        mat <- matrix(c(1, 2, 0, 3), 2)
-        par(mfrow = c(2, 2))
-        layout(mat, c(3.5, 1), c(1, 3))
-        par(mar = c(0.5, 4.5, 0.5, 0.5))
-    }
-    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
-        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
-    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
-        0.1), border = NA)
+This chapter demonstrates Optimal Transport (OT) methodology applied to simulated Gaussian and general marginal distributions. The sensitive attribute $S \in \left\{0,1\right\}$ is a binary variable, with each group $S=0$ and $S=1$, corresponding to a distinct Gaussian or general distribution. The objective is to transport, with OT theory, $\boldsymbol{X} = (X_1,X_2)$ from group $S=0$ to group $S=1$.
 
-p1= 0.1586553
-a1=qnorm(p1,-1,1.2)
-a2=qnorm(p1,1.5,.9)
-idx1 = which(vx<=a1)
-idx2 = which(vx<=a2)
-polygon(c(min(vx),vx[idx1],max(vx[idx1])),
-        c(0,vy1[idx1],0),
-        col=scales::alpha(colors["A"],.2),
-        border=NA)
+:::
 
-    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
-        seq(limA[1], limA[2], length = sub)[-1]))
-    
-    
-    par(mar = c(4.5, 4.5, 0.5, 0.5))
-    vu = seq(0,1,length=261)
-    vv1 =qnorm(vu,-1,1.2)
-    vv2 =qnorm(vu,1.5,.9)
-    
-    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
-        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
-        axes = FALSE)
-    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
-    axis(1)
-    axis(2)
-    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
-    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
-    ax1 =qnorm(p1,-1,1.2)
-    ay1 =qnorm(p1,1.5,.9)
-    points(ax1,ay1,pch=19,col=COLORS["1"])
-    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
-    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
-    
-    par(mar = c(4.5, 0.5, 0.5, 0.5))
-    
-    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
-        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
-    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
-        0.1), border = NA)
-    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
-        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+```{r setup, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the setting codes
 
-polygon(c(0,vy2[idx2],0),
-        c(min(vx),vx[idx2],max(vx[idx2])),
-        col=scales::alpha(colors["B"],.2),
-        border=NA)
-```
+# Required packages----
+library(tidyverse)
+library(glue)
+library(igraph)
+library("wesanderson")
+library(scales)
+library(kableExtra)
+library(InsurFair)
+library(expm)
+library(ks)
 
-```{r transport-aaai-2, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
-limA = c(-5, 5)
-limB = c(-5, 5) 
-limY = c(0, .5)
-lab = c("A", "B")
-sub = 6
+# Graphs----
+data("COLORS")
+colors = COLORS
 
+# Seed
 set.seed(1234)
-x1 = rnorm(13,-1,1.2)
-x2 = rnorm(7,1.5,1)
-f1 = density(x1,from=-5,to=5,n=length(vx))
-f2 = density(x2,from=-5,to=5,n=length(vx))
-x1s = sample(x1,size=1e3,replace=TRUE)+rnorm(1e3,0,f1$bw)
-x2s = sample(x2,size=1e3,replace=TRUE)+rnorm(1e3,0,f2$bw)
-F1 = Vectorize(function(x) mean(x1s<=x))
-F2 = Vectorize(function(x) mean(x2s<=x))
-Q1 = Vectorize(function(x) as.numeric(quantile(x1s,x)))
-Q2 = Vectorize(function(x) as.numeric(quantile(x2s,x)))
 
-vy1 = f1$y
-vy2 = f2$y
-
-    d_A = data.frame(x = vx, y = vy1)
-    d_B = data.frame(x = vx, y = vy2)
-    {
-        mat <- matrix(c(1, 2, 0, 3), 2)
-        par(mfrow = c(2, 2))
-        layout(mat, c(3.5, 1), c(1, 3))
-        par(mar = c(0.5, 4.5, 0.5, 0.5))
-    }
-    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
-        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
-    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
-        0.1), border = NA)
-
-p1= 0.1586553
-a1=Q1(p1)
-a2=Q2(p1)
-idx1 = which(vx<=a1)
-idx2 = which(vx<=a2)
-polygon(c(min(vx),vx[idx1],max(vx[idx1])),
-        c(0,vy1[idx1],0),
-        col=scales::alpha(colors["A"],.2),
-        border=NA)
-
-    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
-        seq(limA[1], limA[2], length = sub)[-1]))
-    
-    
-    par(mar = c(4.5, 4.5, 0.5, 0.5))
-    vu = seq(0,1,length=261)
-    vv1 =Q1(vu)
-    vv2 =Q2(vu)
-    
-    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
-        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
-        axes = FALSE)
-    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
-    axis(1)
-    axis(2)
-    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
-    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
-    ax1 =Q1(p1)
-    ay1 =Q2(p1)
-    points(ax1,ay1,pch=19,col=COLORS["1"])
-    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
-    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
-    
-    par(mar = c(4.5, 0.5, 0.5, 0.5))
-    
-    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
-        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
-    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
-        0.1), border = NA)
-    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
-        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
-
-polygon(c(0,vy2[idx2],0),
-        c(min(vx),vx[idx2],max(vx[idx2])),
-        col=scales::alpha(colors["B"],.2),
-        border=NA)
+source("functions/utils.R")
+source("functions/graphs.R")
 ```
 
-```{r, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
-limA = c(-5, 5)
-limB = c(-5, 5) 
-limY = c(0, .5)
-lab = c("A", "B")
-sub = 6
+## Univariate Optimal Transport
 
-vy1 = dnorm(vx,-1,1.2)
-vy2 = dnorm(vx,1.5,.9)
+### Gaussian distribution 
 
-    d_A = data.frame(x = vx, y = vy1)
-    d_B = data.frame(x = vx, y = vy2)
-    {
-        mat <- matrix(c(1, 2, 0, 3), 2)
-        par(mfrow = c(2, 2))
-        layout(mat, c(3.5, 1), c(1, 3))
-        par(mar = c(0.5, 4.5, 0.5, 0.5))
-    }
-    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
-        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
-    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
-        0.1), border = NA)
+We start by simulating two univariate Gaussian distributions with their densities: one for the subset $S=0$ and one for the subset $S=1$.
 
-p1= 0.1586553
-a1=qnorm(p1,-1,1.2)
-a2=qnorm(p1,1.5,.9)
-idx1 = which(vx<=a1)
-idx2 = which(vx<=a2)
-polygon(c(min(vx),vx[idx1],max(vx[idx1])),
-        c(0,vy1[idx1],0),
-        col=scales::alpha(colors["A"],.2),
-        border=NA)
+```{r data-univ-gauss, message=FALSE, warning=FALSE}
 
-    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
-        seq(limA[1], limA[2], length = sub)[-1]))
-    
-    
-    par(mar = c(4.5, 4.5, 0.5, 0.5))
-    vu = seq(0,1,length=261)
-    vv1 =qnorm(vu,-1,1.2)
-    vv2 =qnorm(vu,1.5,.9)
-    
-    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
-        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
-        axes = FALSE)
-    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
-    axis(1)
-    axis(2)
-    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
-    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
-    ax1 =qnorm(p1,-1,1.2)
-    ay1 =qnorm(p1,1.5,.9)
-    points(ax1,ay1,pch=19,col=COLORS["1"])
-    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
-    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
-    
-    par(mar = c(4.5, 0.5, 0.5, 0.5))
-    
-    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
-        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
-    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
-        0.1), border = NA)
-    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
-        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+# Univariate Gaussian distribution S=0
+x1_grid <- seq(-5, 5, length = 251)
+m0 <- -1
+s0 <- 1.2
+d0x1 <- dnorm(x1_grid, m0, s0)
+d_0 <- data.frame(x = x1_grid, y = d0x1)
 
-polygon(c(0,vy2[idx2],0),
-        c(min(vx),vx[idx2],max(vx[idx2])),
-        col=scales::alpha(colors["B"],.2),
-        border=NA)
+# Univariate Gaussian distribution S=1
+m1 <- 1.5
+s1 <- .9
+d1x1 <- dnorm(x1_grid, m1, s1)
+d_1 <- data.frame(x = x1_grid, y = d1x1)
+
 ```
+
+In the following graphs, we plot the optimal transport mapping for one example individual from subset $S=0$:
+```{r ot-map-univ-gauss, message=FALSE, warning=FALSE}
+u <- 0.1586553
+# u-quantile of X1 for subset S=0
+x1 <- qnorm(u, m0, s0)
+# u-quantile of X1 for subset S=1
+x1_star <- qnorm(u, m1, s1)
+
+```
+
+We also calculate the indices of $X_1$ grid that are below this individual ($x_1$) and its counterfactual ($x_1^*$) in order to plot the cdf's (for this individual) of $X_1$ in both subsets $S=0$ and $S=1$ in the following graphs:
+```{r indices-univ-gauss-x1, message=FALSE, warning=FALSE}
+idx1 <- which(x1_grid <= x1)
+idx1_star <- which(x1_grid <= x1_star)
+
+```
+
+We then plot the Optimal Transport line between $X_1|S=0$ and $X_1|S=1$:
+```{r plot-ot-univ, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the codes used to create the Figure
+
+# Graph parameters
+limA <- c(-5, 5)
+limB <- c(-5, 5) 
+limY <- c(0, .5)
+lab <- c("A", "B")
+sub <- 6
+
+{
+  mat <- matrix(c(1, 2, 0, 3), 2)
+  par(mfrow = c(2, 2))
+  layout(mat, c(3.5, 1), c(1, 3))
+  par(mar = c(0.5, 4.5, 0.5, 0.5))
+}
+
+# Density of X1 in subset S=0
+plot(d_0$x, d_0$y, type = "l", col = COLORS[lab[1]], lwd = 2,
+     axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
+polygon(c(0, d_0$x, 1), c(0, d_0$y, 0), 
+        col = scales::alpha(COLORS[lab[1]], 0.1), 
+        border = NA)
+# cdf of X1 in subset S=0
+polygon(c(min(d_0$x), d_0$x[idx1], max(d_0$x[idx1])),
+        c(0, d_0$y[idx1], 0),
+        col = scales::alpha(colors["A"],.2),
+        border = NA)
+# Add x-axis
+axis(1, at = seq(limA[1], limA[2], length = sub), 
+     label = c(NA, seq(limA[1], limA[2], length = sub)[-1]))
+
+# Optimal transport from subset S=0 to S=1 (defined with quantile functions)
+par(mar = c(4.5, 4.5, 0.5, 0.5))
+u_grid <- seq(0, 1, length=261)
+q_0 <- qnorm(u_grid, m0, s0)
+q_1 <- qnorm(u_grid, m1, s1)
+plot(q_0, q_1, col = COLORS["1"], lwd = 2, type = "l", 
+     xlab = "", ylab = "", xlim = limA, ylim = limB, axes = FALSE)
+abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
+# Add x-axis and y-axis
+axis(1)
+axis(2)
+# Legend
+mtext("distribution (group 0)", side = 1, line = 3, col = "black")
+mtext("distribution (group 1)", side = 2, line = 3, col = "black")
+# Example individual
+points(x1, x1_star, pch = 19, col = COLORS["1"])
+segments(x1, x1_star, x1, 10, lwd = .4, col = COLORS["1"])
+segments(x1, x1_star, 10, x1_star, lwd = .4, col = COLORS["1"])
+
+# Density of X1 in subset S=1
+par(mar = c(4.5, 0.5, 0.5, 0.5))
+plot(d_1$y, d_1$x, type = "l", col = COLORS[lab[2]], lwd = 2,
+     ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
+polygon(c(0, d_1$y, 0), c(0, d_1$x, 1), 
+        col = scales::alpha(COLORS[lab[2]], 0.1), border = NA)
+# cdf of X1 in subset S=1
+polygon(c(0, d_1$y[idx1_star], 0),
+        c(min(d_1$x), d_1$x[idx1_star], max(d_1$x[idx1_star])),
+        col = scales::alpha(colors["B"],.2),
+        border = NA)
+# Add y-axis
+axis(2, at = seq(limB[1], limB[2], length = sub), 
+     label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+
+```
+### General distribution
+
+We simulate two general univariate distributions based on Gaussian distributions with their densities, cdf's and quantile functions: one for the subset $S=0$ and one for the subset $S=1$.
+
+```{r data-univ-general, message=FALSE, warning=FALSE}
+
+# General distribution for subset S=0
+x0 <- rnorm(13, m0, s0)
+f0 <- density(x0, from = -5, to = 5, n = length(x1_grid))
+d0 <- f0$y
+d_0 <- data.frame(x = x1_grid, y = d0)
+x0s <- sample(x0, size = 1e3, replace = TRUE) + rnorm(1e3, 0, f0$bw)
+F0 <- Vectorize(function(x) mean(x0s <= x))
+Q0 <- Vectorize(function(x) as.numeric(quantile(x0s, x)))
+
+# General distribution for subset S=1
+x1 <- rnorm(7, m1, 1)
+f1 <- density(x1, from = -5, to = 5, n = length(x1_grid))
+d1 <- f1$y
+d_1 <- data.frame(x = x1_grid, y = d1)
+x1s <- sample(x1, size = 1e3, replace = TRUE) + rnorm(1e3, 0, f1$bw)
+F1 <- Vectorize(function(x) mean(x1s <= x))
+Q1 <- Vectorize(function(x) as.numeric(quantile(x1s, x)))
+
+```
+
+In the following graphs, we plot the optimal transport mapping for one example individual from subset $S=0$:
+```{r data-univ, message=FALSE, warning=FALSE}
+u <- 0.1586553
+x1 <- Q0(u)
+x1_star <- Q1(u)
+
+```
+
+We also calculate the indices of $X_1$ grid that are below this individual ($x_1$) and its counterfactual ($x_1^*$) in order to plot the cdf's (for this individual) of $X_1$ in both subsets $S=0$ and $S=1$ in the following graphs:
+```{r indices-univ-general-x1, message=FALSE, warning=FALSE}
+idx1 <- which(x1_grid <= x1)
+idx1_star <- which(x1_grid <= x1_star)
+
+```
+
+We then plot the Optimal Transport line between $X_1|S=0$ and $X_1|S=1$:
+```{r plot-ot-univ-general, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the codes used to create the Figure
+
+{
+  mat <- matrix(c(1, 2, 0, 3), 2)
+  par(mfrow = c(2, 2))
+  layout(mat, c(3.5, 1), c(1, 3))
+  par(mar = c(0.5, 4.5, 0.5, 0.5))
+}
+
+# Density of X1 in subset S=0
+plot(d_0$x, d_0$y, type = "l", col = COLORS[lab[1]], lwd = 2,
+     axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
+polygon(c(0, d_0$x, 1), c(0, d_0$y, 0), 
+        col = scales::alpha(COLORS[lab[1]], 0.1), 
+        border = NA)
+# cdf of X1 in subset S=0
+polygon(c(min(d_0$x), d_0$x[idx1], max(d_0$x[idx1])),
+        c(0, d_0$y[idx1], 0),
+        col = scales::alpha(colors["A"],.2),
+        border = NA)
+# Add x-axis
+axis(1, at = seq(limA[1], limA[2], length = sub), 
+     label = c(NA, seq(limA[1], limA[2], length = sub)[-1]))
+
+# Optimal transport from subset S=0 to S=1 (defined with quantile functions)
+par(mar = c(4.5, 4.5, 0.5, 0.5))
+u_grid <- seq(0, 1, length=261)
+q_0 <- Q0(u_grid)
+q_1 <- Q1(u_grid)
+plot(q_0, q_1, col = COLORS["1"], lwd = 2, type = "l", 
+     xlab = "", ylab = "", xlim = limA, ylim = limB, axes = FALSE)
+abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
+# Add x-axis and y-axis
+axis(1)
+axis(2)
+# Legend
+mtext("distribution (group 0)", side = 1, line = 3, col = "black")
+mtext("distribution (group 1)", side = 2, line = 3, col = "black")
+# Example individual
+points(x1, x1_star, pch = 19, col = COLORS["1"])
+segments(x1, x1_star, x1, 10, lwd = .4, col = COLORS["1"])
+segments(x1, x1_star, 10, x1_star, lwd = .4, col = COLORS["1"])
+
+# Density of X1 in subset S=1
+par(mar = c(4.5, 0.5, 0.5, 0.5))
+plot(d_1$y, d_1$x, type = "l", col = COLORS[lab[2]], lwd = 2,
+     ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
+polygon(c(0, d_1$y, 0), c(0, d_1$x, 1), 
+        col = scales::alpha(COLORS[lab[2]], 0.1), border = NA)
+# cdf of X1 in subset S=1
+polygon(c(0, d_1$y[idx1_star], 0),
+        c(min(d_1$x), d_1$x[idx1_star], max(d_1$x[idx1_star])),
+        col = scales::alpha(colors["B"],.2),
+        border = NA)
+# Add y-axis
+axis(2, at = seq(limB[1], limB[2], length = sub), 
+     label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+
+```
+## Multivariate and Conditional Transport
+
+### Gaussian distribution
 
 ```{r X1_then_X2, fig.height = 5, fig.width = 5, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
 par(mar=c(2.5,2.5,0,0))
