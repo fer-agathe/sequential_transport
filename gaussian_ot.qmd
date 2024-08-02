@@ -1,0 +1,616 @@
+# Gaussian (original)
+
+```{r transport-aaai-1, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+limA = c(-5, 5)
+limB = c(-5, 5) 
+limY = c(0, .5)
+lab = c("A", "B")
+sub = 6
+
+vy1 = dnorm(vx,-1,1.2)
+vy2 = dnorm(vx,1.5,.9)
+
+    d_A = data.frame(x = vx, y = vy1)
+    d_B = data.frame(x = vx, y = vy2)
+    {
+        mat <- matrix(c(1, 2, 0, 3), 2)
+        par(mfrow = c(2, 2))
+        layout(mat, c(3.5, 1), c(1, 3))
+        par(mar = c(0.5, 4.5, 0.5, 0.5))
+    }
+    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
+        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
+    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
+        0.1), border = NA)
+
+p1= 0.1586553
+a1=qnorm(p1,-1,1.2)
+a2=qnorm(p1,1.5,.9)
+idx1 = which(vx<=a1)
+idx2 = which(vx<=a2)
+polygon(c(min(vx),vx[idx1],max(vx[idx1])),
+        c(0,vy1[idx1],0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+
+    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
+        seq(limA[1], limA[2], length = sub)[-1]))
+    
+    
+    par(mar = c(4.5, 4.5, 0.5, 0.5))
+    vu = seq(0,1,length=261)
+    vv1 =qnorm(vu,-1,1.2)
+    vv2 =qnorm(vu,1.5,.9)
+    
+    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
+        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
+        axes = FALSE)
+    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
+    axis(1)
+    axis(2)
+    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
+    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
+    ax1 =qnorm(p1,-1,1.2)
+    ay1 =qnorm(p1,1.5,.9)
+    points(ax1,ay1,pch=19,col=COLORS["1"])
+    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
+    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
+    
+    par(mar = c(4.5, 0.5, 0.5, 0.5))
+    
+    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
+        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
+    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
+        0.1), border = NA)
+    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
+        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+
+polygon(c(0,vy2[idx2],0),
+        c(min(vx),vx[idx2],max(vx[idx2])),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+```
+
+```{r transport-aaai-2, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+limA = c(-5, 5)
+limB = c(-5, 5) 
+limY = c(0, .5)
+lab = c("A", "B")
+sub = 6
+
+set.seed(1234)
+x1 = rnorm(13,-1,1.2)
+x2 = rnorm(7,1.5,1)
+f1 = density(x1,from=-5,to=5,n=length(vx))
+f2 = density(x2,from=-5,to=5,n=length(vx))
+x1s = sample(x1,size=1e3,replace=TRUE)+rnorm(1e3,0,f1$bw)
+x2s = sample(x2,size=1e3,replace=TRUE)+rnorm(1e3,0,f2$bw)
+F1 = Vectorize(function(x) mean(x1s<=x))
+F2 = Vectorize(function(x) mean(x2s<=x))
+Q1 = Vectorize(function(x) as.numeric(quantile(x1s,x)))
+Q2 = Vectorize(function(x) as.numeric(quantile(x2s,x)))
+
+vy1 = f1$y
+vy2 = f2$y
+
+    d_A = data.frame(x = vx, y = vy1)
+    d_B = data.frame(x = vx, y = vy2)
+    {
+        mat <- matrix(c(1, 2, 0, 3), 2)
+        par(mfrow = c(2, 2))
+        layout(mat, c(3.5, 1), c(1, 3))
+        par(mar = c(0.5, 4.5, 0.5, 0.5))
+    }
+    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
+        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
+    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
+        0.1), border = NA)
+
+p1= 0.1586553
+a1=Q1(p1)
+a2=Q2(p1)
+idx1 = which(vx<=a1)
+idx2 = which(vx<=a2)
+polygon(c(min(vx),vx[idx1],max(vx[idx1])),
+        c(0,vy1[idx1],0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+
+    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
+        seq(limA[1], limA[2], length = sub)[-1]))
+    
+    
+    par(mar = c(4.5, 4.5, 0.5, 0.5))
+    vu = seq(0,1,length=261)
+    vv1 =Q1(vu)
+    vv2 =Q2(vu)
+    
+    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
+        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
+        axes = FALSE)
+    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
+    axis(1)
+    axis(2)
+    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
+    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
+    ax1 =Q1(p1)
+    ay1 =Q2(p1)
+    points(ax1,ay1,pch=19,col=COLORS["1"])
+    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
+    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
+    
+    par(mar = c(4.5, 0.5, 0.5, 0.5))
+    
+    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
+        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
+    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
+        0.1), border = NA)
+    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
+        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+
+polygon(c(0,vy2[idx2],0),
+        c(min(vx),vx[idx2],max(vx[idx2])),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+```
+
+```{r, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+limA = c(-5, 5)
+limB = c(-5, 5) 
+limY = c(0, .5)
+lab = c("A", "B")
+sub = 6
+
+vy1 = dnorm(vx,-1,1.2)
+vy2 = dnorm(vx,1.5,.9)
+
+    d_A = data.frame(x = vx, y = vy1)
+    d_B = data.frame(x = vx, y = vy2)
+    {
+        mat <- matrix(c(1, 2, 0, 3), 2)
+        par(mfrow = c(2, 2))
+        layout(mat, c(3.5, 1), c(1, 3))
+        par(mar = c(0.5, 4.5, 0.5, 0.5))
+    }
+    plot(d_A$x, d_A$y, type = "l", col = COLORS[lab[1]], lwd = 2, 
+        axes = FALSE, xlab = "", ylab = "", xlim = limA, ylim = limY)
+    polygon(c(0, d_A$x, 1), c(0, d_A$y, 0), col = scales::alpha(COLORS[lab[1]], 
+        0.1), border = NA)
+
+p1= 0.1586553
+a1=qnorm(p1,-1,1.2)
+a2=qnorm(p1,1.5,.9)
+idx1 = which(vx<=a1)
+idx2 = which(vx<=a2)
+polygon(c(min(vx),vx[idx1],max(vx[idx1])),
+        c(0,vy1[idx1],0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+
+    axis(1, at = seq(limA[1], limA[2], length = sub), label = c(NA, 
+        seq(limA[1], limA[2], length = sub)[-1]))
+    
+    
+    par(mar = c(4.5, 4.5, 0.5, 0.5))
+    vu = seq(0,1,length=261)
+    vv1 =qnorm(vu,-1,1.2)
+    vv2 =qnorm(vu,1.5,.9)
+    
+    plot(vv1,vv2, col = COLORS["1"], lwd = 2, 
+        type = "l", xlab = "", ylab = "", xlim = limA, ylim = limB, 
+        axes = FALSE)
+    abline(a = 0, b = 1, col = COLORS["0"], lty = 2)
+    axis(1)
+    axis(2)
+    mtext("distribution (group 0)", side = 1, line = 3, col = "black")
+    mtext("distribution (group 1)", side = 2, line = 3, col = "black")
+    ax1 =qnorm(p1,-1,1.2)
+    ay1 =qnorm(p1,1.5,.9)
+    points(ax1,ay1,pch=19,col=COLORS["1"])
+    segments(ax1,ay1,ax1,10,lwd=.4,col=COLORS["1"])
+    segments(ax1,ay1,10,ay1,lwd=.4,col=COLORS["1"])
+    
+    par(mar = c(4.5, 0.5, 0.5, 0.5))
+    
+    plot(d_B$y, d_B$x, type = "l", col = COLORS[lab[2]], lwd = 2, 
+        ylim = limB, xlim = limY, xlab = "", ylab = "", axes = FALSE)
+    polygon(c(0, d_B$y, 0), c(0, d_B$x, 1), col = scales::alpha(COLORS[lab[2]], 
+        0.1), border = NA)
+    axis(2, at = seq(limB[1], limB[2], length = sub), label = c(NA, 
+        seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA))
+
+polygon(c(0,vy2[idx2],0),
+        c(min(vx),vx[idx2],max(vx[idx2])),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+```
+
+```{r X1_then_X2, fig.height = 5, fig.width = 5, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+par(mar=c(2.5,2.5,0,0))
+par(mfrow=c(1,1))
+b1=3
+vx = seq(-5,5,length=6001)
+vy1 = dnorm(vx,-1,1.2)*4
+vy2 = dnorm(vx,1.5,.9)*4
+plot(vx,vy1,col=colors["A"],xlab="",ylab="",axes=FALSE,type="l",ylim=c(0,10))
+
+M1=c(-1,-1+5)
+M2=c(1.5,1.5+5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+
+A  = sqrtm(S1) %*% S2 %*% (sqrtm(S1))
+A  = solve(sqrtm(S1)) %*% sqrtm(A) %*% solve((sqrtm(S1)))
+T = function(x) as.vector(M2+A%*%(x-M1))
+
+library(mvtnorm)
+vx0 = seq(-5,5,length=251)
+data.grid <- expand.grid(x=vx0,y=vx0+5)
+dgauss1 = matrix(mvtnorm::dmvnorm(data.grid, mean = M1, sigma = S1),length(vx0),length(vx0))
+dgauss2 = matrix(mvtnorm::dmvnorm(data.grid, mean = M2, sigma = S2),length(vx0),length(vx0))
+
+contour(vx0,vx0+5,dgauss1,col=colors["A"],add=TRUE)
+contour(vx0,vx0+5,dgauss2,col=colors["B"],add=TRUE)
+polygon(c(min(vx),vx,max(vx)),
+        c(0,vy1,0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(min(vx),vx,max(vx)),
+        c(0,vy2,0),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+p1= 0.1586553
+a1=qnorm(p1,-1,1.2)
+a2=qnorm(p1,1.5,.9)
+idx1 = which(vx<=a1)
+idx2 = which(vx<=a2)
+polygon(c(min(vx),vx[idx1],max(vx[idx1])),
+        c(0,vy1[idx1],0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(min(vx),vx[idx2],max(vx[idx2])),
+        c(0,vy2[idx2],0),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+lines(vx,vy2,col=colors["B"])
+segments(a1,0,a1,100,col=colors["A"])
+segments(a2,0,a2,100,col=colors["B"])
+points(a1,b1,pch=19)
+axis(1,at = seq(-2,2)*2,labels=NA)
+axis(1,at = a1,
+     labels=expression(x[0]),
+     col.ticks =NA,
+     col.axis = colors["A"], line=.5)
+axis(1,at = a2,
+     labels=bquote(x[1]~"="~mu[1][x]+frac(sigma[1][x],sigma[0][x])~(x[0]-mu[0][x])),
+     col.ticks = NA,
+     col.axis = colors["B"], line=.5)
+axis(1,at = a1,
+     labels=NA,
+     col.ticks = colors["A"],line = -.5)
+axis(1,at = a2,
+     labels=NA,
+     col.ticks = colors["B"],line = -.5)
+
+####
+
+y = b1 = 3
+vx=vx+5
+mu1 = M1[2]+S1[1,2]/S1[1,1]*(a1-M1[1])
+sig1=sqrt(S1[2,2]-S1[2,1]^2/S1[2,2])
+mu2 = M2[2]+S2[1,2]/S2[1,1]*(a2-M2[1])
+sig2=sqrt(S2[2,2]-S2[2,1]^2/S2[2,2])
+vz1 = dnorm(vx,mu1,sig1)*3
+vz2 = dnorm(vx,mu2,sig2)*3
+lines(vz1-5,vx,col=colors["A"])
+
+polygon(c(0,vz1,0)-5,
+        c(min(vx),vx,max(vx)),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(0,vz2,0)-5,
+        c(min(vx),vx,max(vx)),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+
+p1 = pnorm(b1,mu1,sig1)
+b2=qnorm(p1,mu2,sig2)
+idx1 = which(vx<=b1)
+idx2 = which(vx<=b2)
+polygon(c(0,vz1[idx1],0)-5,
+        c(min(vx),vx[idx1],max(vx[idx1])),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(0,vz2[idx2],0)-5,
+        c(min(vx),vx[idx2],max(vx[idx2])),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+lines(vz2-5,vx,col=colors["B"])
+segments(-5,b1,100,b1,col=colors["A"])
+segments(-5,b2,100,b2,col=colors["B"])
+points(a1,b1,pch=19)
+axis(2,at = c(0,1,3,4,5)*2,labels=NA)
+axis(2,at = b1,
+     labels=expression(y[0]),
+     col.ticks =NA,
+     col.axis = colors["A"], line=.5)
+axis(2,at = b2,
+     labels=bquote(y[1]),
+     col.ticks = NA,
+     col.axis = colors["B"], line=.5)
+axis(2,at = b1,
+     labels=NA,
+     col.ticks = colors["A"],line = -.5)
+axis(2,at = b2,
+     labels=NA,
+     col.ticks = colors["B"],line = -.5)
+points(a2,b2,pch=19)
+segments(a1,b1,a2,b1,lwd=2)
+arrows(a2,b1,a2,b2-.1,length=.1,lwd=2)
+
+XpuisY = matrix(c(a1,b1,a2,b2),2,2)
+colnames(XpuisY) = c("start","x_then_y")
+
+M1=c(-1,-1+5)
+M2=c(1.5,1.5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+
+AA  = sqrtm(S1) %*% S2 %*% (sqrtm(S1))
+AA  = solve(sqrtm(S1)) %*% sqrtm(AA) %*% solve((sqrtm(S1)))
+T = function(x) as.vector(M2+AA%*%(x-M1))
+
+optrasnp=T(c(a1,b1))
+XYopt = matrix(c(a1,b1,optrasnp[1],optrasnp[2]+5),2,2)
+colnames(XYopt) = c("start","OT")
+
+points(optrasnp[1],optrasnp[2]+5,pch=15,col="#C93312")
+```
+
+```{r X2_then_X1, fig.height = 5, fig.width = 5, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+par(mar=c(2.5,4,0,0))
+par(mfrow=c(1,1))
+vx = seq(-5,5,length=6001)
+vx=vx+5
+M1=c(-1,-1+5)
+M2=c(1.5,1.5+5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+b1=3
+b2=qnorm(pnorm(b1,5-1,1.2),5+1.5,.9)
+mu1 = M1[2]+S1[1,2]/S1[1,1]*(b1-M1[1]-5)
+sig1=sqrt(S1[2,2]-S1[2,1]^2/S1[2,2])
+mu2 = M2[2]+S2[1,2]/S2[1,1]*(b2-M2[1]-5)
+sig2=sqrt(S2[2,2]-S2[2,1]^2/S2[2,2])
+vy1 = dnorm(vx,mu1,sig1)*3
+vy2 = dnorm(vx,mu2,sig2)*3
+
+vz1 = dnorm(vx-5,-1,1.2)*4
+vz2 = dnorm(vx-5,1.5,.9)*4
+
+plot(vx,vy1,col=colors["A"],xlab="",ylab="",axes=FALSE,type="l",ylim=c(0,10))
+lines(vz1-5,vx,col=colors["A"])
+library(mvtnorm)
+vx0 = seq(-5,5,length=251)
+data.grid <- expand.grid(x=vx0,y=vx0+5)
+dgauss1 = matrix(mvtnorm::dmvnorm(data.grid, mean = M1, sigma = S1),length(vx0),length(vx0))
+dgauss2 = matrix(mvtnorm::dmvnorm(data.grid, mean = M2, sigma = S2),length(vx0),length(vx0))
+
+contour(vx0+5,vx0+5,dgauss1,col=colors["A"],add=TRUE)
+contour(vx0+5,vx0+5,dgauss2,col=colors["B"],add=TRUE)
+polygon(c(min(vx),vx,max(vx)),
+        c(0,vy1,0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(min(vx),vx,max(vx)),
+        c(0,vy2,0),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+a1= -2.2
+p1=pnorm(a1+5,mu1,sig1)
+a2=qnorm(p1,mu2,sig2)
+a1=a1+5
+idx1 = which(vx<=a1)
+idx2 = which(vx<=a2)
+polygon(c(min(vx),vx[idx1],max(vx[idx1])),
+        c(0,vy1[idx1],0),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(min(vx),vx[idx2],max(vx[idx2])),
+        c(0,vy2[idx2],0),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+lines(vx,vy2,col=colors["B"])
+segments(a1,0,a1,100,col=colors["A"])
+segments(a2,0,a2,100,col=colors["B"])
+points(a1,b1,pch=19)
+axis(1,at = 5+seq(-2,2)*2,labels=NA)
+axis(1,at = a1,
+     labels=expression(x[0]),
+     col.ticks =NA,
+     col.axis = colors["A"], line=.5)
+axis(1,at = a2,
+     labels=bquote(x[1]),
+     col.ticks = NA,
+     col.axis = colors["B"], line=.5)
+axis(1,at = a1,
+     labels=NA,
+     col.ticks = colors["A"],line = -.5)
+axis(1,at = a2,
+     labels=NA,
+     col.ticks = colors["B"],line = -.5)
+
+####
+
+lines(vz1,vx,col=colors["A"])
+
+polygon(c(0,vz1,0),
+        c(min(vx),vx,max(vx)),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(0,vz2,0),
+        c(min(vx),vx,max(vx)),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+
+p1 = pnorm(b1,5-1,1.2)
+b2=qnorm(p1,5+1.5,.9)
+idx1 = which(vx<=b1)
+idx2 = which(vx<=b2)
+polygon(c(0,vz1[idx1],0),
+        c(min(vx),vx[idx1],max(vx[idx1])),
+        col=scales::alpha(colors["A"],.2),
+        border=NA)
+polygon(c(0,vz2[idx2],0),
+        c(min(vx),vx[idx2],max(vx[idx2])),
+        col=scales::alpha(colors["B"],.2),
+        border=NA)
+lines(vz2,vx,col=colors["B"])
+segments(0,b1,100,b1,col=colors["A"])
+segments(0,b2,100,b2,col=colors["B"])
+points(a1,b1,pch=19)
+axis(2,at = c(0,1,3,4,5)*2,labels=NA)
+axis(2,at = b1,
+     labels=expression(y[0]),
+     col.ticks =NA,
+     col.axis = colors["A"], line=0)
+axis(2,at = b2,
+     labels=bquote(y[1]~"="~mu[1][y]+frac(sigma[1][y],sigma[0][y])~(y[0]-mu[0][y])),
+     col.ticks = NA,
+     col.axis = colors["B"], line=.5)
+axis(2,at = b1,
+     labels=NA,
+     col.ticks = colors["A"],line = -.5)
+axis(2,at = b2,
+     labels=NA,
+     col.ticks = colors["B"],line = -.5)
+points(a2,b2,pch=19)
+segments(a1,b1,a1,b2,lwd=2)
+arrows(a1,b2,a2-.1,b2,length=.1,lwd=2)
+
+YpuisX = matrix(c(a1,b1,a2,b2),2,2)
+colnames(YpuisX) = c("start","y_then_x")
+
+M1=c(-1,-1)
+M2=c(1.5,1.5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+
+AA  = sqrtm(S1) %*% S2 %*% (sqrtm(S1))
+AA  = solve(sqrtm(S1)) %*% sqrtm(AA) %*% solve((sqrtm(S1)))
+T = function(x) as.vector(M2+AA%*%(x-M1))
+optrasnp=T(c(a1-5,b1-5))
+points(optrasnp[1]+5,optrasnp[2]+5,pch=15,col="#C93312")
+```
+
+```{r aaai-ellipse-1, fig.height = 5, fig.width = 5, fig.align = "center", dev.args = list(bg = 'transparent'), echo=FALSE, message=FALSE, warning=FALSE}
+
+angle = function(theta,
+                 A = c(-2.2,-2)){
+  
+  R = matrix(c(cos(theta),sin(theta),
+               -sin(theta),cos(theta)),2,2)
+M1=c(-1,-1)
+M2=c(1.5,1.5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+
+
+M1 = as.vector(R%*%M1)
+M2 = as.vector(R%*%M2)
+S1 = t(R)%*%S1%*%R
+S2 = t(R)%*%S2%*%R
+A =  as.vector(R %*%A)
+
+a1 = A[1]
+b1 = A[2]
+a2 = qnorm(pnorm(a1,M1[1],sqrt(S1[1,1])),
+                M2[1],sqrt(S2[1,1]))
+mu1 = M1[2]+S1[1,2]/S1[1,1]*(a1-M1[1])
+sig1=sqrt(S1[2,2]-S1[2,1]^2/S1[2,2])
+mu2 = M2[2]+S2[1,2]/S2[1,1]*(a2-M2[1])
+sig2=sqrt(S2[2,2]-S2[2,1]^2/S2[2,2])
+p1 = pnorm(b1,mu1,sig1)
+b2=qnorm(p1,mu2,sig2)
+B = c(a2,b2)
+return(c(
+as.vector(t(R)%*%A),
+as.vector(t(R)%*%B)))
+}
+
+M1=c(-1,-1)
+M2=c(1.5,1.5)
+S1=matrix(c(1,.5,.5,1)*1.2^2,2,2)
+S2=matrix(c(1,-.4,-.4,1)*.9^2,2,2)
+
+A = c(-2.2,-2)
+
+par(mfrow=c(1,1),mar=c(.5,.5,0,0))
+
+library(mvtnorm)
+vx0 = seq(-5,5,length=251)
+data.grid <- expand.grid(x=vx0,y=vx0)
+dgauss1 = matrix(mvtnorm::dmvnorm(data.grid, mean = M1, sigma = S1),length(vx0),length(vx0))
+dgauss2 = matrix(mvtnorm::dmvnorm(data.grid, mean = M2, sigma = S2),length(vx0),length(vx0))
+
+contour(vx0,vx0,dgauss1,col=colors["A"],xlim=c(-5,5),ylim=c(-5,5),axes=FALSE)
+contour(vx0,vx0,dgauss2,col=colors["B"],add=TRUE)
+
+segments(A[1],-5,A[1],100,col=colors["A"])
+segments(-5,A[2],100,A[2],col=colors["A"])
+points(A[1],A[2],pch=19)
+axis(1,at = c(0,1,2,3,4,5)*2-5,labels=NA)
+axis(2,at = c(0,1,2,3,4,5)*2-5,labels=NA)
+
+MANGLE = Vectorize(angle)(seq(0,2*pi,length=100))
+lines(MANGLE[3,],MANGLE[4,])
+m=angle(0,c(-2.2,-2)); points(m[3],m[4],pch=19)
+m=angle(pi/2,c(-2.2,-2)); points(m[3],m[4],pch=19)
+
+T = function(x) as.vector(M2+AA%*%(x-M1))
+optrasnp=T(c(A[1],A[2]))
+points(optrasnp[1],optrasnp[2],pch=15,col="#C93312")
+
+A = c(-2.2,.5)
+
+par(mfrow=c(1,1),mar=c(.5,.5,0,0))
+
+library(mvtnorm)
+vx0 = seq(-5,5,length=251)
+data.grid <- expand.grid(x=vx0,y=vx0)
+dgauss1 = matrix(mvtnorm::dmvnorm(data.grid, mean = M1, sigma = S1),length(vx0),length(vx0))
+dgauss2 = matrix(mvtnorm::dmvnorm(data.grid, mean = M2, sigma = S2),length(vx0),length(vx0))
+
+contour(vx0,vx0,dgauss1,col=colors["A"],xlim=c(-5,5),ylim=c(-5,5),axes=FALSE)
+contour(vx0,vx0,dgauss2,col=colors["B"],add=TRUE)
+
+segments(A[1],-5,A[1],100,col=colors["A"])
+segments(-5,A[2],100,A[2],col=colors["A"])
+points(A[1],A[2],pch=19)
+axis(1,at = c(0,1,2,3,4,5)*2-5,labels=NA)
+axis(2,at = c(0,1,2,3,4,5)*2-5,labels=NA)
+
+MANGLE = Vectorize(function(x) angle(x,c(-2.2,.5)))(seq(0,2*pi,length=100))
+lines(MANGLE[3,],MANGLE[4,])
+m=angle(0,c(-2.2,.5)); points(m[3],m[4],pch=19)
+m=angle(pi/2,c(-2.2,.5)); points(m[3],m[4],pch=19)
+
+AA  = sqrtm(S1) %*% S2 %*% (sqrtm(S1))
+AA  = solve(sqrtm(S1)) %*% sqrtm(AA) %*% solve((sqrtm(S1)))
+T = function(x) as.vector(M2+AA%*%(x-M1))
+optrasnp=T(c(A[1],A[2]))
+points(optrasnp[1],optrasnp[2],pch=15,col="#C93312")
+
+par(mfrow=c(1,1),mar=c(.5,.5,0,0))
+MANGLE = Vectorize(function(x) angle(x,c(-2.2,.5)))(seq(0,2*pi,length=100))
+plot(MANGLE[3,],MANGLE[4,],type="b",cex=.6,xlab="",ylab="")
+
+MANGLE = Vectorize(function(x) angle(x,c(-2.2,-1)))(seq(0,2*pi,length=100))
+plot(MANGLE[3,],MANGLE[4,],type="b",cex=.6,xlab="",ylab="")
+
+MANGLE = Vectorize(function(x) angle(x,c(0,0)))(seq(0,2*pi,length=100))
+plot(MANGLE[3,],MANGLE[4,],type="b",cex=.6,xlab="",ylab="")
+
+MANGLE = Vectorize(function(x) angle(x,c(1,4)))(seq(0,2*pi,length=100))
+plot(MANGLE[3,],MANGLE[4,],type="b",cex=.6,xlab="",ylab="")
+```
