@@ -949,12 +949,12 @@ $$
 ## General Conditional Transport
 
 An interesting property of Gaussian vectors is the stability under rotations. In dimension 2, instead of a sequential transport of $\boldsymbol{x}$ on $\overrightarrow{e}_x$ and then (conditionally) on  $\overrightarrow{e}_y, one could consider a projection on any unit vector $\overrightarrow{u}$ (with angle $\theta$), and then (conditionally) along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$.
-In @fig-gauss-seq-rotation-1, we can visualize the set of all counterfactuals $\boldsymbol{x}^\star$ when $\theta\in[0,2\pi]$. The (global) optimal transport is also considered.
+In @fig-gauss-seq-rotation-1, we can visualize the set of all counterfactuals $\boldsymbol{x}^\star$ when $\theta\in[0,2\pi]$. The (global) optimal transport is also considered (shown with a red square).
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| fig-height: 4
 #| fig-width: 4
-#| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions.
+#| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions. The red square shows the global optimal tranpport.
 #| label: fig-gauss-seq-rotation-1
 #| code-fold: true
 angle <- function(theta,
@@ -1047,7 +1047,7 @@ points(m[3],m[4],pch=19)
 m <- angle(pi/2, c(-2.2, -2))
 points(m[3], m[4], pch = 19)
 
-
+# Global optimal transport
 T <- function(x) as.vector(M2 + AA %*% (x - M1))
 optrasnp <- T(c(A[1], A[2]))
 points(optrasnp[1], optrasnp[2], pch = 15, col = "#C93312")
@@ -1059,7 +1059,7 @@ We can consider another starting point.
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| fig-height: 4
 #| fig-width: 4
-#| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions.
+#| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions. The red square shows the global optimal tranpport.
 #| label: fig-gauss-seq-rotation-2
 #| code-fold: true
 # Consider the following starting point
@@ -1110,6 +1110,7 @@ points(m[3], m[4], pch = 19)
 m <- angle(pi/2, c(-2.2, .5))
 points(m[3], m[4], pch = 19)
 
+# Global optimal transport
 AA <- sqrtm(S1) %*% S2 %*% (sqrtm(S1))
 AA <- solve(sqrtm(S1)) %*% sqrtm(AA) %*% solve((sqrtm(S1)))
 T <- function(x) as.vector(M2 + AA %*% (x - M1))
