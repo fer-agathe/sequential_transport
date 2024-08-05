@@ -39,7 +39,7 @@ renv/
 renv/*
 
 # Generated documentation files
-docs/
+#docs/
 
 # Compiled shared objects (e.g., C, C++)
 *.o
