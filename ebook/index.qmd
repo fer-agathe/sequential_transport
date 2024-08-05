@@ -1,0 +1,36 @@
+# Introduction {.unnumbered}
+
+This ebook provides the replication codes to the project titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
+
+xxx
+
+::: callout-note
+All the codes are written in R, except for multivariate transport where we switch to python.
+:::
+
+## Abstract
+
+xxx
+
+**Keywords**: xxx
+
+## Outline
+
+
+### Part 1
+
+@sec-optimal-transport
+
+### Part 2
+
+@sec-gaussian
+@sec-regression
+
+### Part 3
+
+@sec-data
+@sec-classifier
+@sec-cf-fairadapt
+@sec-cf-ot
+@sec-cf-seq-t
+@sec-cf-comparison
