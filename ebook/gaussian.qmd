@@ -191,6 +191,8 @@ To obtain the counterfactuals based on the methodology presented in the article,
 \end{algorithm}
 ```
 
+### Transport of $X_1$
+
 Following Algorithm @alg-1 for Sequential Transport and the causal graph in Figure @fig-DAG-a, we begin by transporting $X_1$ from subset $S=0$ to subset $S=1$. Since $X_1$ is the first variable to be transported and has no parents, we use optimal transport for univariate distributions, applying the function estimated on $X_1$ from the data, $\hat{F}{1|0} \circ \hat{Q}{1|1}$. Because $X_1$ has no parents, we can compute the cdf's and quantile functions directly on all subgroups without the need for conditioning, thus eliminating the need for Gaussian kernels in this step (we simply use uniform weights).
 
 ```{r transport-x1-function, message=FALSE, warning=FALSE}
@@ -279,7 +281,7 @@ save(x1_star_grid_t, file = "../data/x1_grid_transport.rda")
 ```
 
 The application of transport on $X_1$ takes approximately 3 minutes to run. When creating this document, we load the pre-saved file to save time, so that we do not need to calculate `T_X1`{.R} over the grid.
-```{r load-transport-x1-grid, echo=FALSE, message=FALSE, warning=FALSE}
+```{r load-transport-x1-grid, message=FALSE, warning=FALSE}
 load("../data/x1_grid_transport.rda")
 ```
 
@@ -303,7 +305,7 @@ x1 <- -2
 x2 <- -1
 ```
 
-Using the function `T_X1`{R} created earlier, we can transport the example individual from subset $S=0$ to subset $S=1$ along its first coordinate $x_1$.
+Using the function `T_X1`{.R} created earlier, we can transport the example individual from subset $S=0$ to subset $S=1$ along its first coordinate $x_1$.
 
 ```{r transport-x1-example-indiv, message=FALSE, warning=FALSE}
 x1_star <- T_X1(x1)
@@ -471,6 +473,9 @@ abline(v = x1, lwd = .4, col = colours["A"])
 abline(v = x1_star, col = "black", lwd = .5)
 
 ```
+
+### Transport of $X_2|X_1$
+
 Secondly, according to Figure @fig-DAG-a, we transport $X_2$ from subset $S=0$ to subset $S=1$, using conditional transport for univariate distribution $X_2|X_1$ as $X_1$ is the only parent of $X_2$. Following @alg-1, we apply the following function estimated on $X_2$ and $X_1$ from data $\hat{F}_{2|0} \circ \hat{Q}_{2|1}$. Here the empirical cdf's and quantile functions need to be estimated conditionally on $X_1$. To do so, we first estimate densities of $X_2$ in both subsets $S=0$ and $S=1$ with weights on $X_1$ calculated with Gaussian kernels for each sensitive group. Here, we will only condition the distribution of $X_2$ in subset $S=0$ (resp. $S=1$) on the example value $x_1$ (resp. $x_1^*$).
 
 ```{r transport-x2cx1-function, message=FALSE, warning=FALSE}
@@ -543,7 +548,7 @@ x2_grid_t <- seq(-3.5, 1.75, length=101)
 ```
 
 
-```{r transport-x2-grid, echo=FALSE, message=FALSE, warning=FALSE}
+```{r transport-x2-grid, message=FALSE, warning=FALSE}
 #| eval: false
 
 ncl <- detectCores()-1
@@ -564,7 +569,7 @@ stopCluster(cl)
 save(x2_star_grid_t, file = "../data/x2_grid_transport.rda")
 ```
 Once again, because the application of transport on $X_2|X_1$ takes approximately 3 minutes, we will only load the file presaved and we don't need to calculate `T_X2_c_x1`{.R} over the grid.
-```{r load-transport-x2-grid, echo=FALSE, message=FALSE, warning=FALSE}
+```{r load-transport-x2-grid, message=FALSE, warning=FALSE}
 load("../data/x2_grid_transport.rda")
 ```
 
@@ -1101,7 +1106,7 @@ for (j in 1:n_grid) {
 ```
 
 
-Following Algorithm @alg-2 for Sequential Transport and the causal graph in Figure @fig-DAG-a, we begin by transporting $X_1$ from subset $S=0$ to subset $S=1$ xxx
+Following @alg-3 for Sequential Transport and the causal graph in Figure @fig-DAG-a, we begin by transporting $X_1$ from subset $S=0$ to subset $S=1$ xxx
 
 ```{r transport-x1-function-faster, message=FALSE, warning=FALSE}
 T_X1 <- seq_functions_grids$Transport_x1
@@ -1114,7 +1119,7 @@ x1_grid_t <- seq(-3.5, 1.75, length = 251)
 x1_star_grid_t <- Vectorize(T_X1)(x1_grid_t)
 ```
 
-Using the function `T_X1`{R} created earlier, we can transport the example individual from subset $S=0$ to subset $S=1$ along its first coordinate $x_1$.
+Using the function `T_X1`{.R} created earlier, we can transport the example individual from subset $S=0$ to subset $S=1$ along its first coordinate $x_1$.
 
 ```{r transport-x1-example-indiv-faster, message=FALSE, warning=FALSE}
 x1_star <- T_X1(x1)
@@ -1288,7 +1293,7 @@ abline(v = x1_star, col = "black", lwd = .5)
 
 ```
 
-Secondly, according to Figure @fig-DAG-a, we transport $X_2$ from subset $S=0$ to subset $S=1$, using conditional transport for univariate distribution $X_2|X_1$ as $X_1$ is the only parent of $X_2$. Following @alg-2, we apply the following function estimated on $X_2$ and $X_1$ from data $\hat{F}_{2|0} \circ \hat{Q}_{2|1}$. Here the empirical cdf's and quantile functions need to be estimated conditionally on $X_1$. To do so, we first estimate densities of $X_2$ in both subsets $S=0$ and $S=1$ with weights on $X_1$ calculated with Gaussian kernels for each sensitive group. Here, we will only condition the distribution of $X_2$ in subset $S=0$ (resp. $S=1$) on the example value $x_1$ (resp. $x_1^*$).
+Secondly, according to Figure @fig-DAG-a, we transport $X_2$ from subset $S=0$ to subset $S=1$, using conditional transport for univariate distribution $X_2|X_1$ as $X_1$ is the only parent of $X_2$. Following @alg-1, we apply the following function estimated on $X_2$ and $X_1$ from data $\hat{F}_{2|0} \circ \hat{Q}_{2|1}$. Here the empirical cdf's and quantile functions need to be estimated conditionally on $X_1$. To do so, we first estimate densities of $X_2$ in both subsets $S=0$ and $S=1$ with weights on $X_1$ calculated with Gaussian kernels for each sensitive group. Here, we will only condition the distribution of $X_2$ in subset $S=0$ (resp. $S=1$) on the example value $x_1$ (resp. $x_1^*$).
 
 ```{r transport-x2cx1-function-faster, message=FALSE, warning=FALSE}
 # Transport function for X2|X1=x1
