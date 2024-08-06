@@ -36,6 +36,11 @@ book:
       - cf-seq-transport.qmd
       - cf-comparison.qmd
     - references.qmd
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/fer-agathe/sequential_transport
+        aria-label: GitHub
 
 bibliography: ./biblio.bib
 
