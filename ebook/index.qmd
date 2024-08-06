@@ -28,14 +28,7 @@ This ebook is made of three parts:
 ## Replication Codes
 
 
-The codes to replicate the results displayed in the paper are presented in this ebook. 
-
-We also provide the codes in an archive file.
-
-<a href="./replication_codes.zip" class="btn btn-primary btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{< fa brands r-project >}} Download the Replication Codes (Zip archive)</a>
-
-
-The following structure is adopted:
+The codes to replicate the results displayed in the paper are presented in this ebook. The following structure is adopted:
 
 
 ```
@@ -61,7 +54,6 @@ Supplementary-materials
 |    └── sequential_transport.Rproj
 ```
 
-To visualize the notebook, open the followinf file in a browser: `Supplementary-materials/replication_book/index.html`.
 
 To replicate the codes, provided you have installed R and Rstudio on your computer, double click on the following file to open RStudio (so that the correct working directory is set): `Supplementary-materials/scripts/sequential_transport.Rproj`. Then, the scripts can be launched.
 
