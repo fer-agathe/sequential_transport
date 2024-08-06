@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness",
     "section": "",
-    "text": "Introduction\nThis ebook provides the replication codes to the project titled ‘Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.’\nxxx",
+    "text": "Introduction\nThis ebook provides the replication codes to the project titled ‘Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.’",
     "crumbs": [
       "Introduction"
     ]
@@ -14,7 +14,7 @@
     "href": "index.html#abstract",
     "title": "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness",
     "section": "Abstract",
-    "text": "Abstract\nxxx\nKeywords: xxx",
+    "text": "Abstract\nIn this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in Plečko and Meinshausen (2020)} and optimal transport, as in De Lara et al. (2024). We extend “Knothe’s rearrangement” Bonnotte (2013) and “triangular transport” Zech and Marzouk (2022) to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.\nKeywords: Machine Learning (ML) -&gt; ML: Ethics – Bias, Fairness, Transparency & Privacy",
     "crumbs": [
       "Introduction"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#outline",
     "title": "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness",
     "section": "Outline",
-    "text": "Outline\n\nPart 1\n1  Optimal Transport\n\n\nPart 2\n2  Gaussian Simulations 3  Regression\n\n\nPart 3\n4  Data 5  Classifier 6  Fairadapt 7  Multivariate Optimal Transport 8  Sequential Transport 9  Counterfactuals: comparison",
+    "text": "Outline\nThis ebook is made of three parts:\n\nOptimal Transport We provide some background for optimal transport (Chapter 1  Optimal Transport).\nSimulations\nUsing data simulated from bivariate Gaussian distributions in two subgroups of the population (\\(S=0\\) and \\(S=1\\)), we illustrate the sequential transport algorithm Chapter 2  Gaussian Simulations. Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context Chapter 3  Regression.\nThe last part shows an example with real data. The law datatest used as an illustration is first presented Chapter 4  Data. In this data, the individuals (students) may be part of a protected group (\\(S=0\\)) or not (\\(S=1\\)). Then, a GLM model is estimated to predict a binary outcome Chapter 5  Classifier. We then present three methods to produce counterfactuals from group \\(S=0\\) to group \\(S=1\\): fairadapt Chapter 6  Fairadapt, multivariate optimal transport Chapter 7  Multivariate Optimal Transport, and sequential transport Chapter 8  Sequential Transport. A comparison of the results is presented in Chapter 9  Counterfactuals: comparison.",
     "crumbs": [
       "Introduction"
     ]
@@ -488,6 +488,16 @@
     "text": "Black, Emily, Samuel Yeom, and Matt Fredrikson. 2020. “Fliptest:\nFairness Testing via Optimal Transport.” In Proceedings of\nthe 2020 Conference on Fairness, Accountability, and Transparency,\n111–21.\n\n\nDe Lara, Lucas, Alberto González-Sanz, Nicholas Asher, and Jean-Michel\nLoubes. 2021. “Transport-Based Counterfactual Models.”\narXiv 2108.13025.\n\n\nDe Lara, Lucas, Alberto González-Sanz, Nicholas Asher, Laurent Risser,\nand Jean-Michel Loubes. 2024. “Transport-Based Counterfactual\nModels.” Journal of Machine Learning Research 25 (136):\n1–59.\n\n\nHigham, Nicholas J. 2008. Functions of Matrices: Theory and\nComputation. SIAM.\n\n\nKusner, Matt J, Joshua Loftus, Chris Russell, and Ricardo Silva. 2017.\n“Counterfactual Fairness.” In Advances in Neural\nInformation Processing Systems 30, edited by I. Guyon, U. V.\nLuxburg, S. Bengio, H. Wallach, R. Fergus, S. Vishwanathan, and R.\nGarnett, 4066–76. NIPS.\n\n\nPlečko, Drago, Nicolas Bennett, and Nicolai Meinshausen. 2021.\n“Fairadapt: Causal Reasoning for Fair Data Pre-Processing.”\narXiv Preprint arXiv:2110.10200.\n\n\nPlečko, Drago, and Nicolai Meinshausen. 2020. “Fair Data\nAdaptation with Quantile Preservation.” Journal of Machine\nLearning Research 21 (242): 1–44.\n\n\nSander, Richard H. 2004. “A Systemic Analysis of Affirmative\nAction in American Law Schools.” Stan. L. Rev. 57: 367.\n\n\nTakatsu, Asuka. 2011. “Wasserstein Geometry of Gaussian\nMeasures.” Osaka Journal of Mathematics 48 (4): 1005–26.\n\n\nWightman, Linda F. 1998. “LSAC National Longitudinal Bar Passage\nStudy. LSAC Research Report Series.” In. https://api.semanticscholar.org/CorpusID:151073942.",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "index.html#replication-codes",
+    "href": "index.html#replication-codes",
+    "title": "Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness",
+    "section": "Replication Codes",
+    "text": "Replication Codes\nThe codes to replicate the results displayed in the paper are presented in this ebook.\nWe also provide the codes in an archive file.\n Download the Replication Codes (Zip archive)\nThe following structure is adopted:\nSupplementary-materials\n├ ── replication_book\n│    └── index.html\n│    └── ...\n├ ── data\n├ ── functions\n│    └── utils.R\n│    └── graphs.R\n├ ── scripts\n|    └── 01_optimal_transport.R\n|    └── 02_gaussian.R\n|    └── 03_regression.R\n|    └── 04_1_law_data.R\n|    └── 04_2_law_classifier.R\n|    └── 04_3_law_fairadapt.R\n|    └── 04_4a_law_optimal_transport.R\n|    └── 04_4b_law_optimal_transport.R\n|    └── 04_5_law_sequential_transport.R\n|    └── 04_6_comparison.R\n|    └── sequential_transport.Rproj\nTo visualize the notebook, open the followinf file in a browser: Supplementary-materials/replication_book/index.html.\nTo replicate the codes, provided you have installed R and Rstudio on your computer, double click on the following file to open RStudio (so that the correct working directory is set): Supplementary-materials/scripts/sequential_transport.Rproj. Then, the scripts can be launched.\n\n\n\n\nBonnotte, Nicolas. 2013. “From Knothe’s Rearrangement to Brenier’s Optimal Transport Map.” SIAM Journal on Mathematical Analysis 45 (1): 64–87.\n\n\nDe Lara, Lucas, Alberto González-Sanz, Nicholas Asher, Laurent Risser, and Jean-Michel Loubes. 2024. “Transport-Based Counterfactual Models.” Journal of Machine Learning Research 25 (136): 1–59.\n\n\nPlečko, Drago, and Nicolai Meinshausen. 2020. “Fair Data Adaptation with Quantile Preservation.” Journal of Machine Learning Research 21 (242): 1–44.\n\n\nZech, Jakob, and Youssef Marzouk. 2022. “Sparse Approximation of Triangular Transports, Part I: The Finite-Dimensional Case.” Constructive Approximation 55 (3): 919–86.",
+    "crumbs": [
+      "Introduction"
     ]
   }
 ]

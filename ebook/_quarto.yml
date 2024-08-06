@@ -17,7 +17,7 @@ book:
     orcid: 0000-0003-3740-2620
     affiliations:
       - name: Aix-Marseille School of Economics, Aix-Marseille Univ.
-  date: "8/5/2024"
+  date: "8/6/2024"
   chapters:
     - index.qmd
     - part: I. Optimal Transport

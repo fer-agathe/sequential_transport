@@ -2,7 +2,7 @@
 
 This ebook provides the replication codes to the project titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
 
-xxx
+
 
 ::: callout-note
 All the codes are written in R, except for multivariate transport where we switch to python.
@@ -10,27 +10,59 @@ All the codes are written in R, except for multivariate transport where we switc
 
 ## Abstract
 
-xxx
+In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in @plevcko2020fair} and optimal transport, as in @de2024transport. We extend  "Knothe's rearrangement" @bonnotte2013knothe and "triangular transport" @zech2022sparse1 to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.
 
-**Keywords**: xxx
+**Keywords**: Machine Learning (ML) -> ML: Ethics -- Bias, Fairness, Transparency & Privacy
 
 ## Outline
 
+This ebook is made of three parts:
 
-### Part 1
+1. Optimal Transport
+  We provide some background for optimal transport ([Chapter -@sec-optimal-transport]).
+2. Simulations  
+  Using data simulated from bivariate Gaussian distributions in two subgroups of the population ($S=0$ and $S=1$), we illustrate the sequential transport algorithm [Chapter -@sec-gaussian]. Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context [Chapter -@sec-regression].
+3. The last part shows an example with real data. 
+  The law datatest used as an illustration is first presented [Chapter -@sec-data]. In this data, the individuals (students) may be part of a protected group ($S=0$) or not ($S=1$). Then, a GLM model is estimated to predict a binary outcome [Chapter -@sec-classifier]. We then present three methods to produce counterfactuals from group $S=0$ to group $S=1$: fairadapt [Chapter -@sec-cf-fairadapt], multivariate optimal transport [Chapter -@sec-cf-ot], and sequential transport [Chapter -@sec-cf-seq-t]. A comparison of the results is presented in [Chapter -@sec-cf-comparison].
 
-@sec-optimal-transport
+## Replication Codes
 
-### Part 2
 
-@sec-gaussian
-@sec-regression
+The codes to replicate the results displayed in the paper are presented in this ebook. 
 
-### Part 3
+We also provide the codes in an archive file.
 
-@sec-data
-@sec-classifier
-@sec-cf-fairadapt
-@sec-cf-ot
-@sec-cf-seq-t
-@sec-cf-comparison
+<a href="./replication_codes.zip" class="btn btn-primary btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{< fa brands r-project >}} Download the Replication Codes (Zip archive)</a>
+
+
+The following structure is adopted:
+
+
+```
+Supplementary-materials
+├ ── replication_book
+│    └── index.html
+│    └── ...
+├ ── data
+├ ── functions
+│    └── utils.R
+│    └── graphs.R
+├ ── scripts
+|    └── 01_optimal_transport.R
+|    └── 02_gaussian.R
+|    └── 03_regression.R
+|    └── 04_1_law_data.R
+|    └── 04_2_law_classifier.R
+|    └── 04_3_law_fairadapt.R
+|    └── 04_4a_law_optimal_transport.R
+|    └── 04_4b_law_optimal_transport.R
+|    └── 04_5_law_sequential_transport.R
+|    └── 04_6_comparison.R
+|    └── sequential_transport.Rproj
+```
+
+To visualize the notebook, open the followinf file in a browser: `Supplementary-materials/replication_book/index.html`.
+
+To replicate the codes, provided you have installed R and Rstudio on your computer, double click on the following file to open RStudio (so that the correct working directory is set): `Supplementary-materials/scripts/sequential_transport.Rproj`. Then, the scripts can be launched.
+
+
