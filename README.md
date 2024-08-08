@@ -7,7 +7,7 @@ The working paper is on arXiv: <https://arxiv.org/abs/2408.03425>
 
 A companion html e-book that explains the codes and provides supplementary materials can be accessed at the following url: <https://fer-agathe.github.io/sequential_transport>.
 
-## Reference of the paper
+## Reference of the paper (preprint)
 
 ```
 @misc{fernandesmachado_2024_sequential,
