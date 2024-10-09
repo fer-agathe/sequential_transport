@@ -87,9 +87,11 @@ We apply multivariate optimal transport (OT), following the methodology develope
 The codes are run in python. We use the {reticulate} R package to call python in this notebook.
 ```{r load-library-reticulate}
 library(reticulate)
+# py_install("POT")
 ```
 
 Some libraries need to be loaded (including POT called ot)
+
 ```{python import-libraries}
 import ot
 import pandas as pd
