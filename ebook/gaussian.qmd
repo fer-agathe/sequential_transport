@@ -127,9 +127,59 @@ contour(
   col = colours["B"], add = TRUE
 )
 # Display one individual on the graph in group S=0
-points(-2, -1, pch = 19)
+A = c(-2, -1)
+points(A[1], A[2], pch = 19)
 
 ```
+
+
+## Optimal Transport
+
+Since the covariates are Gaussian, we can use an explicit expression for the optimal transport:
+$$
+\boldsymbol{x}_{1} = T^\star(\boldsymbol{x}_{0})=\boldsymbol{\mu}_{1} + \boldsymbol{A}(\boldsymbol{x}_{0}-\boldsymbol{\mu}_{0}),
+$$
+where $\boldsymbol{A}$ is a symmetric positive matrix that satisfies $\boldsymbol{A}\boldsymbol{\Sigma}_{0}\boldsymbol{A}=\boldsymbol{\Sigma}_{1}$, which has a unique solution given by $\boldsymbol{A}=\boldsymbol{\Sigma}_{0}^{-1/2}\big(\boldsymbol{\Sigma}_{0}^{1/2}\boldsymbol{\Sigma}_{1}\boldsymbol{\Sigma}_{0}^{1/2}\big)^{1/2}\boldsymbol{\Sigma}_{0}^{-1/2}\), where \(\boldsymbol{M}^{1/2}$ is the square root of the square (symmetric) positive matrix $\boldsymbol{M}$ based on the Schur decomposition ($\boldsymbol{M}^{1/2}$ is a positive symmetric matrix).
+
+```{r define)A_opt_transport}
+AA <- sqrtm(S0) %*% S1 %*% (sqrtm(S0))
+AA <- solve(sqrtm(S0)) %*% sqrtm(AA) %*% solve((sqrtm(S0)))
+T <- function(x) as.vector(M1 + AA %*% (x - M0))
+A_opt_transport <- T(c(A[1], A[2]))
+A_opt_transport
+```
+
+We can then display the transported individual on the same plot as before.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| code-fold: true
+#| code-summary: Display the codes used to create the Figure
+#| fig-cap: Bivariate Gaussian densities within each group ($S=0$ on the left and $S=1$ on the right), estimated with a Gaussian kernel. The red square is the multivariate OT of the point.
+
+# Plotting densities
+par(mar = c(2,2,0,0))
+# Group S=0
+contour(
+  f0_2d$eval.point[[1]], f0_2d$eval.point[[2]], f0_2d$estimate, 
+  col = colours["A"], axes = FALSE, xlab = "", ylab = ""
+)
+axis(1)
+axis(2)
+# Group S=1
+contour(
+  f1_2d$eval.point[[1]], f1_2d$eval.point[[2]], f1_2d$estimate, 
+  col = colours["B"], add = TRUE
+)
+# Display one individual on the graph in group S=0
+A = c(-2, -1)
+points(A[1], A[2], pch = 19)
+# Display the transported individual
+points(A_opt_transport[1], A_opt_transport[2], pch = 15, col = "#C93312")
+```
+
+
 
 ## Sequential Transport
 
@@ -418,7 +468,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_1$ (whi
 #| code-summary: Display the codes used to create the Figure
 #| fig-height: 4
 #| fig-width: 4
-#| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$."
+#| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: fig-transport-x1-contour-lines
 
 # Graph parameters
@@ -471,7 +521,8 @@ polygon(
 points(x1, x2, pch = 19)
 abline(v = x1, lwd = .4, col = colours["A"])
 abline(v = x1_star, col = "black", lwd = .5)
-
+# Display the transported individual
+points(A_opt_transport[1], A_opt_transport[2], pch = 15, col = "#C93312")
 ```
 
 ### Transport of $X_2|X_1$
@@ -689,7 +740,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_2|X_1$ 
 #| code-summary: Display the codes used to create the Figure
 #| fig-width: 4
 #| fig-height: 4
-#| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$."
+#| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: transport-x2-c-x1-contour-lines
 
 # Graph parameters
@@ -746,6 +797,8 @@ polygon(
 abline(v = x1_star, col = colours[lab[2]], lwd = .5)
 abline(h = x2_c_x1_star, col = "black", lwd = .5)
 points(x1_star, x2_c_x1_star, pch=19)
+# Display the transported individual
+points(A_opt_transport[1], A_opt_transport[2], pch = 15, col = "#C93312")
 
 ```
 ## Faster Sequential Transport
@@ -1234,7 +1287,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_1$ (whi
 #| fig-width: 4
 #| code-fold: true
 #| code-summary: Display the codes used to create the Figure
-#| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$."
+#| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: fig-transport-x1-contour-lines-faster
 
 # Graph parameters
@@ -1290,6 +1343,8 @@ polygon(
 points(x1, x2, pch = 19)
 abline(v = x1, lwd = .4, col = colours["A"])
 abline(v = x1_star, col = "black", lwd = .5)
+# Display the transported individual
+points(A_opt_transport[1], A_opt_transport[2], pch = 15, col = "#C93312")
 
 ```
 
@@ -1417,7 +1472,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_2|X_1$ 
 #| fig-width: 4
 #| code-fold: true
 #| code-summary: Display the codes used to create the Figure
-#| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$."
+#| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: fig-transport-x2-c-x1-contour-lines-faster
 
 # Graph parameters
@@ -1475,5 +1530,7 @@ polygon(
 abline(v = x1_star, col = colours[lab[2]], lwd = .5)
 abline(h = x2_c_x1_star, col = "black", lwd = .5)
 points(x1_star, x2_c_x1_star, pch=19)
+# Display the transported individual
+points(A_opt_transport[1], A_opt_transport[2], pch = 15, col = "#C93312")
 
 ```

@@ -233,8 +233,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
+  <a href="./transport-fast-grid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Fast Transport on a Grid with Numerical Covariates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algorithm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
       </ul>
@@ -251,37 +257,37 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./classifier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-fairadapt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-ot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-seq-transport.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-comparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
   </div>
 </li>
       </ul>
@@ -395,8 +401,8 @@ Note
 <ol type="1">
 <li>Optimal Transport We provide some background for optimal transport (<a href="optimal-transport.html" class="quarto-xref">Chapter&nbsp;<span>1&nbsp; Optimal Transport</span></a>).</li>
 <li>Simulations<br>
-Using data simulated from bivariate Gaussian distributions in two subgroups of the population (<span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>), we illustrate the sequential transport algorithm (<a href="gaussian.html" class="quarto-xref">Chapter&nbsp;<span>2&nbsp; Gaussian Simulations</span></a>). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context (<a href="regression.html" class="quarto-xref">Chapter&nbsp;<span>3&nbsp; Regression</span></a>).</li>
-<li>The last part shows an example with real data. The law datatest used as an illustration is first presented (<a href="data.html" class="quarto-xref">Chapter&nbsp;<span>4&nbsp; Data</span></a>). In this data, the individuals (students) may be part of a protected group (<span class="math inline">\(S=0\)</span>) or not (<span class="math inline">\(S=1\)</span>). Then, a GLM model is estimated to predict a binary outcome (<a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>5&nbsp; Classifier</span></a>). We then present three methods to produce counterfactuals from group <span class="math inline">\(S=0\)</span> to group <span class="math inline">\(S=1\)</span>: fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>6&nbsp; Fairadapt</span></a>), multivariate optimal transport (<a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>7&nbsp; Multivariate Optimal Transport</span></a>), and sequential transport (<a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>8&nbsp; Sequential Transport</span></a>). A comparison of the results is presented in (<a href="cf-comparison.html" class="quarto-xref">Chapter&nbsp;<span>9&nbsp; Counterfactuals: comparison</span></a>).</li>
+Using data simulated from bivariate Gaussian distributions in two subgroups of the population (<span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>), we illustrate the sequential transport algorithm (<a href="gaussian.html" class="quarto-xref">Chapter&nbsp;<span>2&nbsp; Gaussian Simulations</span></a>). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context (<a href="transport-fast-grid.html" class="quarto-xref">Chapter&nbsp;<span>3&nbsp; Fast Transport on a Grid with Numerical Covariates</span></a>).</li>
+<li>The last part shows an example with real data. The law datatest used as an illustration is first presented (<a href="data.html" class="quarto-xref">Chapter&nbsp;<span>5&nbsp; Data</span></a>). In this data, the individuals (students) may be part of a protected group (<span class="math inline">\(S=0\)</span>) or not (<span class="math inline">\(S=1\)</span>). Then, a GLM model is estimated to predict a binary outcome (<a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>6&nbsp; Classifier</span></a>). We then present three methods to produce counterfactuals from group <span class="math inline">\(S=0\)</span> to group <span class="math inline">\(S=1\)</span>: fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>7&nbsp; Fairadapt</span></a>), multivariate optimal transport (<a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>8&nbsp; Multivariate Optimal Transport</span></a>), and sequential transport (<a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>9&nbsp; Sequential Transport</span></a>). A comparison of the results is presented in (<a href="cf-comparison.html" class="quarto-xref">Chapter&nbsp;<span>10&nbsp; Counterfactuals: comparison</span></a>).</li>
 </ol>
 </section>
 <section id="replication-codes" class="level2">

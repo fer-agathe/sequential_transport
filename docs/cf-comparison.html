@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>9&nbsp; Counterfactuals: comparison – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
+<title>10&nbsp; Counterfactuals: comparison – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -163,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-comparison.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-comparison.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -215,8 +215,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
+  <a href="./transport-fast-grid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Fast Transport on a Grid with Numerical Covariates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algorithm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
       </ul>
@@ -233,37 +239,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./classifier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-fairadapt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-ot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-seq-transport.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-comparison.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
   </div>
 </li>
       </ul>
@@ -284,18 +290,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#load-data-and-classifier" id="toc-load-data-and-classifier" class="nav-link active" data-scroll-target="#load-data-and-classifier"><span class="header-section-number">9.1</span> Load Data and Classifier</a></li>
-  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"><span class="header-section-number">9.2</span> Comparison</a></li>
-  <li><a href="#densities" id="toc-densities" class="nav-link" data-scroll-target="#densities"><span class="header-section-number">9.3</span> Densities</a></li>
+  <li><a href="#load-data-and-classifier" id="toc-load-data-and-classifier" class="nav-link active" data-scroll-target="#load-data-and-classifier"><span class="header-section-number">10.1</span> Load Data and Classifier</a></li>
+  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"><span class="header-section-number">10.2</span> Comparison</a></li>
+  <li><a href="#densities" id="toc-densities" class="nav-link" data-scroll-target="#densities"><span class="header-section-number">10.3</span> Densities</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-comparison.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-comparison.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-cf-comparison" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></h1>
+<h1 class="title"><span id="sec-cf-comparison" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></h1>
 </div>
 
 
@@ -362,28 +368,28 @@ Objectives
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../functions/utils.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="load-data-and-classifier" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">9.1</span> Load Data and Classifier</h2>
-<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>4.3</span></a>:</p>
+<section id="load-data-and-classifier" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">10.1</span> Load Data and Classifier</h2>
+<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>5.3</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Counterfactuals constructed with fairadapt and predictions by the classifiers (see <a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>6</span></a>):</p>
+<p>Counterfactuals constructed with fairadapt and predictions by the classifiers (see <a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_aware_fpt.rda"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_unaware_fpt.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Counterfactuals constructed with multivariate optimal transport and predictions by the classifiers (see <a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>):</p>
+<p>Counterfactuals constructed with multivariate optimal transport and predictions by the classifiers (see <a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>8</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_aware_ot.rda"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_unaware_ot.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Counterfactuals constructed with sequential transport and predictions by the classifiers (see <a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>8</span></a>):</p>
+<p>Counterfactuals constructed with sequential transport and predictions by the classifiers (see <a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>9</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_aware_seq_black.rda"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/counterfactuals_unaware_seq_black.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also need the predictions made by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>5</span></a>):</p>
+<p>We also need the predictions made by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>6</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on train/test sets</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/pred_aware.rda"</span>)</span>
@@ -411,9 +417,9 @@ Objectives
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="comparison" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="comparison"><span class="header-section-number">9.2</span> Comparison</h2>
-<p>Let us focus on the first three Black individuals from the dataset. We will compare the predicted values by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>5</span></a>) made using the observed characteristics, and the changes in the predictions when using counterfactuals. We use the three types of counterfactuals explored in the previous chapters.</p>
+<section id="comparison" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="comparison"><span class="header-section-number">10.2</span> Comparison</h2>
+<p>Let us focus on the first three Black individuals from the dataset. We will compare the predicted values by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>6</span></a>) made using the observed characteristics, and the changes in the predictions when using counterfactuals. We use the three types of counterfactuals explored in the previous chapters.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Unaware Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Aware Model</a></li></ul>
 <div class="tab-content">
@@ -453,9 +459,9 @@ Objectives
  7 White  3.20  37.6 0.502 counterfactual    24 ot            
  8 White  3.29  28.0 0.345 counterfactual    40 ot            
  9 White  2.96  32.1 0.371 counterfactual    51 ot            
-10 White  3.2   37   0.491 counterfactual    24 seq           
-11 White  3.5   28.5 0.381 counterfactual    40 seq           
-12 White  3.1   31.5 0.379 counterfactual    51 seq           </code></pre>
+10 White  3.3   37.5 0.515 counterfactual    24 seq           
+11 White  3.6   28.5 0.395 counterfactual    40 seq           
+12 White  3.1   32   0.388 counterfactual    51 seq           </code></pre>
 </div>
 </div>
 </div>
@@ -495,9 +501,9 @@ Objectives
  7 White  3.20  37.6 0.515  counterfactual    24 ot            
  8 White  3.29  28.0 0.386  counterfactual    40 ot            
  9 White  2.96  32.1 0.405  counterfactual    51 ot            
-10 White  3.2   37   0.507  counterfactual    24 seq           
-11 White  3.5   28.5 0.418  counterfactual    40 seq           
-12 White  3.1   31.5 0.413  counterfactual    51 seq           </code></pre>
+10 White  3.3   37.5 0.526  counterfactual    24 seq           
+11 White  3.6   28.5 0.430  counterfactual    40 seq           
+12 White  3.1   32   0.420  counterfactual    51 seq           </code></pre>
 </div>
 </div>
 </div>
@@ -652,7 +658,7 @@ Objectives
 <div id="fig-example-3-black-inviv-unaware" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-example-3-black-inviv-unaware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Predictions by the unaware model for three Black individuals.
+Figure&nbsp;10.1: Predictions by the unaware model for three Black individuals.
 </figcaption>
 <div aria-describedby="fig-example-3-black-inviv-unaware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-comparison_files/figure-html/fig-example-3-black-inviv-unaware-1.png" class="img-fluid figure-img" width="384">
@@ -799,7 +805,7 @@ Figure&nbsp;9.1: Predictions by the unaware model for three Black individuals.
 <div id="fig-example-3-black-inviv-aware" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-example-3-black-inviv-aware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.2: Predictions by the aware model for three Black individuals.
+Figure&nbsp;10.2: Predictions by the aware model for three Black individuals.
 </figcaption>
 <div aria-describedby="fig-example-3-black-inviv-aware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-comparison_files/figure-html/fig-example-3-black-inviv-aware-1.png" class="img-fluid figure-img" width="384">
@@ -812,8 +818,8 @@ Figure&nbsp;9.2: Predictions by the aware model for three Black individuals.
 </div>
 </div>
 </section>
-<section id="densities" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="densities"><span class="header-section-number">9.3</span> Densities</h2>
+<section id="densities" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="densities"><span class="header-section-number">10.3</span> Densities</h2>
 <p>Let us now compare the densities of the predicted values.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>colours <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
@@ -952,7 +958,7 @@ Figure&nbsp;9.2: Predictions by the aware model for three Black individuals.
 <div id="fig-densities-counterfactuals-unaware" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-densities-counterfactuals-unaware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.3: Densities of predicted scores for Black individuals with factuals and with counterfactuals. The yellow dashed line corresponds to the density of predicted scores for White individuals, using factuals.
+Figure&nbsp;10.3: Densities of predicted scores for Black individuals with factuals and with counterfactuals. The yellow dashed line corresponds to the density of predicted scores for White individuals, using factuals.
 </figcaption>
 <div aria-describedby="fig-densities-counterfactuals-unaware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-comparison_files/figure-html/fig-densities-counterfactuals-unaware-1.png" class="img-fluid figure-img" width="384">
@@ -1084,7 +1090,7 @@ Figure&nbsp;9.3: Densities of predicted scores for Black individuals with factua
 <div id="fig-densities-counterfactuals-aware" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-densities-counterfactuals-aware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.4: Densities of predicted scores for Black individuals with factuals and with counterfactuals. The yellow dashed line corresponds to the density of predicted scores for White individuals, using factuals.
+Figure&nbsp;10.4: Densities of predicted scores for Black individuals with factuals and with counterfactuals. The yellow dashed line corresponds to the density of predicted scores for White individuals, using factuals.
 </figcaption>
 <div aria-describedby="fig-densities-counterfactuals-aware-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-comparison_files/figure-html/fig-densities-counterfactuals-aware-1.png" class="img-fluid figure-img" width="384">
@@ -1524,7 +1530,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./cf-seq-transport.html" class="pagination-link" aria-label="Sequential Transport">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

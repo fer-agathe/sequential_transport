@@ -1,4 +1,4 @@
-# Regression {#sec-regression}
+# Fast Transport on a Grid with Numerical Covariates {#sec-regression}
 
 <!-- In the terminal: -->
 <!-- quarto add leovan/quarto-pseudocode -->
@@ -7,7 +7,7 @@
 
 ## Objectives
 
-In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data.
+In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data, using @alg-3. Note that this algorithm works only for numerical covariates.
 
 :::
 

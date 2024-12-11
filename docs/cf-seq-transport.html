@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Sequential Transport – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
+<title>9&nbsp; Sequential Transport – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -192,7 +192,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-seq-transport.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-seq-transport.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -244,8 +244,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
+  <a href="./transport-fast-grid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Fast Transport on a Grid with Numerical Covariates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algorithm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
       </ul>
@@ -262,37 +268,37 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./classifier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-fairadapt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-ot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-seq-transport.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-comparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,20 +319,20 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#load-data-and-classifier" id="toc-load-data-and-classifier" class="nav-link active" data-scroll-target="#load-data-and-classifier"><span class="header-section-number">8.1</span> Load Data and Classifier</a></li>
-  <li><a href="#counterfactuals-with-sequential-transport" id="toc-counterfactuals-with-sequential-transport" class="nav-link" data-scroll-target="#counterfactuals-with-sequential-transport"><span class="header-section-number">8.2</span> Counterfactuals with Sequential Transport</a></li>
-  <li><a href="#comparison-for-two-individuals" id="toc-comparison-for-two-individuals" class="nav-link" data-scroll-target="#comparison-for-two-individuals"><span class="header-section-number">8.3</span> Comparison for Two Individuals</a></li>
-  <li><a href="#counterfactual-demographic-parity" id="toc-counterfactual-demographic-parity" class="nav-link" data-scroll-target="#counterfactual-demographic-parity"><span class="header-section-number">8.4</span> Counterfactual Demographic Parity</a></li>
-  <li><a href="#sec-cf-seq-t-save" id="toc-sec-cf-seq-t-save" class="nav-link" data-scroll-target="#sec-cf-seq-t-save"><span class="header-section-number">8.5</span> Saving Objects</a></li>
+  <li><a href="#load-data-and-classifier" id="toc-load-data-and-classifier" class="nav-link active" data-scroll-target="#load-data-and-classifier"><span class="header-section-number">9.1</span> Load Data and Classifier</a></li>
+  <li><a href="#counterfactuals-with-sequential-transport" id="toc-counterfactuals-with-sequential-transport" class="nav-link" data-scroll-target="#counterfactuals-with-sequential-transport"><span class="header-section-number">9.2</span> Counterfactuals with Sequential Transport</a></li>
+  <li><a href="#comparison-for-two-individuals" id="toc-comparison-for-two-individuals" class="nav-link" data-scroll-target="#comparison-for-two-individuals"><span class="header-section-number">9.3</span> Comparison for Two Individuals</a></li>
+  <li><a href="#counterfactual-demographic-parity" id="toc-counterfactual-demographic-parity" class="nav-link" data-scroll-target="#counterfactual-demographic-parity"><span class="header-section-number">9.4</span> Counterfactual Demographic Parity</a></li>
+  <li><a href="#sec-cf-seq-t-save" id="toc-sec-cf-seq-t-save" class="nav-link" data-scroll-target="#sec-cf-seq-t-save"><span class="header-section-number">9.5</span> Saving Objects</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-seq-transport.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./cf-seq-transport.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-cf-seq-t" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></h1>
+<h1 class="title"><span id="sec-cf-seq-t" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></h1>
 </div>
 
 
@@ -358,8 +364,8 @@ Objectives
 </div>
 <p>In the article, we use three methods to create counterfactuals:</p>
 <ol type="1">
-<li>Fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>6</span></a>)</li>
-<li>Multivariate optimal transport (<a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>)</li>
+<li>Fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>)</li>
+<li>Multivariate optimal transport (<a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>8</span></a>)</li>
 <li>Sequential transport (the methodology we develop in the paper, presented in this chapter).</li>
 </ol>
 <div class="cell">
@@ -399,17 +405,17 @@ Objectives
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../functions/utils.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="load-data-and-classifier" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">8.1</span> Load Data and Classifier</h2>
-<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>4.3</span></a>:</p>
+<section id="load-data-and-classifier" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">9.1</span> Load Data and Classifier</h2>
+<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>5.3</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable ((Y), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="classifier.html#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span>5.5</span></a>:</p>
+<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable ((Y), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="classifier.html#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span>6.5</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race_c.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also need the predictions made by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>5</span></a>):</p>
+<p>We also need the predictions made by the classifier (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>6</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on train/test sets</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/pred_aware.rda"</span>)</span>
@@ -419,190 +425,285 @@ Objectives
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/pred_unaware_all.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="counterfactuals-with-sequential-transport" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="counterfactuals-with-sequential-transport"><span class="header-section-number">8.2</span> Counterfactuals with Sequential Transport</h2>
-<p>We now turn to sequential transport (the methodology developed in our paper). We define a function, <code class="sourceCode r"><span class="fu">transport_function</span>()</code> (see in <code>functions/utils.R</code>) to perform a fast sequential transport on causal graph.</p>
+<section id="counterfactuals-with-sequential-transport" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="counterfactuals-with-sequential-transport"><span class="header-section-number">9.2</span> Counterfactuals with Sequential Transport</h2>
+<p>We now turn to sequential transport (the methodology developed in our paper). We define a function, <code class="sourceCode r"><span class="fu">seq_trans</span>()</code> (see in <code>functions/utils.R</code>) to perform a fast sequential transport on causal graph.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Sequential transport</span></span>
+<details class="code-fold">
+<summary>R codes for functions <code class="sourceCode r"><span class="fu">seq_trans</span>()</code>, <code class="sourceCode r"><span class="fu">topological_ordering</span>()</code>, and <code class="sourceCode r"><span class="fu">swap</span>()</code></summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Sequential Transport Using a Pre-Defined Causal Graph</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param data dataset with three columns:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - S: sensitive attribute</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - X1: first predictor, assumed to be causally linked to S</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'  - X2: second predictor, assumed to be causally linked to S and X1</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param S_0 value for the sensitive attribute for the source distribution</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param number of cells in each dimension (default to 15)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param h small value added to extend the area covered by the grid (default</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'  to .2)</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param d neighborhood weight when conditioning by x1 (default to .5)</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>transport_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                               S_0,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">n_grid =</span> <span class="dv">15</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                               <span class="at">h =</span> .<span class="dv">2</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                               <span class="at">d =</span> .<span class="dv">5</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                               ) {</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset of the data: 0 for Black, 1 for White</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  D_SXY_0 <span class="ot">&lt;-</span> data[data<span class="sc">$</span>S <span class="sc">==</span>S_0, ]</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  D_SXY_1 <span class="ot">&lt;-</span> data[data<span class="sc">$</span>S<span class="sc">!=</span> S_0, ]</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Coordinates of the cells of the grid on subset of 0 (Black)</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  vx1_0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(D_SXY_0<span class="sc">$</span>X1) <span class="sc">-</span> h, <span class="fu">max</span>(D_SXY_0<span class="sc">$</span>X1) <span class="sc">+</span> h, <span class="at">length =</span> n_grid <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  vx2_0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(D_SXY_0<span class="sc">$</span>X2) <span class="sc">-</span> h, <span class="fu">max</span>(D_SXY_0<span class="sc">$</span>X2) <span class="sc">+</span> h, <span class="at">length =</span> n_grid <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># and middle point of the cells</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  vx1_0_mid <span class="ot">&lt;-</span> (vx1_0[<span class="dv">2</span><span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>n_grid)]<span class="sc">+</span>vx1_0[<span class="dv">1</span><span class="sc">:</span>(n_grid)]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  vx2_0_mid <span class="ot">&lt;-</span> (vx2_0[<span class="dv">2</span><span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>n_grid)]<span class="sc">+</span>vx2_0[<span class="dv">1</span><span class="sc">:</span>(n_grid)]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Coordinates of the cells of the grid on subset of 1 (White)</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  vx1_1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(D_SXY_1<span class="sc">$</span>X1) <span class="sc">-</span>h, <span class="fu">max</span>(D_SXY_1<span class="sc">$</span>X1) <span class="sc">+</span> h, <span class="at">length =</span> n_grid <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  vx1_1_mid <span class="ot">&lt;-</span> (vx1_1[<span class="dv">2</span><span class="sc">:</span>(<span class="dv">1</span> <span class="sc">+</span> n_grid)] <span class="sc">+</span> vx1_1[<span class="dv">1</span><span class="sc">:</span>(n_grid)]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># and middle point of the cells</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  vx2_1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(D_SXY_1<span class="sc">$</span>X2) <span class="sc">-</span> h, <span class="fu">max</span>(D_SXY_1<span class="sc">$</span>X2) <span class="sc">+</span> h, <span class="at">length =</span> n_grid <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  vx2_1_mid <span class="ot">&lt;-</span> (vx2_1[<span class="dv">2</span><span class="sc">:</span>(<span class="dv">1</span> <span class="sc">+</span> n_grid)] <span class="sc">+</span> vx2_1[<span class="dv">1</span><span class="sc">:</span>(n_grid)]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creation of the grids for the CDF and Quantile function</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># init with NA values</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># One grid for X1 and X2, on both subsets of the data (Black/White)</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  F1_0 <span class="ot">&lt;-</span> F2_0 <span class="ot">&lt;-</span> F1_1 <span class="ot">&lt;-</span> F2_1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n_grid, n_grid)</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  Q1_0 <span class="ot">&lt;-</span> Q2_0 <span class="ot">&lt;-</span> Q1_1 <span class="ot">&lt;-</span> Q2_1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n_grid, n_grid)</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical CDF for X1 on subset of Black</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  FdR1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X1 <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>  f1_0 <span class="ot">&lt;-</span> <span class="fu">FdR1_0</span>(vx1_0_mid)</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical CDF for X2 on subset of Black</span></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  FdR2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X2 <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  f2_0 <span class="ot">&lt;-</span> <span class="fu">FdR2_0</span>(vx2_0_mid)</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical CDF for X1 on subset of White</span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  FdR1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X1 <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  f1_1 <span class="ot">&lt;-</span> <span class="fu">FdR1_1</span>(vx1_1_mid)</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical CDF for X2 on subset of White</span></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  FdR2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X2 <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  f2_1 <span class="ot">&lt;-</span> <span class="fu">FdR2_1</span>(vx2_1_mid)</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n_grid) <span class="sc">/</span> (n_grid <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical quantiles for X1 on subset of Black</span></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>  Qtl1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X1, x))</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  q1_0 <span class="ot">&lt;-</span> <span class="fu">Qtl1_0</span>(u)</span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical quantiles for X2 on subset of Black</span></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>  Qtl2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X2, x))</span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  q2_0 <span class="ot">&lt;-</span> <span class="fu">Qtl2_0</span>(u)</span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical quantiles for X1 on subset of White</span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  Qtl1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X1, x))</span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>  q1_1 <span class="ot">&lt;-</span> <span class="fu">Qtl1_1</span>(u)</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Empirical quantiles for X2 on subset of White</span></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>  Qtl2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X2, x))</span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>  q2_1 <span class="ot">&lt;-</span> <span class="fu">Qtl2_1</span>(u)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute c.d.f and quantile at each cell of the grid in both groups</span></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_grid) {</span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Subset of Black</span></span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    idx1_0 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_0<span class="sc">$</span>X1 <span class="sc">-</span> vx1_0_mid[i]) <span class="sc">&lt;</span> d)</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    FdR2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X2[idx1_0] <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    F2_0[, i] <span class="ot">&lt;-</span> <span class="fu">FdR2_0</span>(vx2_0_mid)</span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>    Qtl2_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X2[idx1_0], x))</span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>    Q2_0[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl2_0</span>(u)</span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>    idx2_0 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_0<span class="sc">$</span>X2 <span class="sc">-</span> vx2_0_mid[i]) <span class="sc">&lt;</span> d)</span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    FdR1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_0<span class="sc">$</span>X1[idx2_0] <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    F1_0[, i] <span class="ot">&lt;-</span> <span class="fu">FdR1_0</span>(vx1_0_mid)</span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>    Qtl1_0 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_0<span class="sc">$</span>X1[idx2_0], x))</span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>    Q1_0[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl1_0</span>(u)</span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Subset of White</span></span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>    idx1_1 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_1<span class="sc">$</span>X1 <span class="sc">-</span> vx1_1_mid[i]) <span class="sc">&lt;</span> d)</span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>    FdR2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X2[idx1_1] <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>    F2_1[, i] <span class="ot">&lt;-</span> <span class="fu">FdR2_1</span>(vx2_1_mid)</span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>    Qtl2_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X2[idx1_1], x))</span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>    Q2_1[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl2_1</span>(u)</span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>    idx2_1 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(D_SXY_1<span class="sc">$</span>X2<span class="sc">-</span>vx2_1_mid[i])<span class="sc">&lt;</span>d)</span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>    FdR1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(D_SXY_1<span class="sc">$</span>X1[idx2_1] <span class="sc">&lt;=</span> x))</span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>    F1_1[, i] <span class="ot">&lt;-</span> <span class="fu">FdR1_1</span>(vx1_1_mid)</span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>    Qtl1_1 <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(x) <span class="fu">quantile</span>(D_SXY_1<span class="sc">$</span>X1[idx2_1], x))</span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>    Q1_1[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl1_1</span>(u)</span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transport for X2</span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>  T2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x2) {</span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> f2_0[i]</span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>    x2star <span class="ot">&lt;-</span> q2_1[i]</span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>    x2star</span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' The sensitive attribute, S, is assumed to be a binary variable with value</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' $S_0$ in the source distribution and $S_1$ in the target distribution.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param data Data frame with the observations.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param adj Adjacency matrix for the causal graph.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param s Name of the sensitive attribute column in the data.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param S_0 Label of the sensitive attribute in the source distribution.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param y Name of the outcome variable in the data.</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param num_neighbors Number of neighbors to use in the weighted quantile</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#'        estimation. Default to 5.</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param silent If `TRUE`, the messages showing progress in the estimation are</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#'        not shown. Default to `silent=FALSE`.</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#' @returns A list with the following elements:</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `transported`: A named list with the transported values. The names are those of the variables.</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `weights`: A list with the weights of each observation in the two groups.</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `ecdf`: A list with empirical distribution functions for numerical variables.</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `ecdf_values`: A list with the values of the ecdf evaluated for each observation in the source distribution.</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `fit_for_categ`: A list with the estimated multinomial models to predict categories using parents characteristics</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `params`: A list with some parameters used to transport observations:</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `adj`: Adjacency matrix.</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `top_order`: Topological ordering.</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `s`: Name of the sensitive attribute.</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `S_0`: Label of the sensitive attribute in the source distribution.</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `y`: Name of the outcome variable in the data.</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#'     * `num_neighbors`: Number of neighbors used when computing quantiles.</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#' @md</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom stats predict ecdf quantile</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom dplyr across filter mutate pull select</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom tidyselect where</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom rlang sym !! := is_character</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom cluster daisy</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom Hmisc wtd.quantile</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom nnet multinom</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>seq_trans <span class="ot">&lt;-</span> <span class="cf">function</span>(data,</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>                      adj,</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>                      s,</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>                      S_0,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>                      y,</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_neighbors =</span> <span class="dv">5</span>,</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>                      <span class="at">silent =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make sure character variables are encoded as factors</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    data <span class="sc">|&gt;</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character), <span class="sc">~</span><span class="fu">as.factor</span>(.x)))</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Topological ordering</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  top_order <span class="ot">&lt;-</span> <span class="fu">topological_ordering</span>(adj)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  variables <span class="ot">&lt;-</span> top_order[<span class="sc">!</span>top_order <span class="sc">%in%</span> <span class="fu">c</span>(s, y)]</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Observations in group S_0</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>  data_0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(s) <span class="sc">==</span> <span class="sc">!!</span>S_0)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  data_1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(s) <span class="sc">!=</span> <span class="sc">!!</span>S_0)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Lists where results will be stored</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  list_transported <span class="ot">&lt;-</span> <span class="fu">list</span>()  <span class="co"># Transported values</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  list_weights <span class="ot">&lt;-</span> <span class="fu">list</span>()      <span class="co"># Weights</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>  list_ecdf <span class="ot">&lt;-</span> <span class="fu">list</span>()         <span class="co"># Empirical dist. function</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  list_ecdf_values <span class="ot">&lt;-</span> <span class="fu">list</span>()  <span class="co"># Evaluated values of the ecdf</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  fit_for_categ <span class="ot">&lt;-</span> <span class="fu">list</span>()     <span class="co"># Fitted multinomial models for categ. variables</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (x_name <span class="cf">in</span> variables) {</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (silent <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="fu">cat</span>(<span class="st">"Transporting "</span>, x_name, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Names of the parent variables</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    parents <span class="ot">&lt;-</span> <span class="fu">colnames</span>(adj)[adj[, x_name] <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># values of current x in each group</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    x_S0 <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">pull</span>(<span class="sc">!!</span>x_name)</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    x_S1 <span class="ot">&lt;-</span> data_1 <span class="sc">|&gt;</span> <span class="fu">pull</span>(<span class="sc">!!</span>x_name)</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check whether X is numeric</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    is_x_num <span class="ot">&lt;-</span> <span class="fu">is.numeric</span>(x_S0)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Characteristics of the parent variables (if any)</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    parents_characteristics <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(parents_characteristics) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>      data_0_parents <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>      data_1_parents <span class="ot">&lt;-</span> data_1 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Weights in S_0</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>      weights_S0 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(cluster<span class="sc">::</span><span class="fu">daisy</span>(data_0_parents, <span class="at">metric =</span> <span class="st">"gower"</span>))</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>      tot_weights_S0 <span class="ot">&lt;-</span> <span class="fu">apply</span>(weights_S0, <span class="at">MARGIN =</span> <span class="dv">1</span>, sum)</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Weights in S_1</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>      <span class="co"># First, we need to get the transported values for the parents, if necessary</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>      data_0_parents_t <span class="ot">&lt;-</span> data_0_parents <span class="co">#init</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (parent <span class="cf">in</span> parents) {</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>        <span class="co"># does the parent depend on the sensitive variable</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (parent <span class="sc">%in%</span> <span class="fu">names</span>(list_transported)) {</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>          data_0_parents_t <span class="ot">&lt;-</span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>            data_0_parents_t <span class="sc">|&gt;</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(parent) <span class="sc">:</span><span class="er">=</span> list_transported[[parent]])</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Unfortunately, we will compute a lot of distances not needed</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>      combined <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data_0_parents_t, data_1_parents)</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>      gower_dist <span class="ot">&lt;-</span> cluster<span class="sc">::</span><span class="fu">daisy</span>(combined, <span class="at">metric =</span> <span class="st">"gower"</span>)</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>      gower_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(gower_dist)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>      n_0 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data_0_parents_t)</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>      n_1 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data_1_parents)</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>      weights_S1 <span class="ot">&lt;-</span> gower_matrix[<span class="dv">1</span><span class="sc">:</span>n_0, (n_0 <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(n_0 <span class="sc">+</span> n_1), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>      weights_S1 <span class="ot">&lt;-</span> weights_S1 <span class="sc">+</span> <span class="fl">1e-8</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>      weights_S1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (weights_S1)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>      tot_weights_S1 <span class="ot">&lt;-</span> <span class="fu">apply</span>(weights_S1, <span class="at">MARGIN =</span> <span class="dv">1</span>, sum)</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (is_x_num <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Numerical variable to transport</span></span>
 <span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transport for X1</span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>  T1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1) {</span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> f1_0[i]</span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>    x1star <span class="ot">&lt;-</span> q1_1[i]</span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>    x1star</span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transport for X2 conditional on X1</span></span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>  T2_cond_x1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x2, x1) {</span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>    k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>    k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_1_mid <span class="sc">-</span> <span class="fu">T1</span>(x1)))</span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> F2_0[i, k0]</span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>    x2star <span class="ot">&lt;-</span> Q2_1[i, k1]</span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>    x2star</span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Empirical distribution function</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>        f <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(x_S0))</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x_S0)) {</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>          f[i] <span class="ot">&lt;-</span> weights_S0[i, ] <span class="sc">%*%</span> (x_S0 <span class="sc">&lt;=</span> x_S0[i]) <span class="sc">/</span> tot_weights_S0[i]</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>        list_ecdf_values[[x_name]] <span class="ot">&lt;-</span> f</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        f[f<span class="sc">==</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span>(<span class="fl">1e-8</span>)</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Transported values</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>        transported <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(x_S0))</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x_S0)) {</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>          wts <span class="ot">&lt;-</span> weights_S1[i, ]</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>          wts[<span class="sc">-</span><span class="fu">order</span>(wts, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span>num_neighbors]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>          transported[i] <span class="ot">&lt;-</span> Hmisc<span class="sc">::</span><span class="fu">wtd.quantile</span>(</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>              <span class="at">x =</span> x_S1, <span class="at">weights =</span> weights_S1[i, ], <span class="at">probs =</span> f[i]</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>            ) <span class="sc">|&gt;</span> <span class="fu">suppressWarnings</span>()</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># X is non numeric and has parents</span></span>
 <span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transport for X1 conditional on X2</span></span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>  T1_cond_x2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x1, x2) {</span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>    k0 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_0_mid <span class="sc">-</span> x2))</span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>    k1 <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx2_1_mid <span class="sc">-</span> <span class="fu">T2</span>(x2)))</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(vx1_0_mid <span class="sc">-</span> x1))</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> F1_0[i, k0]</span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(u <span class="sc">-</span> p))</span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>    x1star <span class="ot">&lt;-</span> Q1_1[i, k1]</span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>    x1star</span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>    <span class="at">Transport_x1 =</span> T1,</span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>    <span class="at">Transport_x2 =</span> T2,</span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>    <span class="at">Transport_x1_cond_x2 =</span> T1_cond_x2,</span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>    <span class="at">Transport_x2_cond_x1 =</span> T2_cond_x1</span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fit a model to predict the categorical variables given the</span></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>        <span class="co"># characteristics of the parents in group to transport into</span></span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>        fit_indix_x <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>          x_S0 <span class="sc">~</span> .,</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data_1_parents <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">x_S0 =</span> x_S1)</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Predictions with that model for transported parents</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>        pred_probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_indix_x, <span class="at">type =</span> <span class="st">"probs"</span>, <span class="at">newdata =</span> data_0_parents_t)</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For each observation, random draw of the class, using the pred probs</span></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>        <span class="co"># as weights</span></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>        drawn_class <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>          pred_probs, <span class="dv">1</span>,</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(x) <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(pred_probs), <span class="at">prob =</span> x, <span class="at">size =</span> <span class="dv">1</span>)</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>        transported <span class="ot">&lt;-</span> <span class="fu">colnames</span>(pred_probs)[drawn_class]</span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is.factor</span>(x_S1)) {</span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>          transported <span class="ot">&lt;-</span> <span class="fu">factor</span>(transported, <span class="at">levels =</span> <span class="fu">levels</span>(x_S1))</span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>        fit_for_categ[[x_name]] <span class="ot">&lt;-</span> fit_indix_x</span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>      list_transported[[x_name]] <span class="ot">&lt;-</span> transported</span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Store weights for possible later use</span></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>      list_weights[[x_name]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>        <span class="at">w_S0 =</span> <span class="fu">list</span>(<span class="at">weights =</span> weights_S0, <span class="at">tot_weights =</span> tot_weights_S0),</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>        <span class="at">w_S1 =</span> <span class="fu">list</span>(<span class="at">weights =</span> weights_S1, <span class="at">tot_weights =</span> tot_weights_S1)</span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>      <span class="co"># No parents</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (is_x_num <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>        <span class="co"># X is numerical and has no parents</span></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>        F_X_S0 <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(x_S0)</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>        list_ecdf[[x_name]] <span class="ot">&lt;-</span> F_X_S0</span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>        f <span class="ot">&lt;-</span> <span class="fu">F_X_S0</span>(x_S0)</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>        list_ecdf_values[[x_name]] <span class="ot">&lt;-</span> f</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>        transported <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(x_S1, <span class="at">probs =</span> f))</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>        <span class="co"># X is not numerical and has no parents</span></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>        transported <span class="ot">&lt;-</span> <span class="fu">sample</span>(x_S1, <span class="at">size =</span> <span class="fu">length</span>(x_S0), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is.factor</span>(x_S1)) {</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>          transported <span class="ot">&lt;-</span> <span class="fu">factor</span>(transported, <span class="at">levels =</span> <span class="fu">levels</span>(x_S1))</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>          transported <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(transported)</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>      list_transported[[x_name]] <span class="ot">&lt;-</span> transported</span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>      <span class="at">transported =</span> list_transported,</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a>      <span class="at">weights =</span> list_weights,</span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>      <span class="at">ecdf =</span> list_ecdf,</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>      <span class="at">ecdf_values =</span> list_ecdf_values,</span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>      <span class="at">fit_for_categ =</span> fit_for_categ,</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>      <span class="at">params =</span> <span class="fu">list</span>(</span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a>        <span class="at">adj =</span> adj,</span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>        <span class="at">top_order =</span> top_order,</span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>        <span class="at">s =</span> s,</span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>        <span class="at">S_0 =</span> S_0,</span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> y,</span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>        <span class="at">num_neighbors =</span> num_neighbors</span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="co">#' Topological Ordering</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="co">#' @source This function comes from the fairadapt package. Drago Plecko,</span></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a><span class="co">#'         Nicolai Meinshausen (2020). Fair data adaptation with quantile</span></span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a><span class="co">#'         preservation Journal of Machine Learning Research, 21.242, 1-44.</span></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="co">#'         URL https://www.jmlr.org/papers/v21/19-966.html.</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param adj_mat Adjacency matrix with names of the variables for both rows and</span></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a><span class="co">#'        columns.</span></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return A character vector (names of the variables) providing a topological</span></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a><span class="co">#'         ordering.</span></span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>topological_ordering <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat) {</span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>  nrw <span class="ot">&lt;-</span> <span class="fu">nrow</span>(adj_mat)</span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>  num_walks <span class="ot">&lt;-</span> adj_mat</span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(nrw <span class="sc">+</span> <span class="dv">1</span>L)) {</span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>    num_walks <span class="ot">&lt;-</span> adj_mat <span class="sc">+</span> num_walks <span class="sc">%*%</span> adj_mat</span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>  comparison_matrix <span class="ot">&lt;-</span> num_walks <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>  top_order <span class="ot">&lt;-</span> <span class="fu">colnames</span>(adj_mat)</span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(nrw <span class="sc">-</span> <span class="dv">1</span>L)) {</span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq.int</span>(i <span class="sc">+</span> <span class="dv">1</span>L, nrw)) {</span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (comparison_matrix[top_order[j], top_order[i]]) {</span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>        top_order <span class="ot">&lt;-</span> <span class="fu">swap</span>(top_order, i, j)</span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>  top_order</span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a><span class="co">#' Swap Two Elements in a Matrix.</span></span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a><span class="co">#' @source This function comes from the fairadapt package. Drago Plecko,</span></span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a><span class="co">#'         Nicolai Meinshausen (2020). Fair data adaptation with quantile</span></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a><span class="co">#'         preservation Journal of Machine Learning Research, 21.242, 1-44.</span></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a><span class="co">#'         URL https://www.jmlr.org/papers/v21/19-966.html.</span></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x A matrix.</span></span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param i Index of the first element to swap.</span></span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param j Index of the second element to swap.</span></span>
+<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return The matrix x where the i-th and j-th elements have been swapped.</span></span>
+<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a><span class="co">#' @noRd</span></span>
+<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a>swap <span class="ot">&lt;-</span> <span class="cf">function</span>(x, i, j) {</span>
+<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> x[i]</span>
+<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a>  x[i] <span class="ot">&lt;-</span> x[j]</span>
+<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a>  x[j] <span class="ot">&lt;-</span> keep</span>
+<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a>  x</span>
+<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The <code class="sourceCode r"><span class="fu">transport_function</span>()</code> function returns not only the functions <code class="sourceCode r"><span class="fu">Transport_x1</span>()</code>, <code class="sourceCode r"><span class="fu">Transport_x2</span>()</code>, <code class="sourceCode r"><span class="fu">Transport_x1_cond_x2</span>()</code>, <code class="sourceCode r"><span class="fu">Transport_x2_cond_x1</span>()</code>, but also the useful values of the grid (e.g., <code>vx1_0_mid</code> defined in the environment of the function and used in the functions). Note that defining a global object named <code>vx1_0_mid</code> will not alter the object of the same name defined in the environment of <code class="sourceCode r"><span class="fu">transport_function</span>()</code>: R will call the <code>vx1_0_mid</code> from that environment and not the one that may be defined in the global environment.</p>
-</div>
-</div>
-<p>Let us apply this function. Note that we use a grid of length 500 to fasten the computation of sequential transport (the estimation takes about 45 seconds on a standard computer). But first, we create a dataset, <code>df_race_c_light</code>, with the sensitive attribute and the two characteristics only:</p>
+<p>Let us apply this function, but first, we create a dataset, <code>df_race_c_light</code>, with the sensitive attribute and the two characteristics only:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_race_c_light <span class="ot">&lt;-</span> df_race_c <span class="sc">|&gt;</span> <span class="fu">select</span>(S, X1, X2)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ind_white <span class="ot">&lt;-</span> <span class="fu">which</span>(df_race_c_light<span class="sc">$</span>S <span class="sc">==</span> <span class="st">"White"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ind_black <span class="ot">&lt;-</span> <span class="fu">which</span>(df_race_c_light<span class="sc">$</span>S <span class="sc">==</span> <span class="st">"Black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We first transport <span class="math inline">\(x_1\)</span>, then <span class="math inline">\(x_2\)</span>, assuming that <span class="math inline">\(x_1\)</span> is influenced by <span class="math inline">\(S\)</span> only, <span class="math inline">\(x_2\)</span> is influenced by both <span class="math inline">\(S\)</span> and <span class="math inline">\(x_1\)</span>, and <span class="math inline">\(Y\)</span> is influenced by <span class="math inline">\(S\)</span>, <span class="math inline">\(x_1\)</span>, and <span class="math inline">\(x_2\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>seq_functions <span class="ot">&lt;-</span> <span class="fu">transport_function</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_race_c_light, <span class="at">S_0 =</span> <span class="st">"Black"</span>, <span class="at">n_grid =</span> <span class="dv">500</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"Y"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># X1, then X2</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>adj_1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># S  X1 X2 Y</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,<span class="co"># S</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>,<span class="co"># X1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>,<span class="co"># X2</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>  <span class="co"># Y</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="fu">length</span>(variables),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">rep</span>(<span class="fu">list</span>(variables), <span class="dv">2</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let us extract the transport functions to transport <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>T_X1 <span class="ot">&lt;-</span> seq_functions<span class="sc">$</span>Transport_x1</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>T_X2 <span class="ot">&lt;-</span> seq_functions<span class="sc">$</span>Transport_x2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trans_x1_then_x2 <span class="ot">&lt;-</span> <span class="fu">seq_trans</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_race_c, <span class="at">adj =</span> adj_1, <span class="at">s =</span> <span class="st">"S"</span>, <span class="at">S_0 =</span> <span class="st">"Black"</span>, <span class="at">y =</span> <span class="st">"Y"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Transporting  X1 
+Transporting  X2 </code></pre>
 </div>
-<p>We also do the same with the transport of <span class="math inline">\(X_2\)</span> conditional on <span class="math inline">\(X_1\)</span>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>T_X2_c_X1 <span class="ot">&lt;-</span> seq_functions<span class="sc">$</span>Transport_x2_cond_x1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now, we can apply these functions to the subset of Black individuals to sequentially transport <span class="math inline">\(X_1\)</span> (UGPA) and then <span class="math inline">\(X_2\)</span> (LSAT) conditional on the transported value of <span class="math inline">\(X_1\)</span>:</p>
 <p>The values of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> for Black individuals:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>a10 <span class="ot">&lt;-</span> df_race_c_light<span class="sc">$</span>X1[ind_black]</span>
@@ -610,8 +711,8 @@ Note
 </div>
 <p>The transported values:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x1_star <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(a10, T_X1) <span class="co"># Transport X1 to group S=White</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x2_star <span class="ot">&lt;-</span> <span class="fu">map2_dbl</span>(a20, a10, T_X2_c_X1) <span class="co"># Transport X2|X1 to group S=White</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x1_star <span class="ot">&lt;-</span> trans_x1_then_x2<span class="sc">$</span>transported<span class="sc">$</span>X1 <span class="co"># Transport X1 to group S=White</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x2_star <span class="ot">&lt;-</span> trans_x1_then_x2<span class="sc">$</span>transported<span class="sc">$</span>X2 <span class="co"># Transport X2|X1 to group S=White</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We build a dataset with the sensitive attribute of Black individuals changed to white, and their characteristics changed to their transported characteristics:</p>
 <div class="cell">
@@ -624,7 +725,7 @@ Note
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> x2_star</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We make predictions based on those counterfactuals obrained with sequential transport, on both models (the unaware model, and the aware model):</p>
+<p>We make predictions based on those counterfactuals obtained with sequential transport, on both models (the unaware model, and the aware model):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_unaware <span class="ot">&lt;-</span> pred_unaware<span class="sc">$</span>model</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pred_seq_unaware <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
@@ -695,7 +796,7 @@ Note
 <div id="fig-seq-unaware-race-ref-white" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-seq-unaware-race-ref-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.1: Unaware model, Sensitive: Race, Reference: White individuals
+Figure&nbsp;9.1: Unaware model, Sensitive: Race, Reference: White individuals
 </figcaption>
 <div aria-describedby="fig-seq-unaware-race-ref-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-seq-transport_files/figure-html/fig-seq-unaware-race-ref-white-1.png" class="img-fluid figure-img" width="672">
@@ -725,7 +826,7 @@ Figure&nbsp;8.1: Unaware model, Sensitive: Race, Reference: White individuals
 <div id="fig-seq-aware-race-ref-white" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-seq-aware-race-ref-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
+Figure&nbsp;9.2: Aware model, Sensitive: Race, Reference: White individuals
 </figcaption>
 <div aria-describedby="fig-seq-aware-race-ref-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cf-seq-transport_files/figure-html/fig-seq-aware-race-ref-white-1.png" class="img-fluid figure-img" width="672">
@@ -738,8 +839,8 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 </div>
 </div>
 </section>
-<section id="comparison-for-two-individuals" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="comparison-for-two-individuals"><span class="header-section-number">8.3</span> Comparison for Two Individuals</h2>
+<section id="comparison-for-two-individuals" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="comparison-for-two-individuals"><span class="header-section-number">9.3</span> Comparison for Two Individuals</h2>
 <p>Let us focus on the first three Black individuals of the dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>factuals_unaware <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
@@ -762,9 +863,9 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 <pre><code># A tibble: 3 × 6
   S        X1    X2    id  pred type          
   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         
-1 White   3.2  37      24 0.491 counterfactual
-2 White   3.5  28.5    40 0.381 counterfactual
-3 White   3.1  31.5    51 0.379 counterfactual</code></pre>
+1 White   3.3  37.5    24 0.515 counterfactual
+2 White   3.6  28.5    40 0.395 counterfactual
+3 White   3.1  32      51 0.388 counterfactual</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -783,9 +884,9 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 1 Black   2.8  29   0.300 factual           24
 2 Black   3.2  19   0.206 factual           40
 3 Black   2.6  23   0.198 factual           51
-4 White   3.2  37   0.491 counterfactual    24
-5 White   3.5  28.5 0.381 counterfactual    40
-6 White   3.1  31.5 0.379 counterfactual    51</code></pre>
+4 White   3.3  37.5 0.515 counterfactual    24
+5 White   3.6  28.5 0.395 counterfactual    40
+6 White   3.1  32   0.388 counterfactual    51</code></pre>
 </div>
 </div>
 <p>And with the aware model:</p>
@@ -796,9 +897,9 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 <pre><code># A tibble: 3 × 6
   S        X1    X2    id  pred type          
   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         
-1 White   3.2  37      24 0.507 counterfactual
-2 White   3.5  28.5    40 0.418 counterfactual
-3 White   3.1  31.5    51 0.413 counterfactual</code></pre>
+1 White   3.3  37.5    24 0.526 counterfactual
+2 White   3.6  28.5    40 0.430 counterfactual
+3 White   3.1  32      51 0.420 counterfactual</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -817,14 +918,14 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 1 Black   2.8  29   0.133  factual           24
 2 Black   3.2  19   0.0933 factual           40
 3 Black   2.6  23   0.0882 factual           51
-4 White   3.2  37   0.507  counterfactual    24
-5 White   3.5  28.5 0.418  counterfactual    40
-6 White   3.1  31.5 0.413  counterfactual    51</code></pre>
+4 White   3.3  37.5 0.526  counterfactual    24
+5 White   3.6  28.5 0.430  counterfactual    40
+6 White   3.1  32   0.420  counterfactual    51</code></pre>
 </div>
 </div>
 </section>
-<section id="counterfactual-demographic-parity" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="counterfactual-demographic-parity"><span class="header-section-number">8.4</span> Counterfactual Demographic Parity</h2>
+<section id="counterfactual-demographic-parity" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="counterfactual-demographic-parity"><span class="header-section-number">9.4</span> Counterfactual Demographic Parity</h2>
 <p>For the unaware model:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(</span>
@@ -832,7 +933,7 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    factuals_unaware <span class="sc">|&gt;</span> <span class="fu">filter</span>(S <span class="sc">==</span> <span class="st">"Black"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(<span class="st">"pred"</span>)</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1816625</code></pre>
+<pre><code>[1] 0.1982544</code></pre>
 </div>
 </div>
 <p>For the aware model:</p>
@@ -842,12 +943,12 @@ Figure&nbsp;8.2: Aware model, Sensitive: Race, Reference: White individuals
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    factuals_aware <span class="sc">|&gt;</span> <span class="fu">filter</span>(S <span class="sc">==</span> <span class="st">"Black"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(<span class="st">"pred"</span>)</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3722886</code></pre>
+<pre><code>[1] 0.386414</code></pre>
 </div>
 </div>
 </section>
-<section id="sec-cf-seq-t-save" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="sec-cf-seq-t-save"><span class="header-section-number">8.5</span> Saving Objects</h2>
+<section id="sec-cf-seq-t-save" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="sec-cf-seq-t-save"><span class="header-section-number">9.5</span> Saving Objects</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  counterfactuals_unaware_seq_black, </span>
@@ -1286,12 +1387,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./cf-ot.html" class="pagination-link" aria-label="Multivariate Optimal Transport">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./cf-comparison.html" class="pagination-link" aria-label="Counterfactuals: comparison">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

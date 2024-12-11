@@ -26,7 +26,8 @@ book:
     - part: II. Simulations
       chapters:
         - gaussian.qmd
-        - regression.qmd
+        - transport-fast-grid.qmd
+        - algorithm-3.qmd
     - part: III. Counterfactuals with Law Dataset
       chapters:
       - data.qmd

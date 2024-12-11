@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Data – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
+<title>5&nbsp; Data – Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,7 +85,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./classifier.html" rel="next">
-<link href="./regression.html" rel="prev">
+<link href="./algorithm-3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -212,7 +212,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -264,8 +264,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
+  <a href="./transport-fast-grid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Fast Transport on a Grid with Numerical Covariates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algorithm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
       </ul>
@@ -282,37 +288,37 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./classifier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-fairadapt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-ot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-seq-transport.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-comparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
   </div>
 </li>
       </ul>
@@ -333,18 +339,18 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#data-pre-processing" id="toc-data-pre-processing" class="nav-link active" data-scroll-target="#data-pre-processing"><span class="header-section-number">4.1</span> Data Pre-Processing</a></li>
-  <li><a href="#causal-graph" id="toc-causal-graph" class="nav-link" data-scroll-target="#causal-graph"><span class="header-section-number">4.2</span> Causal graph</a></li>
-  <li><a href="#sec-data-save" id="toc-sec-data-save" class="nav-link" data-scroll-target="#sec-data-save"><span class="header-section-number">4.3</span> Saving objects</a></li>
+  <li><a href="#data-pre-processing" id="toc-data-pre-processing" class="nav-link active" data-scroll-target="#data-pre-processing"><span class="header-section-number">5.1</span> Data Pre-Processing</a></li>
+  <li><a href="#causal-graph" id="toc-causal-graph" class="nav-link" data-scroll-target="#causal-graph"><span class="header-section-number">5.2</span> Causal graph</a></li>
+  <li><a href="#sec-data-save" id="toc-sec-data-save" class="nav-link" data-scroll-target="#sec-data-save"><span class="header-section-number">5.3</span> Saving objects</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html">III. Counterfactuals with Law Dataset</a></li><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-data" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></h1>
+<h1 class="title"><span id="sec-data" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></h1>
 </div>
 
 
@@ -421,8 +427,8 @@ Objectives
 <li><code>sander_index</code>: Sander index of the student: weighted average of normalized UGPA and LSAT scores (however, no details are given for this specific dataset, see <span class="citation" data-cites="sander2004systemic">Sander (<a href="references.html#ref-sander2004systemic" role="doc-biblioref">2004</a>)</span>, p.&nbsp;393) (numeric)</li>
 <li><code>first_pf</code>: Probably a binary variable that indicates whether the student passed on their first trial ? No information is given about this variable… (numeric 0/1).</li>
 </ul>
-<section id="data-pre-processing" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="data-pre-processing"><span class="header-section-number">4.1</span> Data Pre-Processing</h2>
+<section id="data-pre-processing" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="data-pre-processing"><span class="header-section-number">5.1</span> Data Pre-Processing</h2>
 <p>We load the data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'../data/law_data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -532,7 +538,7 @@ Objectives
 <div id="fig-density-zfya-race" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-density-zfya-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: Distribution of the standardized first-year law school grades among the two groups, when <span class="math inline">\(S\)</span> is the race
+Figure&nbsp;5.1: Distribution of the standardized first-year law school grades among the two groups, when <span class="math inline">\(S\)</span> is the race
 </figcaption>
 <div aria-describedby="fig-density-zfya-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="data_files/figure-html/fig-density-zfya-race-1.png" class="img-fluid figure-img" width="672">
@@ -562,7 +568,7 @@ Figure&nbsp;4.1: Distribution of the standardized first-year law school grades a
 <div id="fig-density-zfya-gender" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-density-zfya-gender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: Distribution of the standardized first-year law school grades among the two groups, when <span class="math inline">\(S\)</span> is the gender
+Figure&nbsp;5.2: Distribution of the standardized first-year law school grades among the two groups, when <span class="math inline">\(S\)</span> is the gender
 </figcaption>
 <div aria-describedby="fig-density-zfya-gender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="data_files/figure-html/fig-density-zfya-gender-1.png" class="img-fluid figure-img" width="672">
@@ -575,8 +581,8 @@ Figure&nbsp;4.2: Distribution of the standardized first-year law school grades a
 </div>
 </div>
 </section>
-<section id="causal-graph" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="causal-graph"><span class="header-section-number">4.2</span> Causal graph</h2>
+<section id="causal-graph" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="causal-graph"><span class="header-section-number">5.2</span> Causal graph</h2>
 <p>The assumed causal graph we use here is different from that of the different papers <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>, <span class="citation" data-cites="Kusner17">Kusner et al. (<a href="references.html#ref-Kusner17" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="black2020fliptest">Black, Yeom, and Fredrikson (<a href="references.html#ref-black2020fliptest" role="doc-biblioref">2020</a>)</span> using the same dataset.</p>
 <p>We make the following assumptions:</p>
 <ul>
@@ -617,7 +623,7 @@ Y = h_3(X_1, X_2, U_Y): \text{ ZFYA, dependent on } X_1 \text{ and } X_2 \\
 <div id="fig-causal-graph-race" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-causal-graph-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.3: Causal Graph
+Figure&nbsp;5.3: Causal Graph
 </figcaption>
 <div aria-describedby="fig-causal-graph-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="data_files/figure-html/fig-causal-graph-race-1.png" class="img-fluid figure-img" width="672">
@@ -635,8 +641,8 @@ Figure&nbsp;4.3: Causal Graph
 </div>
 </div>
 </section>
-<section id="sec-data-save" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="sec-data-save"><span class="header-section-number">4.3</span> Saving objects</h2>
+<section id="sec-data-save" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-data-save"><span class="header-section-number">5.3</span> Saving objects</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(df_race, <span class="at">file =</span> <span class="st">"../data/df_race.rda"</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(df_gender, <span class="at">file =</span> <span class="st">"../data/df_gender.rda"</span>)</span>
@@ -1089,13 +1095,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./regression.html" class="pagination-link" aria-label="Regression">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Regression</span></span>
+      <a href="./algorithm-3.html" class="pagination-link" aria-label="Faster Algorithm">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./classifier.html" class="pagination-link" aria-label="Classifier">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classifier</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
