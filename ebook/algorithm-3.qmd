@@ -339,7 +339,7 @@ is_x_num
 
 The characteristics of the parent variables:
 ```{r define-indiv_characteristics}
-parents_characteristics <- data_0 |> select(!!parents) |> select(-!!s)
+parents_characteristics <- data_0 |> select(!!parents, -!!s)
 head(parents_characteristics)
 ```
 
@@ -571,7 +571,7 @@ seq_trans <- function(data,
     # Check whether X is numeric
     is_x_num <- is.numeric(x_S0)
     # Characteristics of the parent variables (if any)
-    parents_characteristics <- data_0 |> select(!!parents) |> select(-!!s)
+    parents_characteristics <- data_0 |> select(!!parents, -!!s)
 
     if (length(parents_characteristics) > 0) {
       data_0_parents <- data_0 |> select(!!parents) |> select(-!!s)
@@ -914,7 +914,7 @@ seq_trans_new <- function(x,
     # Check whether X is numeric
     is_x_num <- is.numeric(x_S0)
     # Characteristics of the parent variables (if any)
-    parents_characteristics <- newdata_0 |> select(!!parents) |> select(-!!s)
+    parents_characteristics <- newdata_0 |> select(!!parents, -!!s)
 
     if (length(parents_characteristics) > 0) {
       newdata_0_parents <- newdata_0 |> select(!!parents) |> select(-!!s)

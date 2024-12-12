@@ -36,6 +36,9 @@ book:
       - cf-ot.qmd
       - cf-seq-transport.qmd
       - cf-comparison.qmd
+    - part: IV. Counterfactuals with Other Datasets
+      chapters:
+      - example-adult.qmd
     - references.qmd
   navbar:
     right:

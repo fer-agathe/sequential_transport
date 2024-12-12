@@ -303,6 +303,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">IV. Counterfactuals with Other Datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./example-adult.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -1522,7 +1539,7 @@ Figure&nbsp;3.10: The conditional quantiles of <span class="math inline">\(x_2 |
 <span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a>  Q1_1[, i] <span class="ot">&lt;-</span> <span class="fu">Qtl1_1</span>(u) </span>
 <span id="cb74-22"><a href="#cb74-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let us make predictions with the model presented in <a href="algorithm-3.html#sec-regression-model" class="quarto-xref"><span>Section 4.2</span></a> on a grid:</p>
+<p>Let us make predictions with the model presented in <a href="algorithm-3.html#sec-regression-model" class="quarto-xref"><span>Section 4.6.3</span></a> on a grid:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>vx0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length =</span> <span class="dv">251</span>)</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>data_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> vx0, <span class="at">y =</span> vx0)</span>

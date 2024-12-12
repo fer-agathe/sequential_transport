@@ -17,25 +17,36 @@ split_dataset <- function(data, seed, train_ratio = 0.7) {
   )
 }
 
-#' Train and predict a logistic regression classifier: aware model
+#' @param train_data Train set.
+#' @param test_data Test set.
+#' @param s Name of the sensitive attribute.
+#' @param y Name of the target variable.
+#' @param type If `"type=aware"`, the model includes the sensitive attributes,
+#'        otherwise, if `type=unaware`, it does not.
 #'
-#' @param train_data train set. The sensitive variable S must be in the data
-#' @param test_data test set. The sensitive variable S must be in the data
-#' @param type type of model to train: if `"aware"`, the sensitive variable S
-#'  is included in the formula of the glm, if `"unaware"`, the sensitive
-#'  variable is not included in the formula of the model.
+#' @returns A list with three elements:
+#' * `model`: The estimated logistic regression model.
+#' * `pred_train`: Estimated scores on the train set.
+#' * `pred_test`: Estimated scores on the test set.
+#'
+#' @importFrom dplyr select
+#' @importFrom rlang !!
+#' @importFrom stats glm predict as.formula
 log_reg_train <- function(train_data,
                           test_data,
+                          s,
+                          y,
                           type = c("aware", "unaware")) {
   if (type == "unaware") {
-    train_data_ <- train_data %>% select(-S)
-    test_data_ <- test_data %>% select(-S)
+    train_data_ <- train_data %>% select(-!!s)
+    test_data_ <- test_data %>% select(-!!s)
   } else {
     train_data_ <- train_data
     test_data_ <- test_data
   }
   # Train the logistic regression model
-  model <- glm(Y ~ ., data = train_data_, family = binomial)
+  form <- paste0(y, "~.")
+  model <- glm(as.formula(form), data = train_data_, family = binomial)
   # Predictions on train and test sets
   pred_train <- predict(model, newdata = train_data_, type = "response")
   pred_test <- predict(model, newdata = test_data_, type = "response")

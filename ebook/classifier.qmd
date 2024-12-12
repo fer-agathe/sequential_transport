@@ -43,8 +43,6 @@ global_theme <- function() {
 
 # Seed
 set.seed(2025)
-
-source("../functions/utils.R")
 ```
 
 
@@ -77,8 +75,10 @@ df_race_c$Y <- as.factor(df_race_c$Y)
 levels(df_race_c$Y)
 ```
 
-Let us split the dataset into train/test sets (we use the `split_dataset()`{.R} function defined in `functions/utils.R`):
+Let us split the dataset into train/test sets (we use the `split_dataset()`{.R} function defined in our small package):
 ```{r define-train-test}
+library(devtools)
+load_all("../seqtransfairness/") # load the functions from our package
 seed <- 2025
 sets <- split_dataset(df_race_c, seed)
 data_train <- sets$data_train
@@ -92,7 +92,7 @@ Then, we train two models:
 1. **unaware logistic regression classifier**: model without including the sensitive attribute.
 2. **aware logistic regression classifier**: model with the sensitive attribute included in the set of features.
 
-The model is trained using the `log_reg_train()`{.R} function defined in `functions/utils.R`:
+The model is trained using the `log_reg_train()`{.R} function defined in our small package.
 ```{r}
 log_reg_train
 ```
@@ -100,17 +100,21 @@ Let us train the two models. Then, we extract the predicted values on both the t
 
 ```{r train-classif, message=FALSE, warning=FALSE}
 # Unaware logistic regression classifier (model without S)
-pred_unaware <- log_reg_train(data_train, data_test, type = "unaware")
+pred_unaware <- log_reg_train(
+  data_train, data_test, type = "unaware", s = "S", y = "Y"
+)
 pred_unaware_train <- pred_unaware$pred_train
 pred_unaware_test <- pred_unaware$pred_test
 
 # Aware logistic regression classifier (model with S)
-pred_aware <- log_reg_train(data_train, data_test, type = "aware")
+pred_aware <- log_reg_train(
+  data_train, data_test, type = "aware", s = "S", y = "Y"
+)
 pred_aware_train <- pred_aware$pred_train
 pred_aware_test <- pred_aware$pred_test
 ```
 
-We create a table for each model, with the sensitive attribute and the predicted value by the model (\(\hat{y}\)), only for observations from the test set.
+We create a table for each model, with the sensitive attribute and the predicted value by the model ($\hat{y}$), only for observations from the test set.
 ```{r define-df_test_unaware}
 df_test_unaware <- tibble(
   S = data_test$S, 

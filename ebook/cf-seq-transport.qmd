@@ -434,7 +434,7 @@ aware_seq_black <- bind_rows(
 )
 unaware_seq_black <- bind_rows(
   factuals_unaware |> mutate(id = row_number()) |> filter(S == "Black"), 
-  counterfactuals_aware_seq_black)
+  counterfactuals_unaware_seq_black)
 ```
 
 :::{.panel-tabset}

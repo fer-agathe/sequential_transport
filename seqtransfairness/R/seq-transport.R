@@ -36,6 +36,7 @@
 #' @importFrom cluster daisy
 #' @importFrom Hmisc wtd.quantile
 #' @importFrom nnet multinom
+#' @importFrom purrr map_chr
 seq_trans <- function(data,
                       adj,
                       s,
@@ -72,7 +73,7 @@ seq_trans <- function(data,
     # Check whether X is numeric
     is_x_num <- is.numeric(x_S0)
     # Characteristics of the parent variables (if any)
-    parents_characteristics <- data_0 |> select(!!parents) |> select(-!!s)
+    parents_characteristics <- data_0 |> select(!!parents, -!!s)
 
     if (length(parents_characteristics) > 0) {
       data_0_parents <- data_0 |> select(!!parents) |> select(-!!s)
@@ -135,11 +136,20 @@ seq_trans <- function(data,
         pred_probs <- predict(fit_indix_x, type = "probs", newdata = data_0_parents_t)
         # For each observation, random draw of the class, using the pred probs
         # as weights
-        drawn_class <- apply(
-          pred_probs, 1,
-          function(x) sample(1:ncol(pred_probs), prob = x, size = 1)
-        )
-        transported <- colnames(pred_probs)[drawn_class]
+        if (length(levels(x_S0)) == 2) {
+          # x_S0 is a binary variable, the prediction is not a matrix
+          x_S0_levels <- levels(x_S0)
+          transported <- map_chr(
+            pred_probs,
+            ~sample(x_S0_levels, size = 1, prob = c(1-.x, .x))
+          )
+        } else {
+          drawn_class <- apply(
+            pred_probs, 1,
+            function(x) sample(1:ncol(pred_probs), prob = x, size = 1)
+          )
+          transported <- colnames(pred_probs)[drawn_class]
+        }
         if (is.factor(x_S1)) {
           transported <- factor(transported, levels = levels(x_S1))
         }
@@ -215,6 +225,7 @@ seq_trans <- function(data,
 #' @importFrom cluster daisy
 #' @importFrom Hmisc wtd.quantile
 #' @importFrom nnet multinom
+#' @importFrom purrr map_chr
 seq_trans_new <- function(x,
                           newdata,
                           data) {
@@ -246,7 +257,7 @@ seq_trans_new <- function(x,
     # Check whether X is numeric
     is_x_num <- is.numeric(x_S0)
     # Characteristics of the parent variables (if any)
-    parents_characteristics <- newdata_0 |> select(!!parents) |> select(-!!s)
+    parents_characteristics <- data_0 |> select(!!parents, -!!s)
 
     if (length(parents_characteristics) > 0) {
       newdata_0_parents <- newdata_0 |> select(!!parents) |> select(-!!s)
@@ -315,11 +326,20 @@ seq_trans_new <- function(x,
         pred_probs <- predict(fit_indix_x, type = "probs", newdata = newdata_0_parents_t)
         # For each observation, random draw of the class, using the pred probs
         # as weights
-        drawn_class <- apply(
-          pred_probs, 1,
-          function(x) sample(1:ncol(pred_probs), prob = x, size = 1)
-        )
-        transported <- colnames(pred_probs)[drawn_class]
+        if (length(levels(x_S0)) == 2) {
+          # x_S0 is a binary variable, the prediction is not a matrix
+          x_S0_levels <- levels(x_S0)
+          transported <- map_chr(
+            pred_probs,
+            ~sample(x_S0_levels, size = 1, prob = c(1-.x, .x))
+          )
+        } else {
+          drawn_class <- apply(
+            pred_probs, 1,
+            function(x) sample(1:ncol(pred_probs), prob = x, size = 1)
+          )
+          transported <- colnames(pred_probs)[drawn_class]
+        }
         if (is.factor(x_S1)) {
           transported <- factor(transported, levels = levels(x_S1))
         }

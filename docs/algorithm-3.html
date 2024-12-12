@@ -303,6 +303,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">IV. Counterfactuals with Other Datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./example-adult.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -703,7 +720,7 @@ Figure&nbsp;4.1: Assumed Causal Graph
 </div>
 <p>The characteristics of the parent variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>parents_characteristics <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>parents_characteristics <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents, <span class="sc">-!!</span>s)</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(parents_characteristics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          X1
@@ -949,7 +966,7 @@ drawn_class &lt;- apply(
 <span id="cb61-72"><a href="#cb61-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check whether X is numeric</span></span>
 <span id="cb61-73"><a href="#cb61-73" aria-hidden="true" tabindex="-1"></a>    is_x_num <span class="ot">&lt;-</span> <span class="fu">is.numeric</span>(x_S0)</span>
 <span id="cb61-74"><a href="#cb61-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Characteristics of the parent variables (if any)</span></span>
-<span id="cb61-75"><a href="#cb61-75" aria-hidden="true" tabindex="-1"></a>    parents_characteristics <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<span id="cb61-75"><a href="#cb61-75" aria-hidden="true" tabindex="-1"></a>    parents_characteristics <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents, <span class="sc">-!!</span>s)</span>
 <span id="cb61-76"><a href="#cb61-76" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-77"><a href="#cb61-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(parents_characteristics) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
 <span id="cb61-78"><a href="#cb61-78" aria-hidden="true" tabindex="-1"></a>      data_0_parents <span class="ot">&lt;-</span> data_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
@@ -1331,7 +1348,7 @@ Figure&nbsp;4.4: Estimated densities in both groups, and in the target group usi
 <span id="cb70-51"><a href="#cb70-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check whether X is numeric</span></span>
 <span id="cb70-52"><a href="#cb70-52" aria-hidden="true" tabindex="-1"></a>    is_x_num <span class="ot">&lt;-</span> <span class="fu">is.numeric</span>(x_S0)</span>
 <span id="cb70-53"><a href="#cb70-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Characteristics of the parent variables (if any)</span></span>
-<span id="cb70-54"><a href="#cb70-54" aria-hidden="true" tabindex="-1"></a>    parents_characteristics <span class="ot">&lt;-</span> newdata_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>
+<span id="cb70-54"><a href="#cb70-54" aria-hidden="true" tabindex="-1"></a>    parents_characteristics <span class="ot">&lt;-</span> newdata_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents, <span class="sc">-!!</span>s)</span>
 <span id="cb70-55"><a href="#cb70-55" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-56"><a href="#cb70-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(parents_characteristics) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
 <span id="cb70-57"><a href="#cb70-57" aria-hidden="true" tabindex="-1"></a>      newdata_0_parents <span class="ot">&lt;-</span> newdata_0 <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!!</span>parents) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-!!</span>s)</span>

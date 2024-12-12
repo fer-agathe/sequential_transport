@@ -51,7 +51,6 @@ global_theme <- function() {
 # Seed
 set.seed(2025)
 
-source("../functions/utils.R")
 ```
 
 ## Load Data and Classifier
