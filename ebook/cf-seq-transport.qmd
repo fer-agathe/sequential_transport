@@ -454,7 +454,7 @@ unaware_seq_black <- bind_rows(
 ### Unaware
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Unaware model, Sensitive: Race, Reference: White individuals"
+#| fig-cap: "Unaware model, Sensitive: Race, Black -> White"
 #| label: fig-seq-unaware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
@@ -497,7 +497,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Unaware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -508,7 +507,7 @@ ggplot(
 ### Aware
 
 ```{r}
-#| fig-cap: "Aware model, Sensitive: Race, Reference: White individuals"
+#| fig-cap: "Aware model, Sensitive: Race, Black -> White"
 #| label: fig-seq-aware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
@@ -551,7 +550,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -569,7 +567,7 @@ Then, we focus on the distribution of predicted scores forcounterfactual of Blac
 ### Unaware
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Unaware model, Sensitive: Race, Reference: White individuals"
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Unaware model, Sensitive: Race, Black -> White"
 #| label: fig-seq-unaware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
@@ -611,7 +609,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -622,7 +619,7 @@ ggplot(
 ### Aware
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Reference: White individuals"
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Black -> White"
 #| label: fig-seq-aware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
@@ -664,11 +661,11 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 :::

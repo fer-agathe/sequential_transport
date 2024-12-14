@@ -294,7 +294,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Unaware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -348,7 +347,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Unaware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -408,11 +406,11 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 #### White -> Black
@@ -457,11 +455,11 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 :::
@@ -591,7 +589,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -645,7 +642,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -705,11 +701,11 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 #### White -> Black
@@ -754,11 +750,11 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 :::

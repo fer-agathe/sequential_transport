@@ -547,7 +547,6 @@ colours <- c(
 #| fig-height: 4
 #| code-fold: true
 # Factuals
-# Factuals
 tb_unaware_factuals <- tb_unaware |> 
   filter(counterfactual == "none")
 # Predicted values
@@ -663,7 +662,6 @@ text(x = .53, y = 6, "Seq. T.", col = colours_all[["seq"]])
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
-# Factuals
 # Factuals
 tb_aware_factuals <- tb_aware |> 
   filter(counterfactual == "none")
@@ -934,7 +932,8 @@ knitr::kable(
 
 
 ```{r, eval=FALSE}
-# LaTeX table
+#| code-fold: true
+#| code-summary: LaTeX Table
 knitr::kable(
   tb_res[,-1], format = "latex", booktabs = TRUE
 ) |> 

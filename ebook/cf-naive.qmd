@@ -160,7 +160,7 @@ unaware_naive_black <-
 The unaware model is blind to the sensitive attribute. Hence, changing the sensitive attribute does not affect the predicted scores.
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Unaware model, Sensitive: Race, Reference: Black individuals"
+#| fig-cap: "Unaware model, Sensitive: Race, Black -> White"
 #| label: fig-naive-unaware-race-ref-black
 #| fig-width: 7
 #| code-fold: true
@@ -202,7 +202,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -255,7 +254,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -291,7 +289,7 @@ aware_naive_black <-
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Aware model, Sensitive: Race, Reference: Black individuals"
+#| fig-cap: "Aware model, Sensitive: Race, Black -> White"
 #| label: fig-naive-aware-race-ref-black
 #| code-fold: true
 #| fig-width: 8
@@ -299,7 +297,7 @@ ggplot(
   aware_naive_black |> mutate(
     group = case_when(
       S_origin == "Black" & S == "Black" ~ "Black (Original)",
-      S_origin == "Black" & S == "White" ~ "Black -> Black (counterfactual)",
+      S_origin == "Black" & S == "White" ~ "Black -> White (counterfactual)",
       S_origin == "White" & S == "White" ~ "White (Original)"
     ),
     group = factor(
@@ -325,7 +323,6 @@ ggplot(
   ) +
   facet_wrap(~S) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -336,7 +333,7 @@ ggplot(
 Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Reference: White individuals"
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Black -> White"
 #| label: fig-naive-aware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
@@ -378,7 +375,6 @@ ggplot(
     )
   ) +
   labs(
-    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
