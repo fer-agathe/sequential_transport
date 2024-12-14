@@ -578,7 +578,7 @@ axis(2)
 polygon(d_unaware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_ot_black_star, col = alpha(colours_all[["ot"]], .5), border = NA)
-text(x = .15, y = 6, "Factuals", col = colours_all[["source"]])
+text(x = .15, y = 6, "Factuals - Black", col = colours_all[["source"]])
 pos_arrow <- .2
 ind_min <- which.min(abs(d_unaware_factuals_black$x - pos_arrow))
 arrows(
@@ -586,9 +586,19 @@ arrows(
   y1 = d_unaware_factuals_black$y[ind_min],
   x0 = .15, 
   y0 = 5,
-  length = 0.05
+  length = 0.05, col = colours_all[["source"]]
 )
 text(x = .53, y = 6, "Multi. OT", col = colours_all[["ot"]])
+pos_arrow_ref <- .7
+text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["reference"]])
+ind_min_ref <- which.min(abs(d_unaware_factuals_white$x - pos_arrow_ref))
+arrows(
+  x1 = d_unaware_factuals_white$x[ind_min_ref],
+  y1 = d_unaware_factuals_white$y[ind_min_ref],
+  x0 = pos_arrow_ref, 
+  y0 = 5,
+  length = 0.05, col = colours_all[["reference"]]
+)
 
 # Naive
 tb_unaware_naive <- tb_unaware |> filter(counterfactual == "naive")
@@ -694,7 +704,7 @@ axis(2)
 polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_ot_black_star, col = alpha(colours_all[["ot"]], .5), border = NA)
-text(x = .25, y = 6, "Factuals", col = colours_all[["source"]])
+text(x = .25, y = 6, "Factuals - Black", col = colours_all[["source"]])
 pos_arrow <- .2
 ind_min <- which.min(abs(d_aware_factuals_black$x - .2))
 arrows(
@@ -702,7 +712,17 @@ arrows(
   y1 = d_aware_factuals_black$y[ind_min],
   x0 = .25, 
   y0 = 5,
-  length = 0.05
+  length = 0.05, col = colours_all[["source"]]
+)
+pos_arrow_ref <- .7
+text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["reference"]])
+ind_min_ref <- which.min(abs(d_aware_factuals_white$x - pos_arrow_ref))
+arrows(
+  x1 = d_aware_factuals_white$x[ind_min_ref],
+  y1 = d_aware_factuals_white$y[ind_min_ref],
+  x0 = pos_arrow_ref, 
+  y0 = 5,
+  length = 0.05, col = colours_all[["reference"]]
 )
 text(x = .53, y = 6, "Multi. OT", col = colours_all[["ot"]])
 
@@ -768,7 +788,6 @@ polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_black_star, col = alpha(colours_all[["seq"]], .5), border = NA)
 text(x = .53, y = 6, "Seq. T.", col = colours_all[["seq"]])
-
 ```
 
 

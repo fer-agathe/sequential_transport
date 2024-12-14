@@ -1619,6 +1619,16 @@ axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_naive_women_star, col = alpha(colours_all[["naive"]], .5), border = NA)
+pos_arrow_ref <- .6
+text(x = pos_arrow_ref, y = 8, "Factuals - Men", col = colours_all[["reference"]])
+ind_min_ref <- which.min(abs(d_unaware_factuals_men$x - pos_arrow_ref))
+arrows(
+  x1 = d_unaware_factuals_men$x[ind_min_ref],
+  y1 = d_unaware_factuals_men$y[ind_min_ref],
+  x0 = pos_arrow_ref, 
+  y0 = 7,
+  length = 0.05, col = colours_all[["reference"]]
+)
 text(x = .09, y = 8, "Naive", col = colours_all[["naive"]])
 
 
@@ -1641,7 +1651,7 @@ axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_fpt_women_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .15, y = 6, "Factuals", col = colours_all[["source"]])
+text(x = .15, y = 6, "Factuals - Women", col = colours_all[["source"]])
 pos_arrow <- .07
 ind_min <- which.min(abs(d_unaware_factuals_women$x - pos_arrow))
 arrows(
@@ -1649,7 +1659,7 @@ arrows(
   y1 = d_unaware_factuals_women$y[ind_min],
   x0 = .15, 
   y0 = 5,
-  length = 0.05
+  length = 0.05, col = colours_all[["source"]]
 )
 text(x = .4, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
 
@@ -1673,7 +1683,6 @@ polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), bord
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
 text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
-
 ```
 
 ### Aware model
