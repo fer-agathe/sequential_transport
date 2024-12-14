@@ -13,9 +13,10 @@ This chapter uses sequential transport (developped in our paper) to make counter
 
 In the article, we use three methods to create counterfactuals:
 
-1. Fairadapt ([Chapter -@sec-cf-fairadapt])
-2. Multivariate optimal transport ([Chapter -@sec-cf-ot])
-3. Sequential transport (the methodology we develop in the paper, presented in this chapter).
+1. Naive approach ([Chapter -@sec-cf-naive])
+2. Fairadapt ([Chapter -@sec-cf-fairadapt])
+3. Multivariate optimal transport ([Chapter -@sec-cf-ot])
+4. Sequential transport (the methodology we develop in the paper, presented in this chapter).
 
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -53,7 +54,16 @@ global_theme <- function() {
 # Seed
 set.seed(2025)
 
-source("../functions/utils.R")
+library(devtools)
+load_all("../seqtransfairness/")
+
+colours_all <- c(
+  "source" = "#00A08A",
+  "reference" = "#F2AD00",
+  "naive" = "#000000",
+  "fairadapt" = '#D55E00',
+  "seq" = "#CC79A7"
+)
 ```
 
 ## Load Data and Classifier
@@ -376,9 +386,10 @@ x2_star <- trans_x1_then_x2$transported$X2 # Transport X2|X1 to group S=White
 We build a dataset with the sensitive attribute of Black individuals changed to white, and their characteristics changed to their transported characteristics:
 ```{r}
 df_counterfactuals_seq_black <- 
-  df_race_c_light |> mutate(id = row_number()) |> 
+  df_race_c_light |> mutate(id_indiv= row_number()) |> 
   filter(S == "Black") |> 
   mutate(
+    S_origin = "Black",
     S = "White",
     X1 = x1_star,
     X2 = x2_star
@@ -426,15 +437,16 @@ factuals_unaware <- tibble(
 )
 ```
 
-Let us put in a single table the predictions made by the classifier (either aware or unaware) on black individuals based on their factual characteristics, and those made based on the counterfactuals:
+Let us put in a single table the predictions made by the classifier (either aware or unaware) on Black and White individuals based on their factual characteristics, and those made based on the counterfactuals (i.e., only for Black individuals).
 ```{r define-aware_seq_black}
 aware_seq_black <- bind_rows(
-  factuals_aware |> mutate(id = row_number()) |> filter(S == "Black"), 
-  counterfactuals_aware_seq_black
+  factuals_aware |> mutate(id_indiv = row_number(), S_origin = S), 
+  counterfactuals_aware_seq_black |> mutate(S_origin = "Black")
 )
 unaware_seq_black <- bind_rows(
-  factuals_unaware |> mutate(id = row_number()) |> filter(S == "Black"), 
-  counterfactuals_unaware_seq_black)
+  factuals_unaware |> mutate(id_indiv = row_number(), S_origin = S), 
+  counterfactuals_unaware_seq_black |> mutate(S_origin = "Black")
+)
 ```
 
 :::{.panel-tabset}
@@ -444,20 +456,53 @@ unaware_seq_black <- bind_rows(
 ```{r, message=FALSE, warning=FALSE}
 #| fig-cap: "Unaware model, Sensitive: Race, Reference: White individuals"
 #| label: fig-seq-unaware-race-ref-white
+#| code-fold: true
+#| fig-width: 7
 ggplot(
-  data = unaware_seq_black, 
-  mapping = aes(x = pred, fill = type)
+  data = unaware_seq_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
-    mapping = aes(y = after_stat(density)), 
-    alpha = 0.5, position = "identity", binwidth = 0.05
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
   labs(
-    title = "Unware model, S: Race - Black --> White",
-       x = "Predictions for Y",
-       y = "Density") +
-  global_theme()
+    title = "Unaware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
 ### Aware
@@ -465,87 +510,168 @@ ggplot(
 ```{r}
 #| fig-cap: "Aware model, Sensitive: Race, Reference: White individuals"
 #| label: fig-seq-aware-race-ref-white
+#| code-fold: true
+#| fig-width: 7
 ggplot(
-  data = aware_seq_black, 
-  mapping = aes(x = pred, fill = type)
+  data = aware_seq_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+
+:::
+
+Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+
+:::{.panel-tabset}
+
+### Unaware
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Unaware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-seq-unaware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = unaware_seq_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
   labs(
-    title = "Aware model, S: Race - Black --> White",
-       x = "Predictions for Y",
-       y = "Density") +
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+### Aware
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-seq-aware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = aware_seq_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["seq"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
   global_theme()
 ```
 
-
 :::
-
-
-## Comparison for Two Individuals
-
-Let us focus on the first three Black individuals of the dataset. 
-```{r}
-factuals_unaware |> mutate(id = row_number()) |> 
-  filter(S == "Black") |> 
-  dplyr::slice(1:3)
-```
-
-Their characteristics after sequential transport (and the predicted value with the unaware model):
-```{r seq-ot-comparison-indiv}
-indiv_counterfactuals_unaware_seq <- counterfactuals_unaware_seq_black[c(1:3), ]
-indiv_counterfactuals_unaware_seq
-```
-
-```{r seq-define-indiv_unaware_seq}
-indiv_unaware_seq <- bind_rows(
-  factuals_unaware |> 
-    mutate(id = row_number()) |> 
-    filter(S == "Black") |> 
-    dplyr::slice(1:3),
-  indiv_counterfactuals_unaware_seq
-)
-indiv_unaware_seq
-```
-
-And with the aware model:
-```{r seq-ot-comparison-indiv-awar}
-indiv_counterfactuals_aware_seq <- counterfactuals_aware_seq_black[c(1:3), ]
-indiv_counterfactuals_aware_seq
-```
-
-```{r seq-define-indiv_aware_seq}
-indiv_aware_seq <- bind_rows(
-  factuals_aware |> 
-    mutate(id = row_number()) |> 
-    filter(S == "Black") |> 
-    dplyr::slice(1:3),
-  indiv_counterfactuals_aware_seq
-)
-indiv_aware_seq
-```
-
-## Counterfactual Demographic Parity
-
-For the unaware model:
-```{r}
-mean(
-  counterfactuals_unaware_seq_black$pred -
-    factuals_unaware |> filter(S == "Black") |> pull("pred")
-)
-```
-
-
-For the aware model:
-```{r}
-mean(
-  counterfactuals_aware_seq_black$pred - 
-    factuals_aware |> filter(S == "Black") |> pull("pred")
-)
-```
 
 ## Saving Objects {#sec-cf-seq-t-save}
 

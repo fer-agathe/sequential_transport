@@ -1,0 +1,398 @@
+# Naive Approach {#sec-cf-naive}
+
+::: callout-note
+
+## Objectives
+
+This chapter uses a naive approach to build counterfactuals: simply changing the sensitive attribute and leave the other characteristics unchanged (_ceteris paribus_ approach).
+
+:::
+
+
+In the article, we use four methods to create counterfactuals:
+
+1. Naive approach (this chapter)
+2. Fairadapt  ([Chapter -@sec-cf-fairadapt])
+2. Multivariate optimal transport ([Chapter -@sec-cf-ot])
+3. Sequential transport (the methodology we develop in the paper, see [Chapter -@sec-cf-seq-t]).
+
+
+```{r setup, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: Display the setting codes
+
+# Required packages----
+library(tidyverse)
+library(fairadapt)
+library(devtools)
+load_all("../seqtransfairness/")
+
+# Graphs----
+font_main = font_title = 'Times New Roman'
+extrafont::loadfonts(quiet = T)
+face_text='plain'
+face_title='plain'
+size_title = 14
+size_text = 11
+legend_size = 11
+
+global_theme <- function() {
+  theme_minimal() %+replace%
+    theme(
+      text = element_text(family = font_main, size = size_text, face = face_text),
+      legend.text = element_text(family = font_main, size = legend_size),
+      axis.text = element_text(size = size_text, face = face_text), 
+      plot.title = element_text(
+        family = font_title, 
+        size = size_title, 
+        hjust = 0.5
+      ),
+      plot.subtitle = element_text(hjust = 0.5)
+    )
+}
+
+# Seed
+set.seed(2025)
+colours_all <- c(
+  "source" = "#00A08A",
+  "reference" = "#F2AD00",
+  "naive" = "#000000"
+)
+```
+
+## Load Data and Classifier
+
+We load the dataset where the sensitive attribute (\(S\)) is the race, obtained [Chapter -@sec-data-save]:
+```{r}
+load("../data/df_race.rda")
+```
+
+
+We also load the dataset where the sensitive attribute is also the race, but where where the target variable (\(Y\), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in [Chapter -@sec-classifier-save]:
+```{r}
+load("../data/df_race_c.rda")
+```
+
+We also need the predictions made by the classifier (see [Chapter -@sec-classifier]):
+```{r}
+# Predictions on train/test sets
+load("../data/pred_aware.rda")
+load("../data/pred_unaware.rda")
+# Predictions on the factuals, on the whole dataset
+load("../data/pred_aware_all.rda")
+load("../data/pred_unaware_all.rda")
+```
+
+
+## Counterfactuals with the Naive Approach
+
+
+We begin with the reference class being Black individuals (minority group). We set the sensitive variable (race) of Black individuals into the value of the majority group, i.e., White.
+
+```{r}
+model_unaware <- pred_unaware$model
+pred_unaware_naive_black <- predict(
+  model_unaware, 
+  newdata = df_race_c |> select(S, X1, X2) |> filter(S == "Black") |> mutate(S = "White"), 
+  type = "response"
+)
+
+model_aware <- pred_aware$model
+pred_aware_naive_black <- predict(
+  model_aware, 
+  newdata = df_race_c |> select(S, X1, X2) |> filter(S == "Black") |>  mutate(S = "White"), 
+  type = "response"
+)
+```
+
+We build two tables, one for the unaware model, the other for the aware model, with the predicted values using the naive version of the counterfactuals.
+
+```{r}
+counterfactuals_unaware_naive_black <- 
+  df_race_c |> 
+  filter(S == "Black") |> 
+  mutate(
+    S_origin = S,
+    S = "White",
+    pred = pred_unaware_naive_black,
+    type = "counterfactual"
+  ) |> 
+  mutate(id_indiv = row_number())
+
+counterfactuals_aware_naive_black <- 
+  df_race_c |> 
+  filter(S == "Black") |> 
+  mutate(
+    S_origin = S,
+    S = "White",
+    pred = pred_aware_naive_black,
+    type = "counterfactual"
+  ) |> 
+  mutate(id_indiv = row_number())
+```
+
+
+
+### Unaware Model
+
+The predicted values using the initial characteristics (the factuals), for the unaware model are stored in the object `pred_unaware_all`. We put in a table the initial characteristics (factuals) and the prediction made by the unaware model:
+```{r define-fairadapt-factuals_unaware}
+factuals_unaware <- tibble(
+  S = df_race_c$S,
+  S_origin = df_race_c$S,
+  X1 = df_race_c$X1,
+  X2 = df_race_c$X2,
+  Y = df_race_c$Y,
+  pred = pred_unaware_all,
+  type = "factual"
+) |> 
+  mutate(id_indiv = row_number())
+```
+
+
+```{r}
+unaware_naive_black <- 
+  factuals_unaware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_unaware_naive_black)
+```
+
+
+The unaware model is blind to the sensitive attribute. Hence, changing the sensitive attribute does not affect the predicted scores.
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-naive-unaware-race-ref-black
+#| fig-width: 7
+#| code-fold: true
+ggplot(
+  unaware_naive_black |> mutate(
+    group = case_when(
+      S_origin == "Black" & S == "Black" ~ "Black (Original)",
+      S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+      S_origin == "White" & S == "White" ~ "White (Original)"
+    ),
+    group = factor(
+      group, 
+      levels = c(
+        "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+      )
+    )
+  ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: Black individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Unaware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-naive-unaware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = unaware_naive_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+
+
+### Aware Model
+
+Now, we turn to the model that includes the sensitive attribute, i.e., the aware model.
+
+We create a tibble with the factuals and the predictions by the aware model:
+```{r define-fairadapt-factuals_aware}
+factuals_aware <- tibble(
+  S = df_race_c$S,
+  S_origin = df_race_c$S,
+  X1 = df_race_c$X1,
+  X2 = df_race_c$X2,
+  Y = df_race_c$Y,
+  pred = pred_aware_all,
+  type = "factual"
+) |> 
+  mutate(id_indiv = row_number())
+```
+
+
+```{r}
+aware_naive_black <- 
+  factuals_aware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_aware_naive_black)
+```
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Aware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-naive-aware-race-ref-black
+#| code-fold: true
+#| fig-width: 8
+ggplot(
+  aware_naive_black |> mutate(
+    group = case_when(
+      S_origin == "Black" & S == "Black" ~ "Black (Original)",
+      S_origin == "Black" & S == "White" ~ "Black -> Black (counterfactual)",
+      S_origin == "White" & S == "White" ~ "White (Original)"
+    ),
+    group = factor(
+      group, 
+      levels = c(
+        "Black (Original)", "Black -> Black (counterfactual)", "White (Original)"
+      )
+    )
+  ),
+  aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), alpha = 0.5,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> Black (counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  facet_wrap(~S) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: Black individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-naive-aware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = aware_naive_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+
+## Saving Objects {#sec-cf-fairadapt-save}
+
+```{r}
+save(counterfactuals_unaware_naive_black, 
+     file = "../data/counterfactuals_unaware_naive_black.rda")
+save(counterfactuals_aware_naive_black, 
+     file = "../data/counterfactuals_aware_naive_black.rda")
+```
+

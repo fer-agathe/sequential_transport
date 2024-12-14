@@ -11,9 +11,10 @@ This chapter uses fairadapt (@plevcko2020fair) to make counterfactual inference.
 
 In the article, we use three methods to create counterfactuals:
 
-1. Fairadapt (this chapter)
-2. Multivariate optimal transport ([Chapter -@sec-cf-ot])
-3. Sequential transport (the methodology we develop in the paper, see [Chapter -@sec-cf-seq-t]).
+1. Naive approach ([Chapter -@sec-cf-naive])
+2. Fairadapt (this chapter)
+3. Multivariate optimal transport ([Chapter -@sec-cf-ot])
+4. Sequential transport (the methodology we develop in the paper, see [Chapter -@sec-cf-seq-t]).
 
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -51,6 +52,12 @@ global_theme <- function() {
 # Seed
 set.seed(2025)
 
+colours_all <- c(
+  "source" = "#00A08A",
+  "reference" = "#F2AD00",
+  "naive" = "#000000",
+  "fairadapt" = '#D55E00'
+)
 ```
 
 ## Load Data and Classifier
@@ -134,20 +141,20 @@ adapt_df_black <- adaptedData(fpt_model_black)
 
 Let us wrap up:
 
-- we have two predictive models for the FYA (above median = 1, or below median = 0): 
+- we have two **predictive models** for the FYA (above median = 1, or below median = 0): 
 
-  - unaware (without S)
-  - aware (with S)
+  - **unaware** (without S)
+  - **aware** (with S)
 
-- we have the counterfactual characteristics obtained with fairadapt in two situations depending on the reference class:
+- we have the **counterfactual characteristics** obtained with fairadapt in two situations depending on the **reference** class:
 
-  - Black individuals as reference
-  - White individuals as reference.
+  - **Black** individuals as reference
+  - **White** individuals as reference.
   
-The predictive models will be used to compare predictions made using:
+The **predictive models** will be used to compare predictions made using:
 
-- Raw characteristics (initial characteristics).
-- Characteristics possibly altered through FairAdapt for individuals who were not in the reference group (i.e., using counterfactuals).
+- **Raw characteristics** (initial characteristics).
+- Characteristics possibly altered through **fairadapt** for individuals who were not in the reference group (i.e., using counterfactuals).
 
 
 ### Unaware Model
@@ -155,12 +162,13 @@ The predictive models will be used to compare predictions made using:
 The predicted values using the initial characteristics (the factuals), for the unaware model are stored in the object `pred_unaware_all`. We put in a table the initial characteristics (factuals) and the prediction made by the unaware model:
 ```{r define-fairadapt-factuals_unaware}
 factuals_unaware <- tibble(
-  S = df_race$S,
-  X1 = df_race$X1,
-  X2 = df_race$X2,
+  S = df_race_c$S,
+  X1 = df_race_c$X1,
+  X2 = df_race_c$X2,
   pred = pred_unaware_all,
   type = "factual"
-)
+) |> 
+  mutate(id_indiv = row_number())
 ```
 
 Let us save this dataset in a csv file (this file will be used to perform multivariate transport in python).
@@ -172,94 +180,291 @@ write.csv(
 ```
 
 
-Let us build a dataset containing only counterfactual characteristics (obtained with fairadapt): values for $X_1$ and $X_2$ of White individuals as if they had been Black, and values for $X_1$ and $X_2$ of Black individuals as if they had been White.
-```{r define-fairadapt-df_counterfactuals}
-ind_white <- which(df_race_fpt$S == "White")
-ind_black <- which(df_race_fpt$S == "Black")
-df_counterfactuals_fpt <- factuals_unaware |> select(-pred, -type)
-df_counterfactuals_fpt[ind_white, ] <- 
-  adapt_df_white[ind_white, ] |> select(S, X1, X2)
-df_counterfactuals_fpt[ind_black, ] <- 
-  adapt_df_black[ind_black,] |> select(S, X1, X2)
-```
+<!-- Let us build a dataset containing only counterfactual characteristics (obtained with fairadapt): values for $X_1$ and $X_2$ of White individuals as if they had been Black, and values for $X_1$ and $X_2$ of Black individuals as if they had been White. -->
+<!-- ```{r define-fairadapt-df_counterfactuals} -->
+<!-- ind_white <- which(df_race_fpt$S == "White") -->
+<!-- ind_black <- which(df_race_fpt$S == "Black") -->
+
+<!-- df_counterfactuals_fpt <- factuals_unaware |> select(-pred, -type) -->
+
+<!-- df_counterfactuals_fpt[ind_white, ] <-  -->
+<!--   adapt_df_white[ind_white, ] |> select(S, X1, X2) -->
+<!-- df_counterfactuals_fpt[ind_black, ] <-  -->
+<!--   adapt_df_black[ind_black,] |> select(S, X1, X2) -->
+<!-- ``` -->
 
 Let us get the predicted values for the counterfactuals, using the unaware model:
 ```{r define-fairadapt-pred-unaware-counterfactuals}
+ind_black <- which(df_race_c$S == "Black")
+ind_white <- which(df_race_c$S == "White")
+
 model_unaware <- pred_unaware$model
-pred_unaware_fpt <- predict(
-  model_unaware, newdata = df_counterfactuals_fpt, type = "response"
+pred_unaware_fpt_black <- predict(
+  model_unaware, 
+  newdata = adapt_df_black[ind_black, ], 
+  type = "response"
+)
+pred_unaware_fpt_white <- predict(
+  model_unaware, 
+  newdata = adapt_df_white[ind_white, ],
+  type = "response"
 )
 ```
 
 We create a table with the counterfactual characteristics and the prediction by the unaware model:
 ```{r define-fairadapt-counterfactuals_unaware_fpt}
-counterfactuals_unaware_fpt <- tibble(
-  S = df_counterfactuals_fpt$S,
-  X1 = df_counterfactuals_fpt$X1,
-  X2 = df_counterfactuals_fpt$X2,
-  pred = pred_unaware_fpt,
-  type = "counterfactual"
-)
+counterfactuals_unaware_fpt_black <- 
+  as_tibble(adapt_df_black[ind_black, ]) |> 
+  mutate(
+    S_origin = df_race_c$S[ind_black],
+    pred = pred_unaware_fpt_black,
+    type = "counterfactual",
+    id_indiv = ind_black
+  )
+
+counterfactuals_unaware_fpt_white <- 
+  as_tibble(adapt_df_white[ind_white, ]) |> 
+  mutate(
+    S_origin = df_race_c$S[ind_white],
+    pred = pred_unaware_fpt_white,
+    type = "counterfactual",
+    id_indiv = ind_white
+  )
 ```
 
 We merge the two datasets, `factuals_unaware` and `counterfactuals_unaware_fpt` in a single one.
 ```{r define-fairadapt-unaware_fpt}
 # dataset with counterfactuals, for unaware model
-unaware_fpt <- bind_rows(factuals_unaware, counterfactuals_unaware_fpt)
+unaware_fpt_black <- 
+  factuals_unaware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_unaware_fpt_black)
+  
+unaware_fpt_white <- 
+  factuals_unaware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_unaware_fpt_white)
 ```
 
 Now, we can visualize the distribution of the values predicted by the unaware model within each group defined by the sensitive attribute. 
-```{r define-fairadapt-unaware_fpt_white}
-unaware_fpt_white <- unaware_fpt |> filter(S == "White") 
-unaware_fpt_black <- unaware_fpt |> filter(S == "Black")
-```
 
 :::{.panel-tabset}
 
-#### Ref: Black
+#### Black -> White
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-unaware-race-ref-white
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = unaware_fpt_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Unaware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+#### White -> Black
 
 ```{r, message=FALSE, warning=FALSE}
 #| fig-cap: "Unaware model, Sensitive: Race, Reference: Black individuals"
 #| label: fig-fpt-unaware-race-ref-black
-ggplot(unaware_fpt_black, aes(x = pred, fill = type)) +
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = unaware_fpt_white |> 
+    mutate(
+      group = case_when(
+        S_origin == "White" & S == "White" ~ "White (Original)",
+        S_origin == "White" & S == "Black" ~ "White -> Black (Counterfactual)",
+        S_origin == "Black" & S == "Black" ~ "Black (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "White (Original)", "White -> Black (Counterfactual)", "Black (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(
-      y = after_stat(density)), alpha = 0.5,
+      y = after_stat(density)), alpha = 0.5, colour = NA,
     position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]],
+      "Black (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]],
+      "Black (Original)" = colours_all[["reference"]]
+    )
+  ) +
   labs(
     title = "Unaware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
-  global_theme()
+  global_theme() +
+  theme(legend.position = "bottom")
 ```
 
-#### Ref: White
+:::
+
+Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+
+
+:::{.panel-tabset}
+
+#### Black -> White
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Unaware model, Sensitive: Race, Reference: White individuals"
-#| label: fig-fpt-unaware-race-ref-white
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Unaware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-unaware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
 ggplot(
-  data = unaware_fpt_white,
-  mapping = aes(x = pred, fill = type)
+  data = unaware_fpt_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
   labs(
-    title = "Unaware model, Sensitive: Race, Reference: White individuals",
-       x = "Predictions for Y",
-       y = "Density"
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme()
+```
+
+#### White -> Black
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (White), Unaware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-fpt-unaware-race-ref-black-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = unaware_fpt_white |> 
+    mutate(
+      group = case_when(
+        S_origin == "White" & S == "White" ~ "White (Original)",
+        S_origin == "White" & S == "Black" ~ "White -> Black (Counterfactual)",
+        S_origin == "Black" & S == "Black" ~ "Black (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "White (Original)", "White -> Black (Counterfactual)", "Black (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "White"),
+  mapping = aes(x = pred, fill = group)) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]]
+    )
+  ) +
+  labs(
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: Black individuals",
+    x = "Predictions for Y",
+    y = "Density"
   ) +
   global_theme()
 ```
 
 :::
-
 
 ### Aware Model
 
@@ -275,7 +480,8 @@ factuals_aware <- tibble(
   X2 = df_race$X2,
   pred = pred_aware_all,
   type = "factual"
-)
+) |> 
+  mutate(id_indiv = row_number())
 ```
 
 
@@ -286,80 +492,269 @@ write.csv(
 )
 ```
 
-Recall we created an object called `df_counterfactuals_fpt` which contains the counterfactual characteristics of all students, obtained with fairadapt:
-```{r show-df_counterfactuals_fpt}
-df_counterfactuals_fpt
-```
 
-We make predictions with the aware model on these counterfactuals:
-```{r predict-fairadapt-aware-counterfactuals}
+Let us get the predicted values for the counterfactuals, using the aware model:
+```{r define-fairadapt-pred-aware-counterfactuals}
 model_aware <- pred_aware$model
-pred_aware_fpt <- predict(
-  model_aware, newdata = df_counterfactuals_fpt, type = "response"
+pred_aware_fpt_black <- predict(
+  model_aware, 
+  newdata = adapt_df_black[ind_black, ], 
+  type = "response"
+)
+pred_aware_fpt_white <- predict(
+  model_aware, 
+  newdata = adapt_df_white[ind_white, ],
+  type = "response"
 )
 ```
 
-Then, we create a table with the counterfactuals and the predicted value by the aware model:
-```{r define-fairadapt-counterfactuals_aware}
-counterfactuals_aware_fpt <- tibble(
-  S = df_counterfactuals_fpt$S,
-  X1 = df_counterfactuals_fpt$X1,
-  X2 = df_counterfactuals_fpt$X2,
-  pred = pred_aware_fpt,
-  type = "counterfactual"
-)
+We create a table with the counterfactual characteristics and the prediction by the aware model:
+```{r define-fairadapt-counterfactuals_aware_fpt}
+counterfactuals_aware_fpt_black <- 
+  as_tibble(adapt_df_black[ind_black, ]) |> 
+  mutate(
+    S_origin = df_race_c$S[ind_black],
+    pred = pred_aware_fpt_black,
+    type = "counterfactual",
+    id_indiv = ind_black
+  )
+
+counterfactuals_aware_fpt_white <- 
+  as_tibble(adapt_df_white[ind_white, ]) |> 
+  mutate(
+    S_origin = df_race_c$S[ind_white],
+    pred = pred_aware_fpt_white,
+    type = "counterfactual",
+    id_indiv = ind_white
+  )
 ```
 
-
-We bind together the table with the factuals and the counterfactuals (as well as their predicted values by the aware model):
+We merge the two datasets, `factuals_unaware` and `counterfactuals_aware_fpt` in a single one.
 ```{r define-fairadapt-aware_fpt}
-aware_fpt <- bind_rows(factuals_aware, counterfactuals_aware_fpt)
+# dataset with counterfactuals, for aware model
+aware_fpt_black <- 
+  factuals_aware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_aware_fpt_black)
+  
+aware_fpt_white <- 
+  factuals_aware |> mutate(S_origin = S) |> 
+  bind_rows(counterfactuals_aware_fpt_white)
 ```
 
-Lastly, we can visualize the distribution of predicted values by the aware model once the characteristics of the individuals who are not on the reference group have been modified using fairadapt.
-```{r fairadapt-aware-ftp_white-black}
-aware_fpt_white <- aware_fpt |>  filter(S == "White") 
-aware_fpt_black <- aware_fpt |>  filter(S == "Black")
-```
+Now, we can visualize the distribution of the values predicted by the unaware model within each group defined by the sensitive attribute. 
 
 :::{.panel-tabset}
 
-#### Ref: Black
+#### Black -> White
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Aware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-aware-race-ref-white
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = aware_fpt_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: White individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+#### White -> Black
 
 ```{r, message=FALSE, warning=FALSE}
 #| fig-cap: "Aware model, Sensitive: Race, Reference: Black individuals"
 #| label: fig-fpt-aware-race-ref-black
+#| code-fold: true
+#| fig-width: 7
 ggplot(
-  data = aware_fpt_black, 
-  mapping = aes(x = pred, fill = type)) +
+  data = aware_fpt_white |> 
+    mutate(
+      group = case_when(
+        S_origin == "White" & S == "White" ~ "White (Original)",
+        S_origin == "White" & S == "Black" ~ "White -> Black (Counterfactual)",
+        S_origin == "Black" & S == "Black" ~ "Black (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "White (Original)", "White -> Black (Counterfactual)", "Black (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~S) +
+  scale_fill_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]],
+      "Black (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]],
+      "Black (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    title = "Aware model, Sensitive: Race, Reference: Black individuals",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+:::
+
+Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+
+
+:::{.panel-tabset}
+
+#### Black -> White
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Black), Aware model, Sensitive: Race, Reference: White individuals"
+#| label: fig-fpt-aware-race-ref-white-source-only
+#| code-fold: true
+#| fig-width: 7
+ggplot(
+  data = aware_fpt_black |> 
+    mutate(
+      group = case_when(
+        S_origin == "Black" & S == "Black" ~ "Black (Original)",
+        S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
+        S_origin == "White" & S == "White" ~ "White (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "Black"),
+  mapping = aes(x = pred, fill = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Black (Original)" = colours_all[["source"]],
+      "Black -> White (Counterfactual)" = colours_all[["fairadapt"]],
+      "White (Original)" = colours_all[["reference"]]
+    )
+  ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: Black individuals",
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: White individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
   global_theme()
 ```
 
-#### Ref: White
+#### White -> Black
 
 ```{r, message=FALSE, warning=FALSE}
-#| fig-cap: "Aware model, Sensitive: Race, Reference: White individuals"
-#| label: fig-fpt-aware-race-ref-white
-
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (White), Aware model, Sensitive: Race, Reference: Black individuals"
+#| label: fig-fpt-aware-race-ref-black-source-only
+#| code-fold: true
+#| fig-width: 7
 ggplot(
-  data = aware_fpt_white, 
-  mapping = aes(x = pred, fill = type)) +
+  data = aware_fpt_white |> 
+    mutate(
+      group = case_when(
+        S_origin == "White" & S == "White" ~ "White (Original)",
+        S_origin == "White" & S == "Black" ~ "White -> Black (Counterfactual)",
+        S_origin == "Black" & S == "Black" ~ "Black (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "White (Original)", "White -> Black (Counterfactual)", "Black (Original)"
+        )
+      )
+    ) |> 
+    filter(S_origin == "White"),
+  mapping = aes(x = pred, fill = group)) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
-    alpha = 0.5, position = "identity", binwidth = 0.05) +
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "White (Original)" = colours_all[["source"]],
+      "White -> Black (Counterfactual)" = colours_all[["fairadapt"]]
+    )
+  ) +
   labs(
-    title = "Aware model, Sensitive: Race, Reference: White individuals",
+    title = "Predicted Scores for Minority Class\n Unware model, Sensitive: Race, Reference: Black individuals",
     x = "Predictions for Y",
     y = "Density"
   ) +
@@ -373,78 +768,58 @@ ggplot(
 
 Let us focus on two individuals: the 24th (Black) and the 25th (White) of the dataset.
 ```{r define-fairadapt-indiv_factuals}
-(indiv_factuals_unaware <- factuals_unaware[24:25, ])
+(indiv_factuals_unaware <- factuals_unaware |> filter(id_indiv %in% c(24, 25)))
 ```
 The characteristics of these two individuals would be, according to what was estimated using fairadapt, if the reference group was the one in which they do not belong:
 ```{r define-fairadapt-indiv_counterfactuals}
-(indiv_counterfactuals_unaware_fpt <- counterfactuals_unaware_fpt[24:25, ])
+indiv_counterfactuals_unaware_fpt <- 
+   counterfactuals_unaware_fpt_black |> filter(id_indiv %in% c(24)) |> 
+  bind_rows(
+    counterfactuals_unaware_fpt_white |> filter(id_indiv %in% c(25))  
+  )
+indiv_counterfactuals_unaware_fpt  
 ```
 
 We put the factuals and counterfactuals in a single table:
 ```{r definefairadapt--indiv}
 indiv_unaware_fpt <- bind_rows(
-  indiv_factuals_unaware |> mutate(id = c(24, 25)), 
-  indiv_counterfactuals_unaware_fpt |> mutate(id = c(24, 25))
+  indiv_factuals_unaware,
+  indiv_counterfactuals_unaware_fpt
 )
 indiv_unaware_fpt
 ```
 
 The difference between the counterfactual and the factual for these two individuals:
 ```{r fairadapt-show-indiv}
-indiv_unaware_fpt |> select(id , type, pred) |> 
+indiv_unaware_fpt |> select(id_indiv , type, pred) |> 
   pivot_wider(names_from = type, values_from = pred) |> 
   mutate(diff_fpt = counterfactual - factual)
 ```
 We apply the same procedure with the aware model:
 ```{r define-fairadapt-indiv-aware}
 indiv_aware_fpt <- bind_rows(
-  factuals_aware[c(24, 25),] |> mutate(id = c(24, 25)),
-  counterfactuals_aware_fpt[c(24, 25),] |> mutate(id = c(24, 25))
+  factuals_aware |> filter(id_indiv %in% c(24, 25)),
+  counterfactuals_aware_fpt_black |> filter(id_indiv == 24),
+  counterfactuals_aware_fpt_white |> filter(id_indiv == 25)
 )
 indiv_aware_fpt
 ```
 
 The difference between the counterfactual and the factual for these two individuals, when using the aware model:
 ```{r fairadapt-show-indiv_aware_fpt}
-indiv_aware_fpt |> select(id , type, pred) |> 
+indiv_aware_fpt |> select(id_indiv , type, pred) |> 
   pivot_wider(names_from = type, values_from = pred) |> 
   mutate(diff = counterfactual - factual)
 ```
 
-## Counterfactual Demographic Parity
 
-
-Let us assume here that the reference group is "White individuals" (i.e., the group with the most individuals in the dataset). We focus on the minority, i.e., Black individuals. We consider here that the model is fair towards the minority class if:
-$$
-P(\hat{Y}_{S \leftarrow \text{White}} = 1 | S = \text{Black}, X_1, X_2) = P(\hat{Y} = 1 | S = \text{White}, X_1, X_2)
-$$
-If the model is fair with respect to this criterion, the proportion of Black individuals predicted to have grades above the median should be the same as if they had been white.
-
-
-For predictions made with the unaware model:
-```{r define-dp_unaware_fpt}
-dp_unaware_fpt <- mean(
-  counterfactuals_unaware_fpt |> filter(S == "White") |> pull("pred") - 
-    factuals_unaware |> filter(S == "Black") |> pull("pred")
-)
-dp_unaware_fpt
-```
-
-We do the same with the aware model:
-```{r define-dp_fpt_aware}
-dp_aware_fpt <- mean(
-  counterfactuals_aware_fpt |> filter(S == "White") |> pull("pred") - 
-    factuals_aware |> filter(S == "Black") |> pull("pred")
-)
-dp_aware_fpt
-```
 
 ## Saving Objects {#sec-cf-fairadapt-save}
 
 ```{r}
 save(factuals_unaware, file = "../data/factuals_unaware.rda")
 save(factuals_aware, file = "../data/factuals_aware.rda")
-save(counterfactuals_unaware_fpt, file = "../data/counterfactuals_unaware_fpt.rda")
-save(counterfactuals_aware_fpt, file = "../data/counterfactuals_aware_fpt.rda")
+save(counterfactuals_unaware_fpt_black, file = "../data/counterfactuals_unaware_fpt_black.rda")
+save(counterfactuals_aware_fpt_black, file = "../data/counterfactuals_aware_fpt_black.rda")
 ```
 

@@ -32,6 +32,7 @@ book:
       chapters:
       - data.qmd
       - classifier.qmd
+      - cf-naive.qmd
       - cf-fairadapt.qmd
       - cf-ot.qmd
       - cf-seq-transport.qmd
