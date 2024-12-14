@@ -4,7 +4,7 @@
 
 ::: callout-note
 
-## Objectives {#sec-adult-datase-objectives}
+## Objectives
 
 In this chapter, we extend the analysis from the previous part to the Adult Income dataset from the [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/2/adult). We use a cleaned version of this dataset available in the {[fairadapt](https://github.com/dplecko/fairadapt)} R package.
 
@@ -286,9 +286,129 @@ save(pred_unaware_all, file = "../data/pred_unaware_all_adult.rda")
 save(pred_aware_all, file = "../data/pred_aware_all_adult.rda")
 ```
 
+## Naive approcah: _ceteris paribus_
+
+Let us change the sensitive attribute of individuals from the source group (women) to the target group (men). Then, we use both models (unaware and aware) to predict the target binary variable.
+
+```{r define-pred_unaware_naive}
+pred_unaware_naive <- predict(
+  model_unaware,
+  newdata = adult |> mutate(sex = "Male"),
+  type = "response"
+)
+pred_aware_naive <- predict(
+  model_aware,
+  newdata = adult |> mutate(sex = "Male"),
+  type = "response"
+)
+
+counterfactuals_unaware_naive <- 
+  adult |> 
+  mutate(
+    pred = pred_unaware_naive,
+    type = "counterfactual"
+  )
+counterfactuals_aware_naive <- 
+  adult |> 
+  mutate(
+    pred = pred_aware_naive,
+    type = "counterfactual"
+  )
+```
+
+### Unaware Model
+
+Let us have a look at the distribution of the predicted scores of the classifier in both groups, when the predictions are made after setting the sex attribute of all women to "Male". Since the model does not use the sensitive attribute, changing it will result in absolutely no change in its predictions in this case.
+
+The predicted values using the initial characteristics (the factuals), for the unaware model are stored in the object `pred_unaware_all`. We put in a table the initial characteristics (factuals) and the prediction made by the unaware model:
+
+```{r define-factuals_unaware}
+factuals_unaware <-
+  adult |> 
+  as_tibble() |>
+  mutate(
+    pred = pred_unaware_all,
+    type = "factual"
+  )
+```
+
+
+```{r define-unaware_naive}
+unaware_naive <- bind_rows(factuals_unaware, counterfactuals_unaware_naive)
+unaware_naive_women <- unaware_naive |> filter(sex == "Female")
+unaware_naive_men <- unaware_naive |> filter(sex == "Male")
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Sex, Reference: Men"
+#| label: fig-naive-unaware-adult-ref-men
+#| fig-width: 8
+# Ref: Men
+ggplot(unaware_naive, aes(x = pred, fill = type)) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Unaware model, Sensitive: Sex, Reference: Men",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +facet_wrap(~sex)
+```
+
+
+### Aware Model
+
+We turn to the aware model. This time, the sensitive attribute is used by the classifier when it is trained. Hence, changing the sensitive attribute of individuals in the source group to that of the target group may change the predicted values for the binary outcome variable.
+
+The predicted values by the model, on the initial characteristics (on the factuals) are stored in the `pred_aware_all` object.
+
+We create a tibble with the factuals and the predictions by the aware model:
+```{r define-fairadapt-factuals_aware}
+factuals_aware <-
+  adult[, vars] |>
+  as_tibble() |>
+  mutate(
+    pred = pred_aware_all,
+    type = "factual"
+  )
+```
+
+```{r define-aware_naive}
+aware_naive <- bind_rows(factuals_aware, counterfactuals_aware_naive)
+aware_naive_women <- aware_naive |> filter(sex == "Female")
+aware_naive_men <- aware_naive |> filter(sex == "Male")
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Aware model, Sensitive: Sex, Reference: Black individuals"
+#| label: fig-naive-aware-adult-ref-men
+#| fig-width: 8
+# Ref: Men
+ggplot(aware_naive, aes(x = pred, fill = type)) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Aware model, Sensitive: Sex, Reference: Men",
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() + facet_wrap(~sex)
+```
+
+
 ## Fairadapt {#sec-adult-dataset-fairadapt}
 
-We have already assumed a causal graph (see @sec-adult-datase-objectives).
+We have already assumed a causal graph (see @fig-causal-graph-adult).
 
 Let us consider that we want to build counterfactuals for women: what if the individual had been a man and not a woman?
 
@@ -346,26 +466,7 @@ The predictive models will be used to **compare predictions** made using:
 
 ### Unaware Model
 
-The predicted values using the initial characteristics (the factuals), for the unaware model are stored in the object `pred_unaware_all`. We put in a table the initial characteristics (factuals) and the prediction made by the unaware model:
 
-```{r define-factuals_unaware}
-factuals_unaware <-
-  adult |> 
-  as_tibble() |>
-  mutate(
-    pred = pred_unaware_all,
-    type = "factual"
-  )
-```
-
-Let us save this dataset in a csv file (this file will be used to perform multivariate transport in python, in @sec-adult-dataset-ot).
-
-```{r}
-write.csv(
-  factuals_unaware,
-  file = "../data/factuals_unaware_adult.csv", row.names = FALSE
-)
-```
 
 Let us build a dataset containing only counterfactual characteristics obtained with fairadapt.
 
@@ -438,6 +539,7 @@ ggplot(unaware_fpt_men, aes(x = pred, fill = type)) +
 ```{r, message=FALSE, warning=FALSE}
 #| fig-cap: "Unaware model, Sensitive: Sex, Reference: Women"
 #| label: fig-fpt-unaware-adult-ref-women
+# Ref: Men
 ggplot(unaware_fpt_women, aes(x = pred, fill = type)) +
   geom_histogram(
     mapping = aes(
@@ -459,26 +561,7 @@ ggplot(unaware_fpt_women, aes(x = pred, fill = type)) +
 
 Now, we turn to the model that includes the sensitive attribute, i.e., the aware model.
 
-The predicted values by the model, on the initial characteristics (on the factuals) are stored in the `pred_aware_all` object.
 
-We create a tibble with the factuals and the predictions by the aware model:
-```{r define-fairadapt-factuals_aware}
-factuals_aware <-
-  adult[, vars] |>
-  as_tibble() |>
-  mutate(
-    pred = pred_aware_all,
-    type = "factual"
-  )
-```
-
-
-Let us save this table in a CSV file (this file will be used to perform multivariate transport in python):
-```{r}
-write.csv(
-  factuals_aware, file = "../data/factuals_aware_adult.csv", row.names = FALSE
-)
-```
 
 Recall we created an object called `df_counterfactuals_fpt` which contains the counterfactual characteristics of all students, obtained with fairadapt:
 ```{r show-df_counterfactuals_fpt}
@@ -959,7 +1042,7 @@ We define a small function, `get_prob()`{.R}, to compute the average score predi
 
 #' Computes the average predicted score returned by one of the classifiers.
 #' 
-#' @param type Either `"factual"`, `"fairadapt"`, or `"seq"`.
+#' @param type Either `"factual"`, `"naive"`, `"fairadapt"`, or `"seq"`.
 #' @param model Type of model: `"aware"` is the classifier used the sensitive
 #'        attribute, `"unaware"` otherwise.
 #' @param ind Index of rows in the datasets to compute the statistics on.
@@ -971,6 +1054,8 @@ get_prob <- function(type, model = "aware", ind, sensitive = "Women") {
     x <- get(paste0("counterfactuals_", model, "_fpt"))
   } else if (type == "seq") {
     x <- get(paste0("counterfactuals_", model, "_seq_women"))
+  } else if (type == "naive") {
+    x <- get(paste0("counterfactuals_", model, "_naive"))
   } else {
     stop("Error type.")
   }
@@ -1005,7 +1090,7 @@ Then, we compute the three metrics and merge them in a single table:
 conditional_demographic_parity <- NULL
 eq_op_pos <- NULL
 eq_op_neg <- NULL
-for (type in c("factual", "fairadapt", "seq")) {
+for (type in c("factual", "naive", "fairadapt", "seq")) {
   for (model in c("aware", "unaware")) {
     if (type == "factual") {
       for (sensitive in c("Women", "Men")) {
@@ -1015,7 +1100,7 @@ for (type in c("factual", "fairadapt", "seq")) {
           bind_rows(
             get_prob(
               type = type, model = model, ind = ind_men, sensitive = "Men"
-              )
+            )
           )
         # ~ Equal Opportunity for Y=1
         tmp_eq_op_pos <- 
@@ -1024,7 +1109,7 @@ for (type in c("factual", "fairadapt", "seq")) {
             get_prob(
               type = type, model = model, ind = ind_pos_men, 
               sensitive = "Men"
-              )
+            )
           )
         # ~ Equal Opportunity for Y=0
         tmp_eq_op_neg <- 
@@ -1033,7 +1118,7 @@ for (type in c("factual", "fairadapt", "seq")) {
             get_prob(
               type = type, model = model, ind = ind_neg_men, 
               sensitive = "Men"
-              )
+            )
           )
       } 
     } else {
@@ -1062,29 +1147,47 @@ metrics <-
 #| code-summary: The code to create the table.
 #| tbl-cap: Fairness metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
 #| label: tbl-fairness-metrics-adult
-digits <- 2
+# digits <- 2
+num_accuracy <- 0.01
 tb_res <- 
   metrics |> 
   mutate(type = ifelse(
     type == "factual" & sensitive == "Men", "factual_men", type),
-    type = factor(type, levels = c("factual_men", "factual", "fairadapt", "seq"))
+    type = factor(type, levels = c("factual_men", "factual", "naive","fairadapt", "seq"))
   ) |> 
   select(-sensitive) |> 
   pivot_wider(names_from = "value_type", values_from = "value") |> 
-  mutate(value = paste0(round(mean, digits), " (", round(sd, digits), ")")) |> 
+  mutate(value = paste0(
+    scales::number(mean, accuracy = num_accuracy),
+    " (",
+    scales::number(sd, accuracy = num_accuracy),
+    ")")
+  ) |> 
   select(-mean, -sd) |> 
   pivot_wider(names_from = "type", values_from = "value", names_sort = TRUE) |> 
   arrange(model, metric)
 knitr::kable(
   tb_res[, -1], 
-  col.names = c("Metric", "Factual", "Factual", "Fairadapt", "Seq. Transport")
+  col.names = c("Metric", "Factual", "Factual", "Naive", "Fairadapt", "Seq. Transport")
 ) |> 
   kableExtra::kable_styling("striped", full_width = F) %>%
   kableExtra::add_header_above(
-    c(" " = 1, "Men"=1, "Women"=3)
+    c(" " = 1, "Men"=1, "Women"=4)
   ) |> 
   kableExtra::pack_rows(index = table(tb_res$model))
 ```
 
+
+```{r, eval=FALSE}
+# LaTeX table
+knitr::kable(
+  tb_res[,-1], format = "latex", booktabs = TRUE
+) |> 
+  kableExtra::kable_styling("striped", full_width = F) %>%
+  kableExtra::add_header_above(
+    c(" " = 1, "Men"=1, "Women"=4)
+  ) |> 
+  kableExtra::pack_rows(index = table(tb_res$model))
+```
 
 
