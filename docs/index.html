@@ -353,6 +353,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./example-compas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">COMPAS Dataset</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -441,6 +447,19 @@ window.Quarto = {
 <section id="introduction" class="level1 unnumbered">
 <h1 class="unnumbered">Introduction</h1>
 <p>This ebook provides the replication codes to the article titled <em>‘Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.’</em></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This ebook is still under construction. We are revising the paper at the moment. The results provided here may not be the final ones.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -456,7 +475,7 @@ Note
 </div>
 <section id="abstract" class="level2">
 <h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
-<p>In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in <span class="citation" data-cites="plevcko2020fair">Plečko and Meinshausen (<a href="references.html#ref-plevcko2020fair" role="doc-biblioref">2020</a>)</span>} and optimal transport, as in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. We extend “Knothe’s rearrangement” <span class="citation" data-cites="bonnotte2013knothe">Bonnotte (<a href="references.html#ref-bonnotte2013knothe" role="doc-biblioref">2013</a>)</span> and “triangular transport” <span class="citation" data-cites="zech2022sparse1">Zech and Marzouk (<a href="references.html#ref-zech2022sparse1" role="doc-biblioref">2022</a>)</span> to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.</p>
+<p>In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in <span class="citation" data-cites="plevcko2020fair">Plečko and Meinshausen (<a href="references.html#ref-plevcko2020fair" role="doc-biblioref">2020</a>)</span> and optimal transport, as in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. We extend “Knothe’s rearrangement” <span class="citation" data-cites="bonnotte2013knothe">Bonnotte (<a href="references.html#ref-bonnotte2013knothe" role="doc-biblioref">2013</a>)</span> and “triangular transport” <span class="citation" data-cites="zech2022sparse1">Zech and Marzouk (<a href="references.html#ref-zech2022sparse1" role="doc-biblioref">2022</a>)</span> to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.</p>
 <p><strong>Keywords</strong>: Machine Learning (ML) -&gt; ML: Ethics – Bias, Fairness, Transparency &amp; Privacy</p>
 </section>
 <section id="outline" class="level2">

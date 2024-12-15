@@ -151,11 +151,23 @@ add_tikz_graph <- function(tikz_code,
   knitr::asis_output(res)
 }
 
+colour_nodes <- c(
+  "sex" = "red!30",
+  "age" = "yellow!60", 
+  "native_country" = "yellow!60", 
+  "marital_status" = "yellow!60", 
+  "education_num" = "yellow!60", 
+  "workclass" = "yellow!60", 
+  "hours_per_week" = "yellow!60", 
+  "occupation" = "yellow!60", 
+  "income" = "blue!30"
+)
+
 # Then, in the document:
-# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
+# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
 ```
 
-`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
+`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
 
 
 
@@ -965,11 +977,11 @@ We merge the two datasets, `factuals_unaware` and `counterfactuals_aware_fpt_wom
 ```{r define-aware_fpt_women}
 # dataset with counterfactuals, for aware model
 aware_fpt_women <- 
-  factuals_aware |> mutate(ses_origin = sex) |> 
+  factuals_aware |> mutate(sex_origin = sex) |> 
   bind_rows(counterfactuals_aware_fpt_women)
   
 aware_fpt_men <- 
-  factuals_aware |> mutate(sew_origin = sex) |> 
+  factuals_aware |> mutate(sex_origin = sex) |> 
   bind_rows(counterfactuals_aware_fpt_men)
 ```
 
@@ -1086,7 +1098,7 @@ ggplot(
 
 :::
   
-Then, we focus on the distribution of predicted scores forcounterfactual of Women students and factuals of men students.
+Then, we focus on the distribution of predicted scores for counterfactual of Women  and factuals of men.
 
 
 :::{.panel-tabset}
@@ -1367,7 +1379,7 @@ ggplot(
 
 :::
   
-Then, we focus on the distribution of predicted scores forcounterfactual of Women students and factuals of white students.
+Then, we focus on the distribution of predicted scores for counterfactual of women and factuals of men
 
 :::{.panel-tabset}
 
@@ -1753,6 +1765,11 @@ text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
 
 ## Metrics
 
+:::{.callout-warning}
+
+This section is still under construction. Results may not correct. The metrics used should be changed soon.
+
+:::
 
 Let us compute a few metrics metrics, such as the accuracy, the log-loss, and the Brier Score, as well as the counterfactual demographic parity. For the accuracy, we define the set the probability threshold to .5.
 

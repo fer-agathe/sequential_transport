@@ -2,7 +2,11 @@
 
 This ebook provides the replication codes to the article titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
 
+::: callout-warning
 
+This ebook is still under construction. We are revising the paper at the moment. The results provided here may not be the final ones.
+
+:::
 
 ::: callout-note
 All the codes are written in R, except for multivariate transport where we switch to python.
@@ -10,7 +14,7 @@ All the codes are written in R, except for multivariate transport where we switc
 
 ## Abstract
 
-In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in @plevcko2020fair} and optimal transport, as in @de2024transport. We extend  "Knothe's rearrangement" @bonnotte2013knothe and "triangular transport" @zech2022sparse1 to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.
+In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in @plevcko2020fair and optimal transport, as in @de2024transport. We extend  "Knothe's rearrangement" @bonnotte2013knothe and "triangular transport" @zech2022sparse1 to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.
 
 **Keywords**: Machine Learning (ML) -> ML: Ethics -- Bias, Fairness, Transparency & Privacy
 

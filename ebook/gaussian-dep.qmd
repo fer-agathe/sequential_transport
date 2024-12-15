@@ -216,12 +216,18 @@ add_tikz_graph <- function(tikz_code,
   knitr::asis_output(res)
 }
 
+colour_nodes <- c(
+  "S" = "red!30",
+  "X1" = "yellow!60", 
+  "X2" = "yellow!60", 
+  "Y" = "blue!30"
+)
 # Then, in the document:
-# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`
+# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct,colour_nodes), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`
 ```
 
 
-`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`
+`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct,colour_nodes), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`
 
 
 ### Wrong Assumption: $X_1$ causes $X_2$
@@ -240,7 +246,7 @@ adj_indep_inc_x1_then_x2 <- matrix(
 )
 ```
 
-`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_inc_x1_then_x2), label = "fig-causal-graph-indep-incorrect-1", caption = "\"Assumed Causal Graph: Incorrecly Assumes that $X_1$ causes $X_2$\"", echo = "false")`
+`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_inc_x1_then_x2,colour_nodes), label = "fig-causal-graph-indep-incorrect-1", caption = "\"Assumed Causal Graph: Incorrecly Assumes that $X_1$ causes $X_2$\"", echo = "false")`
 
 ### Wrong Assumption: $X_2$ causes $X_1$
 
@@ -258,7 +264,7 @@ adj_indep_inc_x2_then_x1 <- matrix(
 )
 ```
 
-`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_inc_x2_then_x1), label = "fig-causal-graph-indep-incorrect-2", caption = "\"Assumed Causal Graph: Incorrecly Assumes that $X_2$ causes $X_1$\"", echo = "false")`
+`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_inc_x2_then_x1,colour_nodes), label = "fig-causal-graph-indep-incorrect-2", caption = "\"Assumed Causal Graph: Incorrecly Assumes that $X_2$ causes $X_1$\"", echo = "false")`
 
 
 ## Counterfactuals

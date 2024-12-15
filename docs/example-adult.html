@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./example-compas.html" rel="next">
 <link href="./cf-comparison.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -352,6 +352,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./example-compas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">COMPAS Dataset</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -579,8 +585,20 @@ Figure&nbsp;13.1: Assumed Causal Graph
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">asis_output</span>(res)</span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, in the document:</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co"># `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>colour_nodes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sex"</span> <span class="ot">=</span> <span class="st">"red!30"</span>,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"native_country"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"marital_status"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"education_num"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"workclass"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hours_per_week"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"occupation"</span> <span class="ot">=</span> <span class="st">"yellow!60"</span>, </span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"income"</span> <span class="ot">=</span> <span class="st">"blue!30"</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, in the document:</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co"># `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -1451,11 +1469,11 @@ Figure&nbsp;13.10: Distribution of Predicted Scores for Minority Class (White), 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset with counterfactuals, for aware model</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>aware_fpt_women <span class="ot">&lt;-</span> </span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  factuals_aware <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">ses_origin =</span> sex) <span class="sc">|&gt;</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  factuals_aware <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">sex_origin =</span> sex) <span class="sc">|&gt;</span> </span>
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(counterfactuals_aware_fpt_women)</span>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>aware_fpt_men <span class="ot">&lt;-</span> </span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  factuals_aware <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">sew_origin =</span> sex) <span class="sc">|&gt;</span> </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  factuals_aware <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">sex_origin =</span> sex) <span class="sc">|&gt;</span> </span>
 <span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(counterfactuals_aware_fpt_men)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -1589,7 +1607,7 @@ Figure&nbsp;13.12: Aware model, Sensitive: Race, Reference: Women individuals
 </div>
 </div>
 </div>
-<p>Then, we focus on the distribution of predicted scores forcounterfactual of Women students and factuals of men students.</p>
+<p>Then, we focus on the distribution of predicted scores for counterfactual of Women and factuals of men.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Women -&gt; Men</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Men -&gt; Women</a></li></ul>
 <div class="tab-content">
@@ -1935,7 +1953,7 @@ Figure&nbsp;13.16: Aware model, Sensitive: Race, Woman -&gt; Man
 </div>
 </div>
 </div>
-<p>Then, we focus on the distribution of predicted scores forcounterfactual of Women students and factuals of white students.</p>
+<p>Then, we focus on the distribution of predicted scores for counterfactual of women and factuals of men</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Unaware</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Aware</a></li></ul>
 <div class="tab-content">
@@ -2347,6 +2365,19 @@ Figure&nbsp;13.20: Densities of predicted scores for Women with factuals and wit
 </section>
 <section id="metrics" class="level2" data-number="13.6">
 <h2 data-number="13.6" class="anchored" data-anchor-id="metrics"><span class="header-section-number">13.6</span> Metrics</h2>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This section is still under construction. Results may not correct. The metrics used should be changed soon.</p>
+</div>
+</div>
 <p>Let us compute a few metrics metrics, such as the accuracy, the log-loss, and the Brier Score, as well as the counterfactual demographic parity. For the accuracy, we define the set the probability threshold to .5.</p>
 <p>The <strong>counterfactual demographic</strong> parity writes:</p>
 <p><span class="math display">\[
@@ -3307,8 +3338,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./example-compas.html" class="pagination-link" aria-label="COMPAS Dataset">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">COMPAS Dataset</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
