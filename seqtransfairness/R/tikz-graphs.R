@@ -7,12 +7,12 @@
 #' * `edges`: Edges.
 #' * `name_nodes`: Names of the nodes.
 #' @importFrom igraph graph_from_adjacency_matrix layout_with_fr
-#' @importFrom stringr str_replace
+#' @importFrom stringr str_replace_all
 generate_coordinates_graph <- function(adj_mat) {
   G <- igraph::graph_from_adjacency_matrix(adj_mat)
   L <- igraph::layout_with_fr(G)
   N <- rownames(adj_mat)
-  N <- str_replace(N, "_", " ")
+  N <- str_replace_all(N, "_", " ")
   E <- matrix(NA, sum(adj_mat), 2)
   i_s = 0
   for (i in 1:nrow(adj_mat)) {
