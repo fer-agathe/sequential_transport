@@ -21,7 +21,7 @@ In the article, we use three methods to create counterfactuals:
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -382,6 +382,7 @@ Now, we can visualize the distribution of the values predicted by the unaware mo
 #| label: fig-ot-unaware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_ot_black |> 
     mutate(
@@ -436,6 +437,7 @@ ggplot(
 #| label: fig-ot-unaware-race-ref-black
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_ot_white |> 
     mutate(
@@ -497,6 +499,7 @@ ggplot(
 #| label: fig-ot-unaware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_ot_black |> 
     mutate(
@@ -549,6 +552,7 @@ ggplot(
 #| label: fig-ot-unaware-race-ref-black-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_ot_white |> 
     mutate(
@@ -645,6 +649,7 @@ Now, we can visualize the distribution of the values predicted by the unaware mo
 #| label: fig-ot-aware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_ot_black |> 
     mutate(
@@ -699,6 +704,7 @@ ggplot(
 #| label: fig-ot-aware-race-ref-black
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_ot_white |> 
     mutate(
@@ -760,6 +766,7 @@ ggplot(
 #| label: fig-ot-aware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_ot_black |> 
     mutate(
@@ -812,6 +819,7 @@ ggplot(
 #| label: fig-ot-aware-race-ref-black-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_ot_white |> 
     mutate(

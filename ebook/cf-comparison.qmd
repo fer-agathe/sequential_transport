@@ -14,7 +14,7 @@ This chapter compares the different methods used to create counterfactuals by ex
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -191,6 +191,7 @@ tb_indiv_aware
 #| fig-width: 6
 #| fig-height: 6
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2, 2, 0, 0))
 # Initial characteristics with the unaware model
 tb_indiv_unaware_factual <- 
@@ -359,6 +360,7 @@ legend(
 #| fig-width: 6
 #| fig-height: 6
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2, 2, 0, 0))
 # Initial characteristics with the aware model
 tb_indiv_aware_factual <- 
@@ -546,6 +548,7 @@ colours <- c(
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 # Factuals
 tb_unaware_factuals <- tb_unaware |> 
   filter(counterfactual == "none")
@@ -672,6 +675,7 @@ text(x = .53, y = 6, "Seq. T.", col = colours_all[["seq"]])
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 # Factuals
 tb_aware_factuals <- tb_aware |> 
   filter(counterfactual == "none")
@@ -912,7 +916,7 @@ metrics <-
 
 ```{r}
 #| code-fold: true
-#| code-summary: The code to create the table.
+#| code-summary: Codes used to create the Table.
 #| tbl-cap: Fairness metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
 #| label: tbl-fairness-metrics-lawschool
 # digits <- 2

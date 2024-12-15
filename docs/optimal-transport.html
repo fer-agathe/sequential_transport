@@ -421,7 +421,7 @@ Objectives
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the setting codes</summary>
+<summary>Required packages and definition of colours.</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages----</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
@@ -490,7 +490,7 @@ x_{1}={T}^\star(x_{0})= \mu_{1}+\frac{\sigma_{1}}{\sigma_{0}}(x_{0}-\mu_{0}),
 <p>We then plot the Optimal Transport line between <span class="math inline">\(X_1|S=0\)</span> and <span class="math inline">\(X_1|S=1\)</span>:</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>limA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>limB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>) </span>
@@ -618,7 +618,7 @@ x_{1}={T}^\star(x_{0})= \mu_{1}+\frac{\sigma_{1}}{\sigma_{0}}(x_{0}-\mu_{0}),
 <p>We then plot the Optimal Transport line between <span class="math inline">\(X_1|S=0\)</span> and <span class="math inline">\(X_1|S=1\)</span>:</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
@@ -762,7 +762,7 @@ x_{1}={T}^\star(x_{0})= \mu_{1}+\frac{\sigma_{1}}{\sigma_{0}}(x_{0}-\mu_{0}),
 <p>that are both linear mappings. Let us visualize this.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Code</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1002,7 +1002,7 @@ x_{1}={T}^\star(x_{0})= \mu_{1}+\frac{\sigma_{1}}{\sigma_{0}}(x_{0}-\mu_{0}),
 <p>Now, let us transport first along the <span class="math inline">\(y\)</span> axis, and then along the <span class="math inline">\(x\)</span> axis.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Code</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1325,7 +1325,7 @@ T_{2|1}(x) = F_{1:2|1}^{-1}\big(F_{0:2|1}(x)\big)=\mu_{1:2|1} +\displaystyle\fra
 <p>An interesting property of Gaussian vectors is the stability under rotations. In dimension 2, instead of a sequential transport of <span class="math inline">\(\boldsymbol{x}\)</span> on <span class="math inline">\(\overrightarrow{e}_x\)</span> and then (conditionally) on $_y, one could consider a projection on any unit vector <span class="math inline">\(\overrightarrow{u}\)</span> (with angle <span class="math inline">\(\theta\)</span>), and then (conditionally) along the orthogonal direction <span class="math inline">\(\displaystyle \overrightarrow{u}^\perp\)</span>. In <a href="#fig-gauss-seq-rotation-1" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>, we can visualize the set of all counterfactuals <span class="math inline">\(\boldsymbol{x}^\star\)</span> when <span class="math inline">\(\theta\in[0,2\pi]\)</span>. The (global) optimal transport is also considered (shown with a red square).</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Code</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="cf">function</span>(theta,</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">A =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.2</span>,<span class="sc">-</span><span class="dv">2</span>)) {</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -1437,7 +1437,7 @@ Figure&nbsp;1.1: Gaussian conditional optimal transports. The process begins wit
 <p>We can consider another starting point.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Code</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Consider the following starting point</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.2</span>, .<span class="dv">5</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>

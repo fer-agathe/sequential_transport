@@ -12,7 +12,7 @@ This chapter presents classifier (logistic regression) trained on the dataset pr
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -37,12 +37,18 @@ global_theme <- function() {
         size = size_title, 
         hjust = 0.5
       ),
-      plot.subtitle = element_text(hjust = 0.5)
+      plot.subtitle = element_text(hjust = 0.5),
+      legend.position = "bottom"
     )
 }
 
 # Seed
 set.seed(2025)
+colours_all <- c(
+  "source" = "#00A08A",
+  "reference" = "#F2AD00",
+  "naive" = "#000000"
+)
 ```
 
 
@@ -134,6 +140,8 @@ df_test_aware <- tibble(
 ```{r plot-pred-unaware}
 #| fig-cap: Density of predictions on the test set, for the unaware model, when the sensitive attribute is the race
 #| label: fig-density-pred-unaware
+#| code-fold: true
+#| code-summary: Codes to create the Figure.
 ggplot(
   data = df_test_unaware, 
   mapping = aes(x = pred, fill = S)) +
@@ -142,6 +150,11 @@ ggplot(
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    "S", values = c(
+      "Black" = colours_all[["source"]],
+      "White" = colours_all[["reference"]]),
+  ) +
   labs(
     title = "Unaware Model, with S being Race",
     x = "Predictions for Y",
@@ -156,6 +169,8 @@ ggplot(
 ```{r plot-pred-unaware}
 #| fig-cap: Density of predictions on the test set, for the aware model, when the sensitive attribute is the race
 #| label: fig-density-pred-aware
+#| code-fold: true
+#| code-summary: Codes to create the Figure.
 ggplot(
   data = df_test_aware,
   mapping = aes(x = pred, fill = S)) +
@@ -164,6 +179,11 @@ ggplot(
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    "S", values = c(
+      "Black" = colours_all[["source"]],
+      "White" = colours_all[["reference"]]),
+  ) +
   labs(
     title = "Aware Model, with S being Race",
     x = "Predictions for Y",

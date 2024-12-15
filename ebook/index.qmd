@@ -1,6 +1,6 @@
 # Introduction {.unnumbered}
 
-This ebook provides the replication codes to the project titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
+This ebook provides the replication codes to the article titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
 
 
 
@@ -16,14 +16,32 @@ In this paper, we link two existing approaches to derive counterfactuals: adapta
 
 ## Outline
 
-This ebook is made of three parts:
+This ebook is made of fourt parts:
 
 1. Optimal Transport
   We provide some background for optimal transport ([Chapter -@sec-optimal-transport]).
 2. Simulations  
-  Using data simulated from bivariate Gaussian distributions in two subgroups of the population ($S=0$ and $S=1$), we illustrate the sequential transport algorithm ([Chapter -@sec-gaussian]). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context ([Chapter -@sec-regression]).
-3. The last part shows an example with real data. 
+  Using data simulated from bivariate Gaussian distributions in two subgroups of the population ($S=0$ and $S=1$), we illustrate the sequential transport algorithm ([Chapter -@sec-gaussian]). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context ([Chapter -@sec-regression]). We then present another algorithm which can be used if the covariates are not all numeric ([Chapter -@sec-alg-3]). Lastly, we explore what happens when assuming a wrong DAG ([Chapter -@sec-wrong-causal]).
+3. The third part shows an example with real data. 
   The law datatest used as an illustration is first presented ([Chapter -@sec-data]). In this data, the individuals (students) may be part of a protected group ($S=0$) or not ($S=1$). Then, a GLM model is estimated to predict a binary outcome ([Chapter -@sec-classifier]). We then present three methods to produce counterfactuals from group $S=0$ to group $S=1$: fairadapt ([Chapter -@sec-cf-fairadapt]), multivariate optimal transport ([Chapter -@sec-cf-ot]), and sequential transport ([Chapter -@sec-cf-seq-t]). A comparison of the results is presented in ([Chapter -@sec-cf-comparison]).
+4. The fourth part replicates the analysis from the previous part, using the UCI Adult dataset ([Chapter -@sec-adult-dataset]).
+
+## Small Package
+
+We defined some of the functions used in this ebook in a small R package, {seqtransfairness}, which can be downloaded from the [github repository](https://github.com/fer-agathe/sequential_transport) associated with the paper.
+
+To install the package:
+```{r install-package, eval=FALSE}
+remotes::install_github(
+  repo = "fer-agathe/sequential_transport", subdir = "seqtransfairness"
+)
+```
+
+Then, the package can be loaded as follows:
+```{r, message=FALSE, warning=FALSE}
+library(seqtransfairness)
+```
+
 
 ## Replication Codes
 

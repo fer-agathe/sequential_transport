@@ -396,7 +396,7 @@ Objectives
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the setting codes</summary>
+<summary>Required packages and definition of colours.</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages----</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
@@ -426,8 +426,7 @@ Objectives
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../functions/utils.R"</span>)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../functions/graphs.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../functions/graphs.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="data" class="level2" data-number="2.1">
@@ -473,7 +472,7 @@ Objectives
 <p>The contour lines of both bivariate Gaussian densities (corresponding to groups <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>) are displayed in the following graph.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>D_SXY0 <span class="ot">&lt;-</span> D_SXY[D_SXY<span class="sc">$</span>S <span class="sc">==</span> <span class="dv">0</span>, ]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>D_SXY1 <span class="ot">&lt;-</span> D_SXY[D_SXY<span class="sc">$</span>S <span class="sc">==</span> <span class="dv">1</span>, ]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -531,7 +530,7 @@ Objectives
 <p>We can then display the transported individual on the same plot as before.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting densities</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
@@ -580,7 +579,7 @@ Figure&nbsp;2.1: Causal network with two legitimate mitigating variables <span c
 </div>
 </div>
 <p>To obtain the counterfactuals based on the methodology presented in the article, i.e., on sequential transport using a causal graph, we can use <a href="#alg-1" class="quarto-xref">Algorithm 2.1</a>.</p>
-<div id="alg-1" class="pseudocode-container quarto-float" data-no-end="false" data-line-number="true" data-chapter-level="2" data-line-number-punc=":" data-comment-delimiter="//" data-indent-size="1.2em" data-pseudocode-number="1" data-caption-prefix="Algorithm">
+<div id="alg-1" class="pseudocode-container quarto-float" data-line-number="true" data-line-number-punc=":" data-no-end="false" data-pseudocode-number="1" data-caption-prefix="Algorithm" data-indent-size="1.2em" data-comment-delimiter="//" data-chapter-level="2">
 <div class="pseudocode">
 \begin{algorithm} \caption{Sequential transport on causal graph} \begin{algorithmic} \Require graph \(\mathcal{G}\) on \((s,\boldsymbol{x})\), with adjacency matrix \(\boldsymbol{A}\) \Require dataset \((s_i,\boldsymbol{x}_i)\) and one individual \((s=0,\boldsymbol{a})\) \Require bandwidths \(\boldsymbol{h}\) and \(\boldsymbol{b}_j\)'s \State \((s,\boldsymbol{v})\gets\boldsymbol{A}\) the topological ordering of vertices (DFS) \State \(T_s\gets\text{identity}\) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{p}(j) \gets \text{parents}(j)\) \State \(T_j(\boldsymbol{a}_{\boldsymbol{p}(j)})\gets (T_{\boldsymbol{p}(j)_1}(\boldsymbol{a}_{\boldsymbol{p}(j)}),\cdots,T_{\boldsymbol{p}(j)_{k_j}}(\boldsymbol{a}_{\boldsymbol{p}(j)}))\) \State \((x_{i,j|s},\boldsymbol{x}_{i,\boldsymbol{p}(j)|s})\gets\) subsets when \(s\in\{0,1\}\) \State \(w_{i,j|0}\gets \phi(\boldsymbol{x}_{i,\boldsymbol{p}(j)|0};\boldsymbol{a}_{\boldsymbol{p}(j)},\boldsymbol{b}_j)\) (Gaussian kernel) \State \(w_{i,j|1}\gets \phi(\boldsymbol{x}_{i,\boldsymbol{p}(j)|1};T_j(\boldsymbol{a}_{\boldsymbol{p}(j)}),\boldsymbol{b}_j)\) \State \(\hat{f}_{h_j|s}\gets \text{density estimator}\) of \(x_{\cdot,j|s}\), weights \(w_{\cdot,j|s}\). \State \(\hat{F}_{h_j|s}(\cdot)\gets\displaystyle\int^{~\cdot}_{-\infty}\hat{f}_{h_j|s}(u)\mathrm{d}u\), c.d.f. \State \(\hat{Q}_{h_j|s}\gets \hat{F}_{h_j|s}^{-1}\), quantile \State \(\hat{T}_{j}(\cdot)\gets\hat{Q}_{h_j|1}\circ \hat{F}_{h_j|0}(\cdot)\) \EndFor \State \(\boldsymbol{a}^\star\gets (T_{1}(\boldsymbol{a}_{1}),\cdots,T_{d}(\boldsymbol{a}_{d}))\)\\ \Return \((s=1,\boldsymbol{a}^\star)\), counterfactual of \((s=0,\boldsymbol{a})\) \end{algorithmic} \end{algorithm}
 </div>
@@ -702,7 +701,7 @@ Figure&nbsp;2.1: Causal network with two legitimate mitigating variables <span c
 <p>Here, we plot the optimal transport curve for <span class="math inline">\(X_1\)</span> from subset <span class="math inline">\(S=0\)</span> to subset <span class="math inline">\(S=1\)</span> with the densities corresponding to each subset. Additionnally, the result for the individual from above is displayed.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>limA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>)</span>
@@ -800,7 +799,7 @@ Figure&nbsp;2.2: Illustration of <a href="#alg-1" class="quarto-xref">Algorithm 
 <p>Then we plot the counterfactual obtained from sequential transport on <span class="math inline">\(X_1\)</span> (which corresponds to univariate optimal transport) for the individual, on the contour lines of both groups <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -978,7 +977,7 @@ Figure&nbsp;2.3: Illustration of <a href="#alg-1" class="quarto-xref">Algorithm 
 <p>Here, we plot the optimal transport curve for <span class="math inline">\(X_2|X_1\)</span> from subset <span class="math inline">\(S=0\)</span> to subset <span class="math inline">\(S=1\)</span> with the densities corresponding to each subset (calculated with Gaussian kernels). Additionnally, the result for the individual from above is displayed.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>{</span>
@@ -1071,7 +1070,7 @@ Figure&nbsp;2.4: Illustration of <a href="#alg-1" class="quarto-xref">Algorithm 
 <p>Then we plot the counterfactual obtained from sequential transport on <span class="math inline">\(X_2|X_1\)</span> (which corresponds to univariate conditional transport) for the individual, on the contour lines of both groups <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1144,12 +1143,12 @@ Figure&nbsp;2.4: Illustration of <a href="#alg-1" class="quarto-xref">Algorithm 
 <h2 data-number="2.4" class="anchored" data-anchor-id="faster-sequential-transport"><span class="header-section-number">2.4</span> Faster Sequential Transport</h2>
 <p>In this part, we establish grids for <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> to calculate and store the cdf’s and quantile functions of the variables <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, <span class="math inline">\(X_2|X_1\)</span> and <span class="math inline">\(X_1|X_2\)</span> for both subsets <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>. This approach allows us to apply these functions to individuals based on their positions within the grids, rather than having to compute them each time. Instead of first calculating the cdf at <span class="math inline">\(X_1=x_1\)</span> and then transporting it, we directly apply the cdf and quantile functions at the corresponding <span class="math inline">\(X_1\)</span> grid position near <span class="math inline">\(x_1\)</span>. Then, for transporting <span class="math inline">\(X_2|X_1\)</span>, we start by storing the relevant cdf’s and quantile functions in a matrix, with rows corresponding to grid values for <span class="math inline">\(X_1\)</span> and columns to grid values for <span class="math inline">\(X_2\)</span>. To apply the conditional cdf and quantile function to an individual <span class="math inline">\((s=0,x_1,x_2)\)</span> i.e., sequential transport, rather than relying on Gaussian weights to define a neighborhood around <span class="math inline">\(x_1\)</span>, we define a window of width <code class="sourceCode r">h</code> around the midpoints of the grid cells for <span class="math inline">\(X_1\)</span> and calculate cdf of <span class="math inline">\(X_2\)</span> on this space.</p>
 <p>In <a href="#alg-3" class="quarto-xref">Algorithm 2.2</a> if <span class="math inline">\(j\)</span> has no parents, <span class="math inline">\(\mathrm{parents}(j)=\varnothing\)</span>, <span class="math inline">\(d_j=0\)</span> and then <span class="math inline">\(F_{j|s}\)</span> and <span class="math inline">\(Q_{j|s}\)</span> are vectors (of length <span class="math inline">\(k\)</span>). In <a href="#alg-4" class="quarto-xref">Algorithm 2.3</a>, in that case, <span class="math inline">\(\boldsymbol{i}_0=\boldsymbol{i}_1=\varnothing\)</span>.</p>
-<div id="alg-3" class="pseudocode-container quarto-float" data-no-end="false" data-line-number="true" data-chapter-level="2" data-line-number-punc=":" data-comment-delimiter="//" data-indent-size="1.2em" data-pseudocode-number="2" data-caption-prefix="Algorithm">
+<div id="alg-3" class="pseudocode-container quarto-float" data-line-number="true" data-line-number-punc=":" data-no-end="false" data-pseudocode-number="2" data-caption-prefix="Algorithm" data-indent-size="1.2em" data-comment-delimiter="//" data-chapter-level="2">
 <div class="pseudocode">
 \begin{algorithm} \caption{Faster sequential transport on causal graph (1)} \begin{algorithmic} \Require graph on \((s,\boldsymbol{x})\), with adjacency matrix \(\boldsymbol{A}\) \Require dataset \((s_i,\boldsymbol{x}_i)\) and \(k\in\mathbb{N}\) some grid size, \Require grids \(\boldsymbol{g}_{j|s}=({g}_{j,1|s},\cdots,{g}_{j,k|s})\), for all variable \(j\) \Require grid \(\boldsymbol{u}=(1,\cdots,k)/(k+1)\), for all \(j\) \State \((s,\boldsymbol{v})\gets\boldsymbol{A}\) the topological ordering of vertices (DFS) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{p}(j) \gets \text{parents}(j)\), dimension \(d_j\) \State \(\mathcal{G}_{j|s}\gets\) grid \(\boldsymbol{g}_{\boldsymbol{p}(j)_1|s}\times\cdots\times\boldsymbol{g}_{\boldsymbol{p}(j)_{d_j}|s}\) \State \(F_{j|s}\gets\) tensors \(k\times k^{d_j}\), taking values in \(\boldsymbol{u}\) \State \(Q_{j|s}\gets\) tensors \(k\times k^{d_j}\), taking values in \(\boldsymbol{g}_{j|s}\) \For{\(\boldsymbol{i}=(i_1,\cdots,i_{d_j})\in\{1,\cdots,k\}^{d_j}\)} \State \(F_{j|s}[\cdot,\boldsymbol{i}]\gets\) c.d.f. of \(X_j|\boldsymbol{X}_{\boldsymbol{p}(j)}=\boldsymbol{g}_{\boldsymbol{i}|s},S=s\) \State \(Q_{j|s}[\cdot,\boldsymbol{i}]\gets\) quantile of \(X_j|\boldsymbol{X}_{\boldsymbol{p}(j)}=\boldsymbol{g}_{\boldsymbol{i}|s},S=s\) \EndFor \EndFor \end{algorithmic} \end{algorithm}
 </div>
 </div>
-<div id="alg-4" class="pseudocode-container quarto-float" data-no-end="false" data-line-number="true" data-chapter-level="2" data-line-number-punc=":" data-comment-delimiter="//" data-indent-size="1.2em" data-pseudocode-number="3" data-caption-prefix="Algorithm">
+<div id="alg-4" class="pseudocode-container quarto-float" data-line-number="true" data-line-number-punc=":" data-no-end="false" data-pseudocode-number="3" data-caption-prefix="Algorithm" data-indent-size="1.2em" data-comment-delimiter="//" data-chapter-level="2">
 <div class="pseudocode">
 \begin{algorithm} \caption{Counterfactual calculation on causal graph (2)} \begin{algorithmic} \Require \(F_{1|s},\cdots,F_{d|s}\) and \(Q_{d|s},\cdots,Q_{d|s}\) \Require grids \(\boldsymbol{g}_{1|s},\cdots,\boldsymbol{g}_{d|s}\), \(\mathcal{G}_{1|s},\cdots,\mathcal{G}_{d|s}\) and \(\boldsymbol{u}\) \Require features \(\boldsymbol{a}\in\mathbb{R}^d\) (group 0) \State \(\boldsymbol{b}\gets \boldsymbol{a}\) \For{\(j\in \boldsymbol{v}\)} \State \(\boldsymbol{i}_0\gets \boldsymbol{a}_{\boldsymbol{p}(j)}\) on grid \(\mathcal{G}_{j|0}\) \State \(k_0\gets a_j\) on grid \(\boldsymbol{g}_{j|0}\) \State \(p\gets F_{j|0}[k_0,\boldsymbol{i}_0]\) \State \(\boldsymbol{i}_1\gets \boldsymbol{b}_{\boldsymbol{p}(j)}\) on grid \(\mathcal{G}_{j|1}\) \State \(k_1\gets p\) on grid \(\boldsymbol{u}\) \State \(b_j\gets Q_{j|1}[k_1,\boldsymbol{i}_1]\) \EndFor \Return \(\boldsymbol{b}\) (counterfactual in group 1) \end{algorithmic} \end{algorithm}
 </div>
@@ -1381,7 +1380,7 @@ Figure&nbsp;2.5: Grid for <span class="math inline">\(X_1\)</span>
 <p>First, we plot the matrix for subset <span class="math inline">\(S=0\)</span> and highlight the column corresponding to the cdf of <span class="math inline">\(X_2|X_1=x_1\)</span> for our example individual:</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add x-axis and y-axis (for the matrices with cdf's)</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d_0<span class="sc">$</span>x, d_0<span class="sc">$</span>x, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> <span class="cn">NA</span>)</span>
@@ -1420,7 +1419,7 @@ Figure&nbsp;2.6: Matrix $F_{2|0}, with <span class="math inline">\(k=15\)</span>
 <p>Next, we plot the matrix for subset <span class="math inline">\(S=1\)</span> and highlight the column corresponding to the cdf of <span class="math inline">\(X_2|X_1=x_1^*\)</span> for our example individual:</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add x-axis and y-axis (for the matrices with cdf's)</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d_1<span class="sc">$</span>x, d_1<span class="sc">$</span>x, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> <span class="cn">NA</span>)</span>
@@ -1479,7 +1478,7 @@ Figure&nbsp;2.7: Matrix $F_{2|1}, with <span class="math inline">\(k=15\)</span>
 <p>Here, we plot the optimal transport curve for <span class="math inline">\(X_1\)</span> from subset <span class="math inline">\(S=0\)</span> to subset <span class="math inline">\(S=1\)</span> with the densities corresponding to each subset. Additionnally, the result for the individual from above is displayed.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>limA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>)</span>
@@ -1579,7 +1578,7 @@ Figure&nbsp;2.8: Illustration of <a href="#alg-3" class="quarto-xref">Algorithm 
 <p>Then we plot the counterfactual obtained from sequential transport on <span class="math inline">\(X_1\)</span> (which corresponds to univariate optimal transport) for the individual, on the contour lines of both groups <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1674,7 +1673,7 @@ Figure&nbsp;2.9: Illustration of <a href="#alg-3" class="quarto-xref">Algorithm 
 <p>Here, we plot the optimal transport curve for <span class="math inline">\(X_2|X_1\)</span> from subset <span class="math inline">\(S=0\)</span> to subset <span class="math inline">\(S=1\)</span> with the densities corresponding to each subset (calculated with Gaussian kernels). Additionnally, the result for the individual from above is displayed.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
@@ -1767,7 +1766,7 @@ Figure&nbsp;2.10: Illustration of <a href="#alg-3" class="quarto-xref">Algorithm
 <p>Then we plot the counterfactual obtained from sequential transport on <span class="math inline">\(X_2|X_1\)</span> (which corresponds to univariate conditional transport) for the individual, on the contour lines of both groups <span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph parameters</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>

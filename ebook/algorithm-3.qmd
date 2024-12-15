@@ -13,7 +13,7 @@ In this chapter, we illustrate the interpretable counterfactual fairness methodo
 
 ```{r, warning=FALSE, message=FALSE}
 #| code-fold: true
-#| code-summary: Required packages and definition of colours
+#| code-summary: Required packages and definition of colours.
 library(tidyverse)
 library(ks)
 library(dichromat)

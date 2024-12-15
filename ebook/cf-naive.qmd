@@ -19,7 +19,7 @@ In the article, we use four methods to create counterfactuals:
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -164,6 +164,7 @@ The unaware model is blind to the sensitive attribute. Hence, changing the sensi
 #| label: fig-naive-unaware-race-ref-black
 #| fig-width: 7
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 ggplot(
   unaware_naive_black |> mutate(
     group = case_when(
@@ -216,6 +217,7 @@ Then, we focus on the distribution of predicted scores forcounterfactual of Blac
 #| label: fig-naive-unaware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_naive_black |> 
     mutate(
@@ -293,6 +295,7 @@ aware_naive_black <-
 #| label: fig-naive-aware-race-ref-black
 #| code-fold: true
 #| fig-width: 8
+#| code-summary: Codes used to create the Figure.
 ggplot(
   aware_naive_black |> mutate(
     group = case_when(
@@ -337,6 +340,7 @@ Then, we focus on the distribution of predicted scores forcounterfactual of Blac
 #| label: fig-naive-aware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_naive_black |> 
     mutate(

@@ -13,7 +13,7 @@ In this chapter, we illustrate the interpretable counterfactual fairness methodo
 
 ```{r, warning=FALSE, message=FALSE}
 #| code-fold: true
-#| code-summary: Required packages and definition of colours
+#| code-summary: Required packages and definition of colours.
 library(tidyverse)
 library(ks)
 library(dichromat)
@@ -189,6 +189,7 @@ vx1_example_1_mid # middle cells in dimension 1 for group 1
 #| fig-cap: Example with a grid with 10 cells created in each group (0 in green and 1 in yellow). The observed values are represented by the dots. The crosses represent the millde of the cells.
 #| label: fig-example-grid
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx1_example_0*0, 
@@ -223,6 +224,7 @@ Instead of being in group $s=0$, we would like it to be in group $s=1$. Assume h
 #| fig-cap: The individual from group $s=0$ for which we want to get a counterfactual
 #| label: fig-example-grid-indiv
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx1_example_0*0, 
@@ -257,6 +259,7 @@ x1 <- D_SXY_0[id_indiv, "X1"]
 #| fig-cap: The cell for the $x_1$ dimension in which that individual belongs to
 #| label: fig-example-grid-indiv-cell
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx1_example_0*0, 
@@ -303,6 +306,7 @@ The c.d.f. in the identified cell, $F_{x_1|s=0}[i_0]$, is:
 #| fig-cap: The colour of the cells depend on the cumulative distribution for the point in the middle of the grid
 #| label: fig-example-grid-indiv-quantiles-x1
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx1_example_0*0, 
@@ -364,6 +368,7 @@ And that point belongs in the following cell $\boldsymbol{g}_{x_1, k_1|s=0}$:
 #| fig-cap: The matched cell in the other group, and the transport of $x_1$ from $s=0$ to $s=1$
 #| label: fig-example-grid-indiv-matched-cell
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx1_example_0*0, 
@@ -435,6 +440,7 @@ The grids can be drawn, and we can display the contour:
 #| fig-cap: The individual of interest with its two coordinates, and the two estimated densities (one for $s=0$ and one for $s=1$)
 #| label: fig-example-x2-point
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -499,6 +505,7 @@ vx2_example_1_mid <-
 #| fig-cap: The transported point from $s=0$ to $s=1$ when sequentially transporting by $x_1$ and then by $x_2 | x_1$ will be in the blue rectangle
 #| label: fig-example-x2
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -579,6 +586,7 @@ vx2_example_0_mid <-
 #| fig-cap: The cell in which the inddividual belongs to in the second coordinate is identified
 #| label: fig-example-x2-identify-cell
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -679,6 +687,7 @@ Let us visualize the estimated c.d.f. in each cell of the complete grid in group
 #| fig-cap: The conditional c.d.f of $x_2 | x_1$ in group $s=0$.
 #| label: fig-example-x2-cdf
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -757,6 +766,7 @@ And the estimated conditional quantiles of $x_2 | x_1$ in the group $s=1$, $Q_{x
 #| fig-cap: The conditional quantiles of $x_2 | x_1$ in group $s=1$.
 #| label: fig-example-x2-quantile
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -855,6 +865,7 @@ tibble(S = 1, X1 = x1star, X2 = x2star) # counterfactual
 #| fig-cap: Transported value of ($s=0, x_1, x_2$) in group 0 to ($s=1, x_1^* = T_1*(x_1), x_2^* = T_2^*(x_2 | x_1)$)
 #| lable: fig-example-transported-v2
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2,2,0,0))
 plot(
   vx1_example_0, vx2_example_0, 
@@ -1159,6 +1170,7 @@ transport_x2_cond_x1 <-  function(x2, x1){
 #| fig-cap: Level curves for $(x_1, x_2) \rightarrow m(0, x_1, x_2)$ In the background, estimated density of $(s=0, x_1, x_2)$ (level curves).
 #| label: fig-level-curves-m0
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 par(mar = c(2,2,0,0))
@@ -1187,6 +1199,7 @@ axis(2)
 #| fig-cap: Level curves for $(x_1, x_2) \rightarrow m(1, x_1, x_2)$ In the background, estimated density of $(s=1, x_1, x_2)$ (level curves).
 #| label: fig-level-curves-m1
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 # Group 1

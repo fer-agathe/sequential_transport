@@ -10,7 +10,7 @@ This chapter demonstrates the sequential transport methodology applied to simula
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -41,7 +41,6 @@ colours <- c(
 # Seed
 set.seed(123)
 
-source("../functions/utils.R")
 source("../functions/graphs.R")
 ```
 
@@ -98,7 +97,7 @@ The contour lines of both bivariate Gaussian densities (corresponding to groups 
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-cap: Bivariate Gaussian densities within each group ($S=0$ on the left and $S=1$ on the right), estimated with a Gaussian kernel
 
 D_SXY0 <- D_SXY[D_SXY$S == 0, ]
@@ -155,7 +154,7 @@ We can then display the transported individual on the same plot as before.
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-cap: Bivariate Gaussian densities within each group ($S=0$ on the left and $S=1$ on the right), estimated with a Gaussian kernel. The red square is the multivariate OT of the point.
 
 # Plotting densities
@@ -373,7 +372,7 @@ Here, we plot the optimal transport curve for $X_1$ from subset $S=0$ to subset 
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-width: 4
 #| fig-height: 4
 #| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$"
@@ -465,7 +464,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_1$ (whi
 
 ```{r transport-x1-contour-lines, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 #| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
@@ -650,7 +649,7 @@ Here, we plot the optimal transport curve for $X_2|X_1$ from subset $S=0$ to sub
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-width: 4
 #| fig-height: 4
 #| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_1|X_2$ from $S=0$ to $S=1$"
@@ -737,7 +736,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_2|X_1$ 
 
 ```{r transport-x2-c-x1-contour-lines, fig.height = 4, fig.width = 4, fig.align = "center", dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-width: 4
 #| fig-height: 4
 #| fig-cap: "Illustration of @alg-1 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
@@ -1096,7 +1095,7 @@ First, we plot the matrix for subset $S=0$ and highlight the column correspondin
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 #| fig-cap: Matrix $F_{2|0}, with $k=15$. The vertical vector is $F_{2|0}[\cdot, i]$
@@ -1128,7 +1127,7 @@ Next, we plot the matrix for subset $S=1$ and highlight the column corresponding
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 #| fig-cap: Matrix $F_{2|1}, with $k=15$. The vertical vector is $F_{2|1}[\cdot, j]$
@@ -1190,7 +1189,7 @@ Here, we plot the optimal transport curve for $X_1$ from subset $S=0$ to subset 
 
 ```{r, dev.args = list(bg = 'transparent'), message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-height: 4
 #| fig-width: 4
 #| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$"
@@ -1286,7 +1285,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_1$ (whi
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. First step: transport of $X_1$ from $S=0$ to $S=1$. The green vertical line show the coordinate $x_1$ of the individual. The yellow vertical line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: fig-transport-x1-contour-lines-faster
 
@@ -1384,7 +1383,7 @@ Here, we plot the optimal transport curve for $X_2|X_1$ from subset $S=0$ to sub
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_1|X_2$ from $S=0$ to $S=1$"
 #| label: fig-plot-transport-x2-c-x1-faster
 
@@ -1471,7 +1470,7 @@ Then we plot the counterfactual obtained from sequential transport on $X_2|X_1$ 
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 #| fig-cap: "Illustration of @alg-3 for DAG in @fig-DAG-a with simulated data. Second step: transport of $X_2|X_1$ from $S=0$ to $S=1$. The green horizontal line show the coordinate $x_2$ of the individual. The yellow horizontal line is the transported value in group $S=1$. The red square is the multivariate OT of the point."
 #| label: fig-transport-x2-c-x1-contour-lines-faster
 

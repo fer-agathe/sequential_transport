@@ -401,7 +401,7 @@ Objectives
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the setting codes</summary>
+<summary>Required packages and definition of colours.</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages----</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ks)</span>
@@ -503,7 +503,7 @@ Objectives
 <p>We can visualize the estimated density of the two covariates in each group (<span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>).</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Display the codes used to create the Figure.</summary>
+<summary>Codes used to create the Figure.</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Computation of smoothing parameters (bandwidth) for kernel density estimation</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY_0[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>H1 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(D_SXY_1[, <span class="fu">c</span>(<span class="st">"X1"</span>,<span class="st">"X2"</span>)])</span>
@@ -606,7 +606,10 @@ Figure&nbsp;5.1: Bivariate Gaussian densities within each group <span style="col
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">asis_output</span>(res)</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, in the document:</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -1185,6 +1188,7 @@ Figure&nbsp;5.5: In the background, level curves for<span class="math inline">\(
 </div>
 </div>
 <p>Let us now consider all the points from <span class="math inline">\(S=0\)</span> and not a single one.</p>
+<p>We estimate the densities of <span class="math inline">\((T(X_1), T(X_2))\)</span> in each of the four configurations. We can then plot these estimated densities on top of those previously estimated on <span class="math inline">\((X_1, X_2)\)</span> using the factuals.</p>
 <p>We define a table with the counterfactuals obtained with multivariate optimal transport on the subgroup of <span class="math inline">\(S=0\)</span>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>tb_transpoort_ot <span class="ot">&lt;-</span> counterfactuals_ot <span class="sc">|&gt;</span> </span>
@@ -1192,164 +1196,145 @@ Figure&nbsp;5.5: In the background, level curves for<span class="math inline">\(
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">S =</span> D_SXY<span class="sc">$</span>S) <span class="sc">|&gt;</span> </span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(S <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>And we can bind all the counterfactuals in a single table (obtained with multivariate optimal transport, and with the three different causal dags assumed for sequential transport).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>tb_results <span class="ot">&lt;-</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  tb_transpoort_ot <span class="sc">|&gt;</span> </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>(), <span class="at">type =</span> <span class="st">"OT"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(trans_indep_correct<span class="sc">$</span>transported) <span class="sc">|&gt;</span> </span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>(), <span class="at">type =</span> <span class="st">"correct"</span>)</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(trans_indep_inc_x1_then_x2<span class="sc">$</span>transported) <span class="sc">|&gt;</span> </span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>(), <span class="at">type =</span> <span class="st">"inc_x1_then_x2"</span>)</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(trans_indep_inc_x2_then_x1<span class="sc">$</span>transported) <span class="sc">|&gt;</span> </span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>(), <span class="at">type =</span> <span class="st">"inc_x2_then_x1"</span>)</span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>We estimate the densities of <span class="math inline">\((T(X_1), T(X_2))\)</span> in each of the four configurations. We can then plot these estimated densities on top of those previously estimated on <span class="math inline">\((X_1, X_2)\)</span> using the factuals.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Codes to create the Figure.</summary>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>H1_OT <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(tb_transpoort_ot)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>H1_indep_correct <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_correct<span class="sc">$</span>transported))</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>H1_indep_inc_x1_then_x2 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_inc_x1_then_x2<span class="sc">$</span>transported))</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>H1_indep_inc_x2_then_x1 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_inc_x2_then_x1<span class="sc">$</span>transported))</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>f1_2d_OT <span class="ot">&lt;-</span> <span class="fu">kde</span>(tb_transpoort_ot, <span class="at">H =</span> H1_OT, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_correct <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_correct<span class="sc">$</span>transported), </span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_correct, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_inc_x1_then_x2 <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_inc_x1_then_x2<span class="sc">$</span>transported), </span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_inc_x1_then_x2, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_inc_x2_then_x1 <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
-<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_inc_x2_then_x1<span class="sc">$</span>transported), </span>
-<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_inc_x2_then_x1, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
-<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>x_lim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">5</span>, <span class="fl">2.5</span>)</span>
-<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>y_lim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">25</span>, <span class="dv">3</span>)</span>
-<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting densities</span></span>
-<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
-<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, </span>
-<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
-<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
-<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Optimal transport</span></span>
-<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a>  f1_2d_OT<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d_OT<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d_OT<span class="sc">$</span>estimate, </span>
-<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_ot, <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-43"><a href="#cb53-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb53-44"><a href="#cb53-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, <span class="st">"OT"</span>),</span>
-<span id="cb53-45"><a href="#cb53-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
-<span id="cb53-46"><a href="#cb53-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_ot), <span class="at">bty=</span><span class="st">"n"</span></span>
-<span id="cb53-47"><a href="#cb53-47" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-48"><a href="#cb53-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-49"><a href="#cb53-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-50"><a href="#cb53-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-51"><a href="#cb53-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, correct DAG</span></span>
-<span id="cb53-52"><a href="#cb53-52" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
-<span id="cb53-53"><a href="#cb53-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
-<span id="cb53-54"><a href="#cb53-54" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-55"><a href="#cb53-55" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-56"><a href="#cb53-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
-<span id="cb53-57"><a href="#cb53-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
-<span id="cb53-58"><a href="#cb53-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-59"><a href="#cb53-59" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb53-60"><a href="#cb53-60" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb53-61"><a href="#cb53-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
-<span id="cb53-62"><a href="#cb53-62" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-63"><a href="#cb53-63" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-64"><a href="#cb53-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-65"><a href="#cb53-65" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-66"><a href="#cb53-66" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-67"><a href="#cb53-67" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_correct<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d_indep_correct<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
-<span id="cb53-68"><a href="#cb53-68" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_correct<span class="sc">$</span>estimate, </span>
-<span id="cb53-69"><a href="#cb53-69" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_correct, <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-70"><a href="#cb53-70" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-71"><a href="#cb53-71" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb53-72"><a href="#cb53-72" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, <span class="st">"Seq. T: Correct DAG"</span>),</span>
-<span id="cb53-73"><a href="#cb53-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
-<span id="cb53-74"><a href="#cb53-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_correct), <span class="at">bty=</span><span class="st">"n"</span></span>
-<span id="cb53-75"><a href="#cb53-75" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-76"><a href="#cb53-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-77"><a href="#cb53-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-78"><a href="#cb53-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, Wrong DAG: assuming X2 depends on X1</span></span>
-<span id="cb53-79"><a href="#cb53-79" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
-<span id="cb53-80"><a href="#cb53-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
-<span id="cb53-81"><a href="#cb53-81" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-82"><a href="#cb53-82" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-83"><a href="#cb53-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
-<span id="cb53-84"><a href="#cb53-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
-<span id="cb53-85"><a href="#cb53-85" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-86"><a href="#cb53-86" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb53-87"><a href="#cb53-87" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb53-88"><a href="#cb53-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
-<span id="cb53-89"><a href="#cb53-89" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-90"><a href="#cb53-90" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-91"><a href="#cb53-91" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-92"><a href="#cb53-92" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-93"><a href="#cb53-93" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-94"><a href="#cb53-94" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], </span>
-<span id="cb53-95"><a href="#cb53-95" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
-<span id="cb53-96"><a href="#cb53-96" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>estimate, </span>
-<span id="cb53-97"><a href="#cb53-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_inc_x1_then_x2, <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-98"><a href="#cb53-98" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-99"><a href="#cb53-99" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb53-100"><a href="#cb53-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(</span>
-<span id="cb53-101"><a href="#cb53-101" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, </span>
-<span id="cb53-102"><a href="#cb53-102" aria-hidden="true" tabindex="-1"></a>    latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"Seq. T.: Assuming $X_1 </span><span class="sc">\\</span><span class="st">rightarrow X_2$"</span>)</span>
-<span id="cb53-103"><a href="#cb53-103" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb53-104"><a href="#cb53-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
-<span id="cb53-105"><a href="#cb53-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_inc_x1_then_x2), <span class="at">bty=</span><span class="st">"n"</span></span>
-<span id="cb53-106"><a href="#cb53-106" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-107"><a href="#cb53-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-108"><a href="#cb53-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, Wrong DAG: assuming X1 depends on X2</span></span>
-<span id="cb53-109"><a href="#cb53-109" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
-<span id="cb53-110"><a href="#cb53-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
-<span id="cb53-111"><a href="#cb53-111" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-112"><a href="#cb53-112" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-113"><a href="#cb53-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
-<span id="cb53-114"><a href="#cb53-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
-<span id="cb53-115"><a href="#cb53-115" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-116"><a href="#cb53-116" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb53-117"><a href="#cb53-117" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb53-118"><a href="#cb53-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
-<span id="cb53-119"><a href="#cb53-119" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-120"><a href="#cb53-120" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
-<span id="cb53-121"><a href="#cb53-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-122"><a href="#cb53-122" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-123"><a href="#cb53-123" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb53-124"><a href="#cb53-124" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], </span>
-<span id="cb53-125"><a href="#cb53-125" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
-<span id="cb53-126"><a href="#cb53-126" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>estimate, </span>
-<span id="cb53-127"><a href="#cb53-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_inc_x2_then_x1, <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb53-128"><a href="#cb53-128" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-129"><a href="#cb53-129" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb53-130"><a href="#cb53-130" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(</span>
-<span id="cb53-131"><a href="#cb53-131" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>,</span>
-<span id="cb53-132"><a href="#cb53-132" aria-hidden="true" tabindex="-1"></a>    latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"Seq. T.: Assuming $X_2 </span><span class="sc">\\</span><span class="st">rightarrow X_1$"</span>)</span>
-<span id="cb53-133"><a href="#cb53-133" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb53-134"><a href="#cb53-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
-<span id="cb53-135"><a href="#cb53-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_inc_x2_then_x1), <span class="at">bty=</span><span class="st">"n"</span></span>
-<span id="cb53-136"><a href="#cb53-136" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>H1_OT <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(tb_transpoort_ot)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>H1_indep_correct <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_correct<span class="sc">$</span>transported))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>H1_indep_inc_x1_then_x2 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_inc_x1_then_x2<span class="sc">$</span>transported))</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>H1_indep_inc_x2_then_x1 <span class="ot">&lt;-</span> <span class="fu">Hpi</span>(<span class="fu">as_tibble</span>(trans_indep_inc_x2_then_x1<span class="sc">$</span>transported))</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>f1_2d_OT <span class="ot">&lt;-</span> <span class="fu">kde</span>(tb_transpoort_ot, <span class="at">H =</span> H1_OT, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_correct <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_correct<span class="sc">$</span>transported), </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_correct, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_inc_x1_then_x2 <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_inc_x1_then_x2<span class="sc">$</span>transported), </span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_inc_x1_then_x2, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>f1_2d_indep_inc_x2_then_x1 <span class="ot">&lt;-</span> <span class="fu">kde</span>(</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(trans_indep_inc_x2_then_x1<span class="sc">$</span>transported), </span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H1_indep_inc_x2_then_x1, <span class="at">xmin =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>), <span class="at">xmax =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>x_lim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">5</span>, <span class="fl">2.5</span>)</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>y_lim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">25</span>, <span class="dv">3</span>)</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting densities</span></span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, </span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Optimal transport</span></span>
+<span id="cb52-39"><a href="#cb52-39" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-40"><a href="#cb52-40" aria-hidden="true" tabindex="-1"></a>  f1_2d_OT<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d_OT<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d_OT<span class="sc">$</span>estimate, </span>
+<span id="cb52-41"><a href="#cb52-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_ot, <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-42"><a href="#cb52-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-43"><a href="#cb52-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb52-44"><a href="#cb52-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, <span class="st">"OT"</span>),</span>
+<span id="cb52-45"><a href="#cb52-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
+<span id="cb52-46"><a href="#cb52-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_ot), <span class="at">bty=</span><span class="st">"n"</span></span>
+<span id="cb52-47"><a href="#cb52-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-48"><a href="#cb52-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-49"><a href="#cb52-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-50"><a href="#cb52-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-51"><a href="#cb52-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, correct DAG</span></span>
+<span id="cb52-52"><a href="#cb52-52" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
+<span id="cb52-53"><a href="#cb52-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
+<span id="cb52-54"><a href="#cb52-54" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-55"><a href="#cb52-55" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-56"><a href="#cb52-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb52-57"><a href="#cb52-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
+<span id="cb52-58"><a href="#cb52-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-59"><a href="#cb52-59" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb52-60"><a href="#cb52-60" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb52-61"><a href="#cb52-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
+<span id="cb52-62"><a href="#cb52-62" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-63"><a href="#cb52-63" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-64"><a href="#cb52-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-65"><a href="#cb52-65" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-66"><a href="#cb52-66" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-67"><a href="#cb52-67" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_correct<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d_indep_correct<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
+<span id="cb52-68"><a href="#cb52-68" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_correct<span class="sc">$</span>estimate, </span>
+<span id="cb52-69"><a href="#cb52-69" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_correct, <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-70"><a href="#cb52-70" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-71"><a href="#cb52-71" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb52-72"><a href="#cb52-72" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, <span class="st">"Seq. T: Correct DAG"</span>),</span>
+<span id="cb52-73"><a href="#cb52-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
+<span id="cb52-74"><a href="#cb52-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_correct), <span class="at">bty=</span><span class="st">"n"</span></span>
+<span id="cb52-75"><a href="#cb52-75" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-76"><a href="#cb52-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-77"><a href="#cb52-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-78"><a href="#cb52-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, Wrong DAG: assuming X2 depends on X1</span></span>
+<span id="cb52-79"><a href="#cb52-79" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
+<span id="cb52-80"><a href="#cb52-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
+<span id="cb52-81"><a href="#cb52-81" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-82"><a href="#cb52-82" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-83"><a href="#cb52-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb52-84"><a href="#cb52-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
+<span id="cb52-85"><a href="#cb52-85" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-86"><a href="#cb52-86" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb52-87"><a href="#cb52-87" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb52-88"><a href="#cb52-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
+<span id="cb52-89"><a href="#cb52-89" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-90"><a href="#cb52-90" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-91"><a href="#cb52-91" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-92"><a href="#cb52-92" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-93"><a href="#cb52-93" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-94"><a href="#cb52-94" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], </span>
+<span id="cb52-95"><a href="#cb52-95" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
+<span id="cb52-96"><a href="#cb52-96" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x1_then_x2<span class="sc">$</span>estimate, </span>
+<span id="cb52-97"><a href="#cb52-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_inc_x1_then_x2, <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-98"><a href="#cb52-98" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-99"><a href="#cb52-99" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb52-100"><a href="#cb52-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(</span>
+<span id="cb52-101"><a href="#cb52-101" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>, </span>
+<span id="cb52-102"><a href="#cb52-102" aria-hidden="true" tabindex="-1"></a>    latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"Seq. T.: Assuming $X_1 </span><span class="sc">\\</span><span class="st">rightarrow X_2$"</span>)</span>
+<span id="cb52-103"><a href="#cb52-103" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb52-104"><a href="#cb52-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
+<span id="cb52-105"><a href="#cb52-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_inc_x1_then_x2), <span class="at">bty=</span><span class="st">"n"</span></span>
+<span id="cb52-106"><a href="#cb52-106" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-107"><a href="#cb52-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-108"><a href="#cb52-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1, Sequential transport, Wrong DAG: assuming X1 depends on X2</span></span>
+<span id="cb52-109"><a href="#cb52-109" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mar = c(2,2,0,0))</span></span>
+<span id="cb52-110"><a href="#cb52-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=0</span></span>
+<span id="cb52-111"><a href="#cb52-111" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-112"><a href="#cb52-112" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f0_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-113"><a href="#cb52-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"A"</span>], <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb52-114"><a href="#cb52-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> x_lim, <span class="at">ylim =</span> y_lim</span>
+<span id="cb52-115"><a href="#cb52-115" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-116"><a href="#cb52-116" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb52-117"><a href="#cb52-117" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb52-118"><a href="#cb52-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Group S=1</span></span>
+<span id="cb52-119"><a href="#cb52-119" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-120"><a href="#cb52-120" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], f1_2d<span class="sc">$</span>estimate, </span>
+<span id="cb52-121"><a href="#cb52-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours[<span class="st">"B"</span>], <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-122"><a href="#cb52-122" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-123"><a href="#cb52-123" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb52-124"><a href="#cb52-124" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>eval.point[[<span class="dv">1</span>]], </span>
+<span id="cb52-125"><a href="#cb52-125" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>eval.point[[<span class="dv">2</span>]], </span>
+<span id="cb52-126"><a href="#cb52-126" aria-hidden="true" tabindex="-1"></a>  f1_2d_indep_inc_x2_then_x1<span class="sc">$</span>estimate, </span>
+<span id="cb52-127"><a href="#cb52-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colour_inc_x2_then_x1, <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-128"><a href="#cb52-128" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-129"><a href="#cb52-129" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb52-130"><a href="#cb52-130" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(</span>
+<span id="cb52-131"><a href="#cb52-131" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Obs S=0"</span>, <span class="st">"Obs S=1"</span>,</span>
+<span id="cb52-132"><a href="#cb52-132" aria-hidden="true" tabindex="-1"></a>    latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"Seq. T.: Assuming $X_2 </span><span class="sc">\\</span><span class="st">rightarrow X_1$"</span>)</span>
+<span id="cb52-133"><a href="#cb52-133" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb52-134"><a href="#cb52-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty=</span><span class="dv">1</span>,</span>
+<span id="cb52-135"><a href="#cb52-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(colours[<span class="st">"A"</span>], colours[<span class="st">"B"</span>], colour_inc_x2_then_x1), <span class="at">bty=</span><span class="st">"n"</span></span>
+<span id="cb52-136"><a href="#cb52-136" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-densities-x1-x2-fact-counterfact" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1364,6 +1349,24 @@ Figure&nbsp;5.6: Estimated densities of <span class="math inline">\((X_1, X_2)\)
 </div>
 </div>
 </div>
+<!-- And we can bind all the counterfactuals in a single table (obtained with multivariate optimal transport, and with the three different causal dags assumed for sequential transport). -->
+<!-- ```{r define-tb_results} -->
+<!-- tb_results <- -->
+<!--   tb_transpoort_ot |>  -->
+<!--   mutate(id = row_number(), type = "OT") |>  -->
+<!--   bind_rows( -->
+<!--     as_tibble(trans_indep_correct$transported) |>  -->
+<!--       mutate(id = row_number(), type = "correct") -->
+<!--   ) |>  -->
+<!--   bind_rows( -->
+<!--     as_tibble(trans_indep_inc_x1_then_x2$transported) |>  -->
+<!--       mutate(id = row_number(), type = "inc_x1_then_x2") -->
+<!--   ) |>  -->
+<!--   bind_rows( -->
+<!--     as_tibble(trans_indep_inc_x2_then_x1$transported) |>  -->
+<!--       mutate(id = row_number(), type = "inc_x2_then_x1") -->
+<!--   ) -->
+<!-- ``` -->
 
 
 </section>

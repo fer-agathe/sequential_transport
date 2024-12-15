@@ -10,7 +10,7 @@ This chapter demonstrates Optimal Transport (OT) methodology applied to simulate
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -93,7 +93,7 @@ We then plot the Optimal Transport line between $X_1|S=0$ and $X_1|S=1$:
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 
 # Graph parameters
 limA <- c(-5, 5)
@@ -224,7 +224,7 @@ We then plot the Optimal Transport line between $X_1|S=0$ and $X_1|S=1$:
 #| fig-width: 4
 #| fig-height: 4
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure
+#| code-summary: Codes used to create the Figure.
 
 {
   mat <- matrix(c(1, 2, 0, 3), 2)
@@ -391,6 +391,7 @@ that are both linear mappings. Let us visualize this.
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
 
@@ -626,7 +627,7 @@ Now, let us transport first along the $y$ axis, and then along the $x$ axis.
 #| fig-height: 4
 #| fig-width: 4
 #| code-fold: true
-
+#| code-summary: Codes used to create the Figure.
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
 
@@ -959,6 +960,7 @@ In @fig-gauss-seq-rotation-1, we can visualize the set of all counterfactuals $\
 #| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions. The red square shows the global optimal tranpport.
 #| label: fig-gauss-seq-rotation-1
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 angle <- function(theta,
                   A = c(-2.2,-2)) {
   
@@ -1064,6 +1066,7 @@ We can consider another starting point.
 #| fig-cap: Gaussian conditional optimal transports. The process begins with a univariate transport along the direction $\overrightarrow{u}$ (using $\displaystyle T^\star_{\overrightarrow{u}}$) followed by a transport along the orthogonal direction $\displaystyle \overrightarrow{u}^\perp$, on conditional distributions (using $\displaystyle T^\star_{\overrightarrow{u}^\perp|{\overrightarrow{u}}}$). The blue point is the starting point. The curves in the upper right corner represent the set of all transport maps of the same point (bottom left corner) for all possible directions $\displaystyle \overrightarrow{u}$, the black points correspond to classical $x$ (horizontal) and $y$ (vertical) directions. The red square shows the global optimal tranpport.
 #| label: fig-gauss-seq-rotation-2
 #| code-fold: true
+#| code-summary: Codes used to create the Figure.
 # Consider the following starting point
 A = c(-2.2, .5)
 

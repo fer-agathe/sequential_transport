@@ -12,7 +12,7 @@ This chapter presents the law school dataset (@Wightman1998LSACNL) used in the n
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -37,12 +37,18 @@ global_theme <- function() {
         size = size_title, 
         hjust = 0.5
       ),
-      plot.subtitle = element_text(hjust = 0.5)
+      plot.subtitle = element_text(hjust = 0.5),
+      legend.position = "bottom"
     )
 }
 
 # Seed
 set.seed(2025)
+colours_all <- c(
+  "source" = "#00A08A",
+  "reference" = "#F2AD00",
+  "naive" = "#000000"
+)
 ```
 
 
@@ -140,6 +146,8 @@ df_gender <- df |>
 ```{r plot-density-race, message=FALSE, warning=FALSE}
 #| fig-cap: Distribution of the standardized first-year law school grades among the two groups, when $S$ is the race
 #| label: fig-density-zfya-race
+#| code-fold: true
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = df_race, 
   mapping = aes(x = Y, fill = S)
@@ -149,6 +157,13 @@ ggplot(
     alpha = 0.5, position = "identity", binwidth = 0.5
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    "S",
+    values = c(
+      "Black" = colours_all[["source"]], 
+      "White" = colours_all[["reference"]]
+    )
+  ) +
   labs(
     title = "Race",
     x = "Y",
@@ -163,6 +178,8 @@ ggplot(
 ```{r plot-density-gender, message=FALSE, warning=FALSE}
 #| fig-cap: Distribution of the standardized first-year law school grades among the two groups, when $S$ is the gender
 #| label: fig-density-zfya-gender
+#| code-fold: true
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = df_gender, 
   mapping = aes(x = Y, fill = S)) +
@@ -171,6 +188,13 @@ ggplot(
     alpha = 0.5, position = "identity", binwidth = 0.5
   ) +
   geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    "S",
+    values = c(
+      "Black" = colours_all[["source"]], 
+      "White" = colours_all[["reference"]]
+    )
+  ) +
   labs(
     title = "Gender",
     x = "Y",

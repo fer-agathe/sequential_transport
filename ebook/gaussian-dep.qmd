@@ -12,7 +12,7 @@ In this chapter, we generate
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and definition of colours.
 
 # Required packages----
 library(tidyverse)
@@ -118,7 +118,7 @@ We can visualize the estimated density of the two covariates in each group ($S=0
 
 ```{r}
 #| code-fold: true
-#| code-summary: Display the codes used to create the Figure.
+#| code-summary: Codes used to create the Figure.
 #| label: fig-gaussian-indep-contour
 #| fig-cap: Bivariate Gaussian densities within each group <span style="color:#00A08A;">($S=0$)</span> on the left and <span style="color:#F2AD00;">$S=1$</span> on the right), estimated with a Gaussian kernel.
 # Computation of smoothing parameters (bandwidth) for kernel density estimation
@@ -215,6 +215,9 @@ add_tikz_graph <- function(tikz_code,
   )
   knitr::asis_output(res)
 }
+
+# Then, in the document:
+# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_indep_correct), label = "fig-causal-graph-indep-correct", caption = "\"Assumed Causal Graph: Correct Model\"", echo = "false")`
 ```
 
 
@@ -718,6 +721,14 @@ Let us now consider all the points from $S=0$ and not a single one.
 
 We estimate the densities of $(T(X_1), T(X_2))$ in each of the four configurations. We can then plot these estimated densities on top of those previously estimated on $(X_1, X_2)$ using the factuals.
 
+We define a table with the counterfactuals obtained with multivariate optimal transport on the subgroup of $S=0$:
+```{r define-tb_transpoort_ot}
+tb_transpoort_ot <- counterfactuals_ot |> 
+  slice(1:nrow(D_SXY)) |> # remove last observation: this is the new point
+  mutate(S = D_SXY$S) |> 
+  filter(S == 0) |> select(-S)
+```
+
 ```{r}
 #| code-fold: true
 #| code-summary: Codes to create the Figure.
@@ -863,13 +874,7 @@ legend(
 )
 ```
 
-We define a table with the counterfactuals obtained with multivariate optimal transport on the subgroup of $S=0$:
-```{r define-tb_transpoort_ot}
-tb_transpoort_ot <- counterfactuals_ot |> 
-  slice(1:nrow(D_SXY)) |> # remove last observation: this is the new point
-  mutate(S = D_SXY$S) |> 
-  filter(S == 0) |> select(-S)
-```
+
 
 <!-- And we can bind all the counterfactuals in a single table (obtained with multivariate optimal transport, and with the three different causal dags assumed for sequential transport). -->
 <!-- ```{r define-tb_results} -->

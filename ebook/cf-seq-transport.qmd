@@ -21,7 +21,7 @@ In the article, we use three methods to create counterfactuals:
 
 ```{r setup, message=FALSE, warning=FALSE}
 #| code-fold: true
-#| code-summary: Display the setting codes
+#| code-summary: Required packages and colours definitions.
 
 # Required packages----
 library(tidyverse)
@@ -458,6 +458,7 @@ unaware_seq_black <- bind_rows(
 #| label: fig-seq-unaware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_seq_black |> 
     mutate(
@@ -511,6 +512,7 @@ ggplot(
 #| label: fig-seq-aware-race-ref-white
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_seq_black |> 
     mutate(
@@ -571,6 +573,7 @@ Then, we focus on the distribution of predicted scores forcounterfactual of Blac
 #| label: fig-seq-unaware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = unaware_seq_black |> 
     mutate(
@@ -623,6 +626,7 @@ ggplot(
 #| label: fig-seq-aware-race-ref-white-source-only
 #| code-fold: true
 #| fig-width: 7
+#| code-summary: Codes used to create the Figure.
 ggplot(
   data = aware_seq_black |> 
     mutate(
