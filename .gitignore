@@ -2,68 +2,51 @@
 .Rhistory
 .Rapp.history
 .DS_Store
-
 # Session Data files
 #.RData
 .Ruserdata
-
 # Example code in package build process
 *-Ex.R
-
 # Output files from R CMD build
 /*.tar.gz
-
 # Output files from R CMD check
 /*.Rcheck/
-
 # RStudio files
 .Rproj.user/
 .Rproj.user/*
 .Rproj.user/**
-
 # RStudio Project Files
 *.Rproj
-
 # RStudio settings
 .Rproj.user/
-
 # Default cache directory for R packages
 .Rpackages
-
 # Packrat dependency manager
 packrat/
 packrat/*
-
 # renv dependency manager
 renv/
 renv/*
-
 # Generated documentation files
 #docs/
-
 # Compiled shared objects (e.g., C, C++)
 *.o
 *.so
 *.dll
-
 # Java class files
 *.class
-
 # JAR files
 *.jar
-
 # Temporary files created by R
 *.rda
 *.rds
 #*.RData
 *.Rhistory
-
 # Output files
 *.out
 *.log
-
 /.quarto/
-
 old/
 replication-codes
 overleaf
+test_ewen_dep.R
