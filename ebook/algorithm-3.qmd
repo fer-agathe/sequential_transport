@@ -726,6 +726,8 @@ In @fig-comparison-ot-seq-t, we plot observations from the initial group in gree
 #| code-fold: true
 #| fig-cap: "Optimal transport and sequential transport with algorithm 3"
 #| label: fig-comparison-ot-seq-t
+#| fig-height: 4
+#| fig-width: 4
 plot(
   D_SXY_0$X1, D_SXY_0$X2, 
   col = "#0B775E", pch = 19, cex = .5,
@@ -771,6 +773,8 @@ We can visualize the distance of each transported individual depending on the me
 #| code-fold: true
 #| fig-cap: "Comparison of Optimal transport and sequential transport"
 #| label: fig-comparison-ot-seq-t-without-obs
+#| fig-height: 4
+#| fig-width: 4
 plot(
   tb_results_col$X1_OT, tb_results_col$X2_OT, 
   col = "#C93312", pch = 19, cex = .5,
@@ -800,6 +804,8 @@ Let us compare the bivariate estimated densities.
 #| code-fold: true
 #| fig-cap: "Estimated densities in both groups, and in the target group using counterfactuals obtained with either optimal transport or sequential transport (moving first $x_1$, then $x_2$)."
 #| label: fig-comparison-ot-seq-t-density
+#| fig-height: 4
+#| fig-width: 4
 # Computation of smoothing parameters (bandwidth) for kernel density estimation
 H0 <- Hpi(D_SXY0[, c("X1", "X2")])
 H1 <- Hpi(D_SXY1[, c("X1", "X2")])
@@ -1229,6 +1235,8 @@ Then, we can plot all this information on a graph. The arrows show the path from
 #| code-fold: true
 #| fig-cap: "In the background, level curves for $(x_1,x_2)\\mapsto m(0,x_1,x_2)$. The blue point corresponds to the individual $(s,x_1,x_2)=(s=0,-2,-1)$ (predicted 18.2% by model $m$, and 7.6% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged)."
 #| label: fig-counterfactuals-new-individual-1
+#| fig-height: 4
+#| fig-width: 4
 par(mar = c(2, 2, 0, 0))
 # Group 0
 ## Estimated density: level curves for (x1, x2) -> m(0, x1, x2)
@@ -1274,6 +1282,8 @@ text(
 ```{r}
 #| code-fold: true
 #| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. Two counterfactuals are depicted by the black dots $(s=1,x_1^\\star,x_2^\\star)$ according to a causal graph where $x_2$ depends on $x_1$ (bottom left path, predicted 61.4%) and a causal graph where $x_1$ depends on $x_2$ (top left path, predicted 56.5%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 56.5%)."
+#| fig-height: 4
+#| fig-width: 4
 #| label: fig-counterfactuals-new-individual-2
 par(mar = c(2, 2, 0, 0))
 # Group 0

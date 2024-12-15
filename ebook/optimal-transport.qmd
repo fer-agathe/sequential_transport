@@ -392,7 +392,7 @@ that are both linear mappings. Let us visualize this.
 #| fig-width: 4
 #| code-fold: true
 #| code-summary: Codes used to create the Figure.
-par(mar = c(2.5, 2.5, 0, 0))
+par(mar = c(3.5, 4, 0, 0))
 par(mfrow = c(1, 1))
 
 # Assumed cdf for the individual of interest
@@ -628,7 +628,7 @@ Now, let us transport first along the $y$ axis, and then along the $x$ axis.
 #| fig-width: 4
 #| code-fold: true
 #| code-summary: Codes used to create the Figure.
-par(mar = c(2.5, 2.5, 0, 0))
+par(mar = c(3.5, 4, 0, 0))
 par(mfrow = c(1, 1))
 
 # Mean and variance matrix in both groups
