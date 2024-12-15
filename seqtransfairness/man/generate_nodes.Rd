@@ -4,12 +4,14 @@
 \alias{generate_nodes}
 \title{Function to generate TikZ code for nodes}
 \usage{
-generate_nodes(coordinates, name_nodes)
+generate_nodes(coordinates, name_nodes, colour_nodes = "yellow!60")
 }
 \arguments{
 \item{coordinates}{Coordinates of the nodes.}
 
 \item{name_nodes}{Vector of names of the nodes.}
+
+\item{colour_nodes}{Colour of nodes. Default to "yellow!60".}
 }
 \description{
 Function to generate TikZ code for nodes

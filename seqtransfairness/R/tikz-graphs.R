@@ -42,14 +42,22 @@ generate_coordinates_graph <- function(adj_mat) {
 #'
 #' @param coordinates Coordinates of the nodes.
 #' @param name_nodes Vector of names of the nodes.
-generate_nodes <- function(coordinates, name_nodes) {
+#' @param colour_nodes Colour of nodes. Default to "yellow!60".
+generate_nodes <- function(coordinates,
+                           name_nodes,
+                           colour_nodes = "yellow!60") {
   tikz_nodes <- ""
+  if (length(colour_nodes) == 1)
+    colour_nodes <- rep(colour_nodes, length(name_nodes))
   for (i in seq_along(coordinates)) {
     x <- coordinates[[i]][1]
     y <- coordinates[[i]][2]
     nm <- name_nodes[i]
+    cn <- colour_nodes[i]
     ligne <- paste0(
-      sprintf("\\node[fill=yellow!60] (n%d) at (%.1f, %.1f) {", i, x, y),
+      "\\node[fill=", cn,
+      "]",
+      sprintf(" (n%d) at (%.1f, %.1f) {", i, x, y),
       nm, "};\n"
     )
     tikz_nodes <- paste0(tikz_nodes, ligne)
@@ -74,13 +82,16 @@ generate_edges <- function(edges) {
 #' Tikz for Causal Graph
 #'
 #' @param adj_mat Adjacency matrix, with named columns and rows.
+#' @param colour_nodes Colour of nodes. Default to "yellow!60". If specific
+#'        colour is desired for a node, a vector with colours in the same order
+#'        as the column names must be provided.
 #' @export
-causal_graph_tikz <- function(adj_mat) {
+causal_graph_tikz <- function(adj_mat, colour_nodes = "yellow!60") {
   coords_g <- generate_coordinates_graph(adj_mat)
   coordinates <- coords_g$coordinates
   edges <- coords_g$edges
   name_nodes <- coords_g$name_nodes
-  nodes <- generate_nodes(coordinates, name_nodes)
+  nodes <- generate_nodes(coordinates, name_nodes, colour_nodes)
   edges <- generate_edges(edges)
   tikz_code <- paste0(
     "\\begin{tikzpicture}\n", nodes, edges, "\\end{tikzpicture}"
