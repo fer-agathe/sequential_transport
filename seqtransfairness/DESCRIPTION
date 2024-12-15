@@ -13,8 +13,10 @@ Imports:
     cluster,
     dplyr,
     Hmisc,
+    igraph,
     nnet,
     purrr,
     rlang,
+    stringr,
     tidyselect
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
