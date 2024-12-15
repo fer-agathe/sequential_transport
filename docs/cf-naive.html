@@ -415,7 +415,7 @@ Objectives
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>colours_all <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"source"</span> <span class="ot">=</span> <span class="st">"#00A08A"</span>,</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reference"</span> <span class="ot">=</span> <span class="st">"#F2AD00"</span>,</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"naive"</span> <span class="ot">=</span> <span class="st">"#000000"</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"naive"</span> <span class="ot">=</span> <span class="st">"gray"</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -652,13 +652,13 @@ Figure&nbsp;8.2: Distribution of Predicted Scores for Minority Class (Black), Un
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  aware_naive_black <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="fu">case_when</span>(</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      S_origin <span class="sc">==</span> <span class="st">"Black"</span> <span class="sc">&amp;</span> S <span class="sc">==</span> <span class="st">"Black"</span> <span class="sc">~</span> <span class="st">"Black (Original)"</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      S_origin <span class="sc">==</span> <span class="st">"Black"</span> <span class="sc">&amp;</span> S <span class="sc">==</span> <span class="st">"White"</span> <span class="sc">~</span> <span class="st">"Black -&gt; White (counterfactual)"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      S_origin <span class="sc">==</span> <span class="st">"Black"</span> <span class="sc">&amp;</span> S <span class="sc">==</span> <span class="st">"White"</span> <span class="sc">~</span> <span class="st">"Black -&gt; White (Counterfactual)"</span>,</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      S_origin <span class="sc">==</span> <span class="st">"White"</span> <span class="sc">&amp;</span> S <span class="sc">==</span> <span class="st">"White"</span> <span class="sc">~</span> <span class="st">"White (Original)"</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="fu">factor</span>(</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>      group, </span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Black (Original)"</span>, <span class="st">"Black -&gt; Black (counterfactual)"</span>, <span class="st">"White (Original)"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Black (Original)"</span>, <span class="st">"Black -&gt; White (Counterfactual)"</span>, <span class="st">"White (Original)"</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      )</span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ),</span>
@@ -672,7 +672,7 @@ Figure&nbsp;8.2: Distribution of Predicted Scores for Minority Class (Black), Un
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="cn">NULL</span>, <span class="at">values =</span> <span class="fu">c</span>(</span>
 <span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Black (Original)"</span> <span class="ot">=</span> colours_all[[<span class="st">"source"</span>]],</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Black -&gt; Black (counterfactual)"</span> <span class="ot">=</span> colours_all[[<span class="st">"naive"</span>]],</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Black -&gt; White (Counterfactual)"</span> <span class="ot">=</span> colours_all[[<span class="st">"naive"</span>]],</span>
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"White (Original)"</span> <span class="ot">=</span> colours_all[[<span class="st">"reference"</span>]]</span>
 <span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>

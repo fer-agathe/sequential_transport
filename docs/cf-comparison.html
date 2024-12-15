@@ -404,13 +404,13 @@ Objectives
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>colours_all <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factual"</span> <span class="ot">=</span> <span class="st">"gray"</span>,</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"source"</span> <span class="ot">=</span> <span class="st">"#00A08A"</span>,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reference"</span> <span class="ot">=</span> <span class="st">"#F2AD00"</span>,</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"naive"</span> <span class="ot">=</span> <span class="st">"#000000"</span>,</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ot"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span>,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"fairadapt"</span> <span class="ot">=</span> <span class="st">'#D55E00'</span>,</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"seq"</span> <span class="ot">=</span> <span class="st">"#CC79A7"</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Factual"</span> <span class="ot">=</span> <span class="st">"black"</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Source"</span> <span class="ot">=</span> <span class="st">"#00A08A"</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Reference"</span> <span class="ot">=</span> <span class="st">"#F2AD00"</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Naive"</span> <span class="ot">=</span> <span class="st">"gray"</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"OT"</span> <span class="ot">=</span> <span class="st">"#0072B2"</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Fairadapt"</span> <span class="ot">=</span> <span class="st">'#D55E00'</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seq. T."</span> <span class="ot">=</span> <span class="st">"#CC79A7"</span></span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -582,7 +582,7 @@ Objectives
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_factual<span class="sc">$</span>X1,</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"factual"</span>]],</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Factual"</span>]],</span>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># xlab = "X1 (UGPA)", ylab = "X2 (LSAT)",</span></span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(range_x1[<span class="dv">1</span>] <span class="sc">-</span> expansion_amount_x1[<span class="dv">1</span>], range_x1[<span class="dv">2</span>] <span class="sc">+</span> expansion_amount_x1[<span class="dv">2</span>]),</span>
@@ -598,7 +598,7 @@ Objectives
 <span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_factual<span class="sc">$</span>X1, </span>
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2 <span class="sc">+</span> <span class="dv">1</span>,</span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_unaware_factual<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"factual"</span>]]</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Factual"</span>]]</span>
 <span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with fairadapt</span></span>
 <span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>tb_indiv_unaware_fpt <span class="ot">&lt;-</span> </span>
@@ -606,7 +606,7 @@ Objectives
 <span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X1,</span>
 <span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X2,</span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -616,7 +616,7 @@ Objectives
 <span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2, </span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
@@ -624,14 +624,14 @@ Objectives
 <span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X2, </span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_fpt<span class="sc">$</span>X2 <span class="sc">+</span> <span class="dv">1</span>,</span>
 <span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_unaware_fpt<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]]</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]]</span>
 <span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive</span></span>
@@ -640,7 +640,7 @@ Objectives
 <span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_naive<span class="sc">$</span>X1,</span>
 <span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_naive<span class="sc">$</span>X2,</span>
-<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]],</span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]],</span>
 <span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -649,14 +649,14 @@ Objectives
 <span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_naive<span class="sc">$</span>X1, </span>
 <span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_naive<span class="sc">$</span>X2, </span>
-<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]],</span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]],</span>
 <span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_naive<span class="sc">$</span>X1 <span class="sc">+</span> .<span class="dv">1</span>,</span>
 <span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_naive<span class="sc">$</span>X2,</span>
 <span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_unaware_naive<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]]</span>
+<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]]</span>
 <span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with OT</span></span>
@@ -665,7 +665,7 @@ Objectives
 <span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_ot<span class="sc">$</span>X1,</span>
 <span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_ot<span class="sc">$</span>X2,</span>
-<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]],</span>
+<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]],</span>
 <span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -674,14 +674,14 @@ Objectives
 <span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_ot<span class="sc">$</span>X1, </span>
 <span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_ot<span class="sc">$</span>X2, </span>
-<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]],</span>
+<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]],</span>
 <span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb13-112"><a href="#cb13-112" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_ot<span class="sc">$</span>X1 <span class="sc">-</span> .<span class="dv">15</span>, </span>
 <span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_ot<span class="sc">$</span>X2,</span>
 <span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_unaware_ot<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]]</span>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]]</span>
 <span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with Sequential transport</span></span>
@@ -690,7 +690,7 @@ Objectives
 <span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_seq<span class="sc">$</span>X1,</span>
 <span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_seq<span class="sc">$</span>X2,</span>
-<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -700,7 +700,7 @@ Objectives
 <span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_seq<span class="sc">$</span>X1, </span>
 <span id="cb13-133"><a href="#cb13-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2, </span>
-<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
@@ -708,19 +708,19 @@ Objectives
 <span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_unaware_factual<span class="sc">$</span>X2,</span>
 <span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_unaware_seq<span class="sc">$</span>X1, </span>
 <span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_unaware_seq<span class="sc">$</span>X2, </span>
-<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb13-144"><a href="#cb13-144" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-145"><a href="#cb13-145" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb13-146"><a href="#cb13-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_unaware_seq<span class="sc">$</span>X1 <span class="sc">+</span> .<span class="dv">11</span>, </span>
 <span id="cb13-147"><a href="#cb13-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_unaware_seq<span class="sc">$</span>X2 <span class="sc">-</span> .<span class="dv">5</span>,</span>
 <span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_unaware_seq<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]]</span>
+<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]]</span>
 <span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
 <span id="cb13-152"><a href="#cb13-152" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, </span>
-<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> colours_all[<span class="fu">c</span>(<span class="st">"factual"</span>, <span class="st">"naive"</span>, <span class="st">"ot"</span>, <span class="st">"fairadapt"</span>, <span class="st">"seq"</span>)], </span>
-<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">names</span>(colours_all[<span class="fu">c</span>(<span class="st">"factual"</span>, <span class="st">"naive"</span>, <span class="st">"ot"</span>, <span class="st">"fairadapt"</span>, <span class="st">"seq"</span>)]),</span>
+<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> colours_all[<span class="fu">c</span>(<span class="st">"Factual"</span>, <span class="st">"Naive"</span>, <span class="st">"OT"</span>, <span class="st">"Fairadapt"</span>, <span class="st">"Seq. T."</span>)], </span>
+<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">names</span>(colours_all[<span class="fu">c</span>(<span class="st">"Factual"</span>, <span class="st">"Naive"</span>, <span class="st">"OT"</span>, <span class="st">"Fairadapt"</span>, <span class="st">"Seq. T."</span>)]),</span>
 <span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">box.lty=</span><span class="dv">0</span></span>
 <span id="cb13-156"><a href="#cb13-156" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -755,7 +755,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_factual<span class="sc">$</span>X1,</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"factual"</span>]],</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Factual"</span>]],</span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># xlab = "X1 (UGPA)", ylab = "X2 (LSAT)",</span></span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(range_x1[<span class="dv">1</span>] <span class="sc">-</span> expansion_amount_x1[<span class="dv">1</span>], range_x1[<span class="dv">2</span>] <span class="sc">+</span> expansion_amount_x1[<span class="dv">2</span>]),</span>
@@ -771,7 +771,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_factual<span class="sc">$</span>X1, </span>
 <span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_factual<span class="sc">$</span>X2 <span class="sc">+</span> <span class="dv">1</span>,</span>
 <span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_aware_factual<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"factual"</span>]]</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Factual"</span>]]</span>
 <span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive</span></span>
@@ -780,7 +780,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_naive<span class="sc">$</span>X1,</span>
 <span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_naive<span class="sc">$</span>X2,</span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]],</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]],</span>
 <span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -789,14 +789,14 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_naive<span class="sc">$</span>X1, </span>
 <span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_naive<span class="sc">$</span>X2, </span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]],</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]],</span>
 <span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_naive<span class="sc">$</span>X1 <span class="sc">-</span> .<span class="dv">1</span>,</span>
 <span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_naive<span class="sc">$</span>X2,</span>
 <span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_aware_naive<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]]</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]]</span>
 <span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with fairadapt</span></span>
@@ -805,7 +805,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_fpt<span class="sc">$</span>X1,</span>
 <span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_fpt<span class="sc">$</span>X2,</span>
-<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -815,7 +815,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2, </span>
-<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
@@ -823,14 +823,14 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_fpt<span class="sc">$</span>X2, </span>
-<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]],</span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]],</span>
 <span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_fpt<span class="sc">$</span>X1, </span>
 <span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_fpt<span class="sc">$</span>X2 <span class="sc">+</span> <span class="dv">1</span>,</span>
 <span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_aware_fpt<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]]</span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]]</span>
 <span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with OT</span></span>
 <span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>tb_indiv_aware_ot <span class="ot">&lt;-</span> </span>
@@ -838,7 +838,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_ot<span class="sc">$</span>X1,</span>
 <span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_ot<span class="sc">$</span>X2,</span>
-<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]],</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]],</span>
 <span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -848,14 +848,14 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_ot<span class="sc">$</span>X1, </span>
 <span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_ot<span class="sc">$</span>X2, </span>
-<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]],</span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]],</span>
 <span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_ot<span class="sc">$</span>X1 <span class="sc">-</span> .<span class="dv">15</span>, </span>
 <span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_ot<span class="sc">$</span>X2,</span>
 <span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_aware_ot<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]]</span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]]</span>
 <span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported characteristics with Sequential transport</span></span>
@@ -864,7 +864,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
 <span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_seq<span class="sc">$</span>X1,</span>
 <span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_seq<span class="sc">$</span>X2,</span>
-<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"X1"</span>, <span class="at">ylab =</span> <span class="st">"X2"</span>,</span>
 <span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span></span>
 <span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -874,7 +874,7 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_seq<span class="sc">$</span>X1, </span>
 <span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2, </span>
-<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
@@ -882,19 +882,19 @@ Figure&nbsp;12.1: Predictions by the unaware model for three Black individuals.
 <span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> tb_indiv_aware_factual<span class="sc">$</span>X2,</span>
 <span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> tb_indiv_aware_seq<span class="sc">$</span>X1, </span>
 <span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> tb_indiv_aware_seq<span class="sc">$</span>X2, </span>
-<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]],</span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]],</span>
 <span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
 <span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
 <span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> tb_indiv_aware_seq<span class="sc">$</span>X1 <span class="sc">-</span> .<span class="dv">11</span>, </span>
 <span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> tb_indiv_aware_seq<span class="sc">$</span>X2 <span class="sc">-</span> <span class="dv">1</span>,</span>
 <span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>tb_indiv_aware_seq<span class="sc">$</span>pred, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
-<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]]</span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]]</span>
 <span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
 <span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topleft"</span>, </span>
-<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> colours_all[<span class="fu">c</span>(<span class="st">"factual"</span>, <span class="st">"naive"</span>, <span class="st">"ot"</span>, <span class="st">"fairadapt"</span>, <span class="st">"seq"</span>)], </span>
-<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">names</span>(colours_all[<span class="fu">c</span>(<span class="st">"factual"</span>, <span class="st">"naive"</span>, <span class="st">"ot"</span>, <span class="st">"fairadapt"</span>, <span class="st">"seq"</span>)]),</span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> colours_all[<span class="fu">c</span>(<span class="st">"Factual"</span>, <span class="st">"Naive"</span>, <span class="st">"OT"</span>, <span class="st">"Fairadapt"</span>, <span class="st">"Seq. T."</span>)], </span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">names</span>(colours_all[<span class="fu">c</span>(<span class="st">"Factual"</span>, <span class="st">"Naive"</span>, <span class="st">"OT"</span>, <span class="st">"Fairadapt"</span>, <span class="st">"Seq. T."</span>)]),</span>
 <span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">box.lty=</span><span class="dv">0</span>, <span class="at">bg =</span> <span class="st">"transparent"</span></span>
 <span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -965,10 +965,10 @@ Figure&nbsp;12.2: Predictions by the aware model for three Black individuals.
 <span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_ot_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"ot"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">15</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - Black"</span>, <span class="at">col =</span> colours_all[[<span class="st">"source"</span>]])</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_ot_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"OT"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">15</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - Black"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Source"</span>]])</span>
 <span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>pos_arrow <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>ind_min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(d_unaware_factuals_black<span class="sc">$</span>x <span class="sc">-</span> pos_arrow))</span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(</span>
@@ -976,18 +976,18 @@ Figure&nbsp;12.2: Predictions by the aware model for three Black individuals.
 <span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> d_unaware_factuals_black<span class="sc">$</span>y[ind_min],</span>
 <span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> .<span class="dv">15</span>, </span>
 <span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> <span class="dv">5</span>,</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"source"</span>]]</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"Source"</span>]]</span>
 <span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Multi. OT"</span>, <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]])</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Multi. OT"</span>, <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]])</span>
 <span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>pos_arrow_ref <span class="ot">&lt;-</span> .<span class="dv">7</span></span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> pos_arrow_ref, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - White"</span>, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]])</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> pos_arrow_ref, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - White"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]])</span>
 <span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>ind_min_ref <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(d_unaware_factuals_white<span class="sc">$</span>x <span class="sc">-</span> pos_arrow_ref))</span>
 <span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(</span>
 <span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> d_unaware_factuals_white<span class="sc">$</span>x[ind_min_ref],</span>
 <span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> d_unaware_factuals_white<span class="sc">$</span>y[ind_min_ref],</span>
 <span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> pos_arrow_ref, </span>
 <span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> <span class="dv">5</span>,</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]]</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]]</span>
 <span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive</span></span>
@@ -1005,10 +1005,10 @@ Figure&nbsp;12.2: Predictions by the aware model for three Black individuals.
 <span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_naive_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"naive"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">28</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Naive"</span>, <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]])</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_naive_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Naive"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">28</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Naive"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]])</span>
 <span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Fairadapt</span></span>
@@ -1027,10 +1027,10 @@ Figure&nbsp;12.2: Predictions by the aware model for three Black individuals.
 <span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_fpt_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"fairadapt"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"fairadapt"</span>, <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]])</span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_fpt_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Fairadapt"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"fairadapt"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]])</span>
 <span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Sequential transport</span></span>
@@ -1048,10 +1048,10 @@ Figure&nbsp;12.2: Predictions by the aware model for three Black individuals.
 <span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_seq_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"seq"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Seq. T."</span>, <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_unaware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_unaware_seq_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Seq. T."</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Seq. T."</span>, <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-densities-counterfactuals-unaware" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1100,10 +1100,10 @@ Figure&nbsp;12.3: Densities of predicted scores for Black individuals with factu
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_ot_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"ot"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">25</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - Black"</span>, <span class="at">col =</span> colours_all[[<span class="st">"source"</span>]])</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_ot_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"OT"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">25</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - Black"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Source"</span>]])</span>
 <span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>pos_arrow <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
 <span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>ind_min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(d_aware_factuals_black<span class="sc">$</span>x <span class="sc">-</span> .<span class="dv">2</span>))</span>
 <span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(</span>
@@ -1111,19 +1111,19 @@ Figure&nbsp;12.3: Densities of predicted scores for Black individuals with factu
 <span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> d_aware_factuals_black<span class="sc">$</span>y[ind_min],</span>
 <span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> .<span class="dv">25</span>, </span>
 <span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> <span class="dv">5</span>,</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"source"</span>]]</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"Source"</span>]]</span>
 <span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>pos_arrow_ref <span class="ot">&lt;-</span> .<span class="dv">7</span></span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> pos_arrow_ref, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - White"</span>, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]])</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> pos_arrow_ref, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Factuals - White"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]])</span>
 <span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>ind_min_ref <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(d_aware_factuals_white<span class="sc">$</span>x <span class="sc">-</span> pos_arrow_ref))</span>
 <span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(</span>
 <span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> d_aware_factuals_white<span class="sc">$</span>x[ind_min_ref],</span>
 <span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> d_aware_factuals_white<span class="sc">$</span>y[ind_min_ref],</span>
 <span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> pos_arrow_ref, </span>
 <span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> <span class="dv">5</span>,</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]]</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]]</span>
 <span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Multi. OT"</span>, <span class="at">col =</span> colours_all[[<span class="st">"ot"</span>]])</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Multi. OT"</span>, <span class="at">col =</span> colours_all[[<span class="st">"OT"</span>]])</span>
 <span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive</span></span>
 <span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>tb_aware_naive <span class="ot">&lt;-</span> tb_aware <span class="sc">|&gt;</span> <span class="fu">filter</span>(counterfactual <span class="sc">==</span> <span class="st">"naive"</span>)</span>
@@ -1140,10 +1140,10 @@ Figure&nbsp;12.3: Densities of predicted scores for Black individuals with factu
 <span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_naive_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"naive"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">35</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Naive"</span>, <span class="at">col =</span> colours_all[[<span class="st">"naive"</span>]])</span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_naive_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Naive"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">35</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Naive"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Naive"</span>]])</span>
 <span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Fairadapt</span></span>
@@ -1162,10 +1162,10 @@ Figure&nbsp;12.3: Densities of predicted scores for Black individuals with factu
 <span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_fpt_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"fairadapt"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"fairadapt"</span>, <span class="at">col =</span> colours_all[[<span class="st">"fairadapt"</span>]])</span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_fpt_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Fairadapt"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"fairadapt"</span>, <span class="at">col =</span> colours_all[[<span class="st">"Fairadapt"</span>]])</span>
 <span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Sequential transport</span></span>
@@ -1183,10 +1183,10 @@ Figure&nbsp;12.3: Densities of predicted scores for Black individuals with factu
 <span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
 <span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_seq_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"seq"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Seq. T."</span>, <span class="at">col =</span> colours_all[[<span class="st">"seq"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_factuals_black, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Source"</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(d_aware_factuals_white, <span class="at">col =</span> colours_all[[<span class="st">"Reference"</span>]], <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(d_aware_seq_black_star, <span class="at">col =</span> <span class="fu">alpha</span>(colours_all[[<span class="st">"Seq. T."</span>]], .<span class="dv">5</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> .<span class="dv">53</span>, <span class="at">y =</span> <span class="dv">6</span>, <span class="st">"Seq. T."</span>, <span class="at">col =</span> colours_all[[<span class="st">"Seq. T."</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-densities-counterfactuals-aware" class="quarto-float quarto-figure quarto-figure-center anchored">
