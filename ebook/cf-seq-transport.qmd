@@ -60,7 +60,7 @@ load_all("../seqtransfairness/")
 colours_all <- c(
   "source" = "#00A08A",
   "reference" = "#F2AD00",
-  "naive" = "#000000",
+  "naive" = "gray",
   "fairadapt" = '#D55E00',
   "seq" = "#CC79A7"
 )

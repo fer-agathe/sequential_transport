@@ -55,7 +55,7 @@ set.seed(2025)
 colours_all <- c(
   "source" = "#00A08A",
   "reference" = "#F2AD00",
-  "naive" = "#000000",
+  "naive" = "gray",
   "fairadapt" = '#D55E00'
 )
 ```

@@ -44,10 +44,10 @@ global_theme <- function() {
 set.seed(2025)
 
 colours_all <- c(
-  "factual" = "gray",
+  "factual" = "black",
   "source" = "#00A08A",
   "reference" = "#F2AD00",
-  "naive" = "#000000",
+  "naive" = "gray",
   "ot" = "#0072B2",
   "fairadapt" = '#D55E00',
   "seq" = "#CC79A7"
@@ -164,10 +164,10 @@ colour_nodes <- c(
 )
 
 # Then, in the document:
-# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
+# `r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "true")`
 ```
 
-`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "false")`
+`r add_tikz_graph(tikz_code = causal_graph_tikz(adj_mat,colour_nodes), label = "fig-causal-graph-adult-2", caption = "\"Assumed Causal Graph\"", echo = "true")`
 
 
 

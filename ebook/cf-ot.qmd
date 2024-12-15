@@ -47,7 +47,8 @@ global_theme <- function() {
         size = size_title, 
         hjust = 0.5
       ),
-      plot.subtitle = element_text(hjust = 0.5)
+      plot.subtitle = element_text(hjust = 0.5),
+      legend.position = "bottom"
     )
 }
 
@@ -60,7 +61,7 @@ load_all("../seqtransfairness/")
 colours_all <- c(
   "source" = "#00A08A",
   "reference" = "#F2AD00",
-  "naive" = "#000000",
+  "naive" = "gray",
   "fairadapt" = '#D55E00',
   "ot" = "#56B4E9"
 )

@@ -48,13 +48,13 @@ global_theme <- function() {
 set.seed(2025)
 
 colours_all <- c(
-  "factual" = "gray",
-  "source" = "#00A08A",
-  "reference" = "#F2AD00",
-  "naive" = "#000000",
-  "ot" = "#0072B2",
-  "fairadapt" = '#D55E00',
-  "seq" = "#CC79A7"
+  "Factual" = "black",
+  "Source" = "#00A08A",
+  "Reference" = "#F2AD00",
+  "Naive" = "gray",
+  "OT" = "#0072B2",
+  "Fairadapt" = '#D55E00',
+  "Seq. T." = "#CC79A7"
 )
 ```
 
@@ -207,7 +207,7 @@ expansion_amount_x2 <- .05*range_x2
 plot(
   x = tb_indiv_unaware_factual$X1,
   y = tb_indiv_unaware_factual$X2,
-  col = colours_all[["factual"]],
+  col = colours_all[["Factual"]],
   # xlab = "X1 (UGPA)", ylab = "X2 (LSAT)",
   xlab = "", ylab = "",
   xlim = c(range_x1[1] - expansion_amount_x1[1], range_x1[2] + expansion_amount_x1[2]),
@@ -223,7 +223,7 @@ text(
   x = tb_indiv_unaware_factual$X1, 
   y = tb_indiv_unaware_factual$X2 + 1,
   paste0(round(100*tb_indiv_unaware_factual$pred, 2), "%"),
-  col = colours_all[["factual"]]
+  col = colours_all[["Factual"]]
 )
 # Transported characteristics with fairadapt
 tb_indiv_unaware_fpt <- 
@@ -231,7 +231,7 @@ tb_indiv_unaware_fpt <-
 points(
   x = tb_indiv_unaware_fpt$X1,
   y = tb_indiv_unaware_fpt$X2,
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -241,7 +241,7 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_fpt$X1, 
   y1 = tb_indiv_unaware_factual$X2, 
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   lty = 2
 )
 segments(
@@ -249,14 +249,14 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_fpt$X1, 
   y1 = tb_indiv_unaware_fpt$X2, 
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   lty = 2
 )
 text(
   x = tb_indiv_unaware_fpt$X1, 
   y = tb_indiv_unaware_fpt$X2 + 1,
   paste0(round(100*tb_indiv_unaware_fpt$pred, 2), "%"),
-  col = colours_all[["fairadapt"]]
+  col = colours_all[["Fairadapt"]]
 )
 
 # Naive
@@ -265,7 +265,7 @@ tb_indiv_unaware_naive <-
 points(
   x = tb_indiv_unaware_naive$X1,
   y = tb_indiv_unaware_naive$X2,
-  col = colours_all[["naive"]],
+  col = colours_all[["Naive"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -274,14 +274,14 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_naive$X1, 
   y1 = tb_indiv_unaware_naive$X2, 
-  col = colours_all[["naive"]],
+  col = colours_all[["Naive"]],
   lty = 2
 )
 text(
   x = tb_indiv_unaware_naive$X1 + .1,
   y = tb_indiv_unaware_naive$X2,
   paste0(round(100*tb_indiv_unaware_naive$pred, 2), "%"),
-  col = colours_all[["naive"]]
+  col = colours_all[["Naive"]]
 )
 
 # Transported characteristics with OT
@@ -290,7 +290,7 @@ tb_indiv_unaware_ot <-
 points(
   x = tb_indiv_unaware_ot$X1,
   y = tb_indiv_unaware_ot$X2,
-  col = colours_all[["ot"]],
+  col = colours_all[["OT"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -299,14 +299,14 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_ot$X1, 
   y1 = tb_indiv_unaware_ot$X2, 
-  col = colours_all[["ot"]],
+  col = colours_all[["OT"]],
   lty = 2
 )
 text(
   x = tb_indiv_unaware_ot$X1 - .15, 
   y = tb_indiv_unaware_ot$X2,
   paste0(round(100*tb_indiv_unaware_ot$pred, 2), "%"),
-  col = colours_all[["ot"]]
+  col = colours_all[["OT"]]
 )
 
 # Transported characteristics with Sequential transport
@@ -315,7 +315,7 @@ tb_indiv_unaware_seq <-
 points(
   x = tb_indiv_unaware_seq$X1,
   y = tb_indiv_unaware_seq$X2,
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -325,7 +325,7 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_seq$X1, 
   y1 = tb_indiv_unaware_factual$X2, 
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   lty = 2
 )
 segments(
@@ -333,19 +333,19 @@ segments(
   y0 = tb_indiv_unaware_factual$X2,
   x1 = tb_indiv_unaware_seq$X1, 
   y1 = tb_indiv_unaware_seq$X2, 
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   lty = 2
 )
 text(
   x = tb_indiv_unaware_seq$X1 + .11, 
   y = tb_indiv_unaware_seq$X2 - .5,
   paste0(round(100*tb_indiv_unaware_seq$pred, 2), "%"),
-  col = colours_all[["seq"]]
+  col = colours_all[["Seq. T."]]
 )
 legend(
   "topleft", 
-  pch = 19, col = colours_all[c("factual", "naive", "ot", "fairadapt", "seq")], 
-  legend = names(colours_all[c("factual", "naive", "ot", "fairadapt", "seq")]),
+  pch = 19, col = colours_all[c("Factual", "Naive", "OT", "Fairadapt", "Seq. T.")], 
+  legend = names(colours_all[c("Factual", "Naive", "OT", "Fairadapt", "Seq. T.")]),
   box.lty=0
 )
 
@@ -374,7 +374,7 @@ expansion_amount_x2 <- .05*range_x2
 plot(
   x = tb_indiv_aware_factual$X1,
   y = tb_indiv_aware_factual$X2,
-  col = colours_all[["factual"]],
+  col = colours_all[["Factual"]],
   xlab = "", ylab = "",
   # xlab = "X1 (UGPA)", ylab = "X2 (LSAT)",
   xlim = c(range_x1[1] - expansion_amount_x1[1], range_x1[2] + expansion_amount_x1[2]),
@@ -390,7 +390,7 @@ text(
   x = tb_indiv_aware_factual$X1, 
   y = tb_indiv_aware_factual$X2 + 1,
   paste0(round(100*tb_indiv_aware_factual$pred, 2), "%"),
-  col = colours_all[["factual"]]
+  col = colours_all[["Factual"]]
 )
 
 # Naive
@@ -399,7 +399,7 @@ tb_indiv_aware_naive <-
 points(
   x = tb_indiv_aware_naive$X1,
   y = tb_indiv_aware_naive$X2,
-  col = colours_all[["naive"]],
+  col = colours_all[["Naive"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -408,14 +408,14 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_naive$X1, 
   y1 = tb_indiv_aware_naive$X2, 
-  col = colours_all[["naive"]],
+  col = colours_all[["Naive"]],
   lty = 2
 )
 text(
   x = tb_indiv_aware_naive$X1 - .1,
   y = tb_indiv_aware_naive$X2,
   paste0(round(100*tb_indiv_aware_naive$pred, 2), "%"),
-  col = colours_all[["naive"]]
+  col = colours_all[["Naive"]]
 )
 
 # Transported characteristics with fairadapt
@@ -424,7 +424,7 @@ tb_indiv_aware_fpt <-
 points(
   x = tb_indiv_aware_fpt$X1,
   y = tb_indiv_aware_fpt$X2,
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -434,7 +434,7 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_fpt$X1, 
   y1 = tb_indiv_aware_factual$X2, 
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   lty = 2
 )
 segments(
@@ -442,14 +442,14 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_fpt$X1, 
   y1 = tb_indiv_aware_fpt$X2, 
-  col = colours_all[["fairadapt"]],
+  col = colours_all[["Fairadapt"]],
   lty = 2
 )
 text(
   x = tb_indiv_aware_fpt$X1, 
   y = tb_indiv_aware_fpt$X2 + 1,
   paste0(round(100*tb_indiv_aware_fpt$pred, 2), "%"),
-  col = colours_all[["fairadapt"]]
+  col = colours_all[["Fairadapt"]]
 )
 # Transported characteristics with OT
 tb_indiv_aware_ot <- 
@@ -457,7 +457,7 @@ tb_indiv_aware_ot <-
 points(
   x = tb_indiv_aware_ot$X1,
   y = tb_indiv_aware_ot$X2,
-  col = colours_all[["ot"]],
+  col = colours_all[["OT"]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -467,14 +467,14 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_ot$X1, 
   y1 = tb_indiv_aware_ot$X2, 
-  col = colours_all[["ot"]],
+  col = colours_all[["OT"]],
   lty = 2
 )
 text(
   x = tb_indiv_aware_ot$X1 - .15, 
   y = tb_indiv_aware_ot$X2,
   paste0(round(100*tb_indiv_aware_ot$pred, 2), "%"),
-  col = colours_all[["ot"]]
+  col = colours_all[["OT"]]
 )
 
 # Transported characteristics with Sequential transport
@@ -483,7 +483,7 @@ tb_indiv_aware_seq <-
 points(
   x = tb_indiv_aware_seq$X1,
   y = tb_indiv_aware_seq$X2,
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   xlab = "X1", ylab = "X2",
   pch = 19
 )
@@ -493,7 +493,7 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_seq$X1, 
   y1 = tb_indiv_aware_factual$X2, 
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   lty = 2
 )
 segments(
@@ -501,19 +501,19 @@ segments(
   y0 = tb_indiv_aware_factual$X2,
   x1 = tb_indiv_aware_seq$X1, 
   y1 = tb_indiv_aware_seq$X2, 
-  col = colours_all[["seq"]],
+  col = colours_all[["Seq. T."]],
   lty = 2
 )
 text(
   x = tb_indiv_aware_seq$X1 - .11, 
   y = tb_indiv_aware_seq$X2 - 1,
   paste0(round(100*tb_indiv_aware_seq$pred, 2), "%"),
-  col = colours_all[["seq"]]
+  col = colours_all[["Seq. T."]]
 )
 legend(
   "topleft", 
-  pch = 19, col = colours_all[c("factual", "naive", "ot", "fairadapt", "seq")], 
-  legend = names(colours_all[c("factual", "naive", "ot", "fairadapt", "seq")]),
+  pch = 19, col = colours_all[c("Factual", "Naive", "OT", "Fairadapt", "Seq. T.")], 
+  legend = names(colours_all[c("Factual", "Naive", "OT", "Fairadapt", "Seq. T.")]),
   box.lty=0, bg = "transparent"
 )
 ```
@@ -578,10 +578,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_unaware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_unaware_ot_black_star, col = alpha(colours_all[["ot"]], .5), border = NA)
-text(x = .15, y = 6, "Factuals - Black", col = colours_all[["source"]])
+polygon(d_unaware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_unaware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_unaware_ot_black_star, col = alpha(colours_all[["OT"]], .5), border = NA)
+text(x = .15, y = 6, "Factuals - Black", col = colours_all[["Source"]])
 pos_arrow <- .2
 ind_min <- which.min(abs(d_unaware_factuals_black$x - pos_arrow))
 arrows(
@@ -589,18 +589,18 @@ arrows(
   y1 = d_unaware_factuals_black$y[ind_min],
   x0 = .15, 
   y0 = 5,
-  length = 0.05, col = colours_all[["source"]]
+  length = 0.05, col = colours_all[["Source"]]
 )
-text(x = .53, y = 6, "Multi. OT", col = colours_all[["ot"]])
+text(x = .53, y = 6, "Multi. OT", col = colours_all[["OT"]])
 pos_arrow_ref <- .7
-text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["reference"]])
+text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["Reference"]])
 ind_min_ref <- which.min(abs(d_unaware_factuals_white$x - pos_arrow_ref))
 arrows(
   x1 = d_unaware_factuals_white$x[ind_min_ref],
   y1 = d_unaware_factuals_white$y[ind_min_ref],
   x0 = pos_arrow_ref, 
   y0 = 5,
-  length = 0.05, col = colours_all[["reference"]]
+  length = 0.05, col = colours_all[["Reference"]]
 )
 
 # Naive
@@ -618,10 +618,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_unaware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_unaware_naive_black_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-text(x = .28, y = 6, "Naive", col = colours_all[["naive"]])
+polygon(d_unaware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_unaware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_unaware_naive_black_star, col = alpha(colours_all[["Naive"]], .5), border = NA)
+text(x = .28, y = 6, "Naive", col = colours_all[["Naive"]])
 
 
 # Fairadapt
@@ -640,10 +640,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_unaware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_unaware_fpt_black_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .53, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+polygon(d_unaware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_unaware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_unaware_fpt_black_star, col = alpha(colours_all[["Fairadapt"]], .5), border = NA)
+text(x = .53, y = 6, "fairadapt", col = colours_all[["Fairadapt"]])
 
 
 # Sequential transport
@@ -661,10 +661,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_unaware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_unaware_seq_black_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .53, y = 6, "Seq. T.", col = colours_all[["seq"]])
+polygon(d_unaware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_unaware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_unaware_seq_black_star, col = alpha(colours_all[["Seq. T."]], .5), border = NA)
+text(x = .53, y = 6, "Seq. T.", col = colours_all[["Seq. T."]])
 ```
 
 ### Aware model
@@ -705,10 +705,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_aware_ot_black_star, col = alpha(colours_all[["ot"]], .5), border = NA)
-text(x = .25, y = 6, "Factuals - Black", col = colours_all[["source"]])
+polygon(d_aware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_aware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_aware_ot_black_star, col = alpha(colours_all[["OT"]], .5), border = NA)
+text(x = .25, y = 6, "Factuals - Black", col = colours_all[["Source"]])
 pos_arrow <- .2
 ind_min <- which.min(abs(d_aware_factuals_black$x - .2))
 arrows(
@@ -716,19 +716,19 @@ arrows(
   y1 = d_aware_factuals_black$y[ind_min],
   x0 = .25, 
   y0 = 5,
-  length = 0.05, col = colours_all[["source"]]
+  length = 0.05, col = colours_all[["Source"]]
 )
 pos_arrow_ref <- .7
-text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["reference"]])
+text(x = pos_arrow_ref, y = 6, "Factuals - White", col = colours_all[["Reference"]])
 ind_min_ref <- which.min(abs(d_aware_factuals_white$x - pos_arrow_ref))
 arrows(
   x1 = d_aware_factuals_white$x[ind_min_ref],
   y1 = d_aware_factuals_white$y[ind_min_ref],
   x0 = pos_arrow_ref, 
   y0 = 5,
-  length = 0.05, col = colours_all[["reference"]]
+  length = 0.05, col = colours_all[["Reference"]]
 )
-text(x = .53, y = 6, "Multi. OT", col = colours_all[["ot"]])
+text(x = .53, y = 6, "Multi. OT", col = colours_all[["OT"]])
 
 # Naive
 tb_aware_naive <- tb_aware |> filter(counterfactual == "naive")
@@ -745,10 +745,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_aware_naive_black_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-text(x = .35, y = 6, "Naive", col = colours_all[["naive"]])
+polygon(d_aware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_aware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_aware_naive_black_star, col = alpha(colours_all[["Naive"]], .5), border = NA)
+text(x = .35, y = 6, "Naive", col = colours_all[["Naive"]])
 
 
 # Fairadapt
@@ -767,10 +767,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_aware_fpt_black_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .53, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+polygon(d_aware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_aware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_aware_fpt_black_star, col = alpha(colours_all[["Fairadapt"]], .5), border = NA)
+text(x = .53, y = 6, "fairadapt", col = colours_all[["Fairadapt"]])
 
 
 # Sequential transport
@@ -788,10 +788,10 @@ plot(
 )
 axis(1)
 axis(2)
-polygon(d_aware_factuals_black, col = alpha(colours_all[["source"]], .5), border = NA)
-lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_aware_seq_black_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .53, y = 6, "Seq. T.", col = colours_all[["seq"]])
+polygon(d_aware_factuals_black, col = alpha(colours_all[["Source"]], .5), border = NA)
+lines(d_aware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
+polygon(d_aware_seq_black_star, col = alpha(colours_all[["Seq. T."]], .5), border = NA)
+text(x = .53, y = 6, "Seq. T.", col = colours_all[["Seq. T."]])
 ```
 
 

@@ -56,7 +56,7 @@ set.seed(2025)
 colours_all <- c(
   "source" = "#00A08A",
   "reference" = "#F2AD00",
-  "naive" = "#000000"
+  "naive" = "gray"
 )
 ```
 
@@ -300,13 +300,13 @@ ggplot(
   aware_naive_black |> mutate(
     group = case_when(
       S_origin == "Black" & S == "Black" ~ "Black (Original)",
-      S_origin == "Black" & S == "White" ~ "Black -> White (counterfactual)",
+      S_origin == "Black" & S == "White" ~ "Black -> White (Counterfactual)",
       S_origin == "White" & S == "White" ~ "White (Original)"
     ),
     group = factor(
       group, 
       levels = c(
-        "Black (Original)", "Black -> Black (counterfactual)", "White (Original)"
+        "Black (Original)", "Black -> White (Counterfactual)", "White (Original)"
       )
     )
   ),
@@ -320,7 +320,7 @@ ggplot(
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
-      "Black -> Black (counterfactual)" = colours_all[["naive"]],
+      "Black -> White (Counterfactual)" = colours_all[["naive"]],
       "White (Original)" = colours_all[["reference"]]
     )
   ) +
