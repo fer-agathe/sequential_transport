@@ -1,7 +1,5 @@
 # Adult Dataset {#sec-adult-dataset}
 
-
-
 ::: callout-note
 
 ## Objectives
@@ -1796,162 +1794,309 @@ text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
 ## Metrics
 
 
-We define a small function, `get_prob()`{.R}, to compute the average score predicted by the model (either the aware model or the unaware model) in sub-groups identified by positions of observations.
-```{r define-get_prob}
-#| code-fold: true
-#| code-summary: The `get_prob()`{.R} function.
+Let us compute a few metrics metrics, such as the accuracy, the log-loss, and the Brier Score, as well as the counterfactual demographic parity. For the accuracy, we define the set the probability threshold to .5.
 
-#' Computes the average predicted score returned by one of the classifiers.
+
+
+The **counterfactual demographic** parity writes:
+
+$$
+\mathrm{CDP}=\frac{1}{n_0}\sum_{i\in\mathcal{D}_0}m(1,\boldsymbol{x}_{i}^\star) - m(0,\boldsymbol{x}_{i}),
+$$
+where $n_0$ is the number of women in the sample, $m()$ is the classifier, with $m(1,\boldsymbol{x}_{i}^\star)$ the score returned when the sensitive attribute is $S=1$, i.e., "Male" and $\boldsymbol{x}_{i}^\star$ are the counterfactual values, $m(0,\boldsymbol{x}_{i})$ is the score returned by the model when using the factuals.
+
+We compute the Equalized Odds criterion as the absolute difference between true positive rate (TPR) across the two groups (Women/Men):
+
+$$
+EO = | TPR_{\text{Women}} - TPR_{\text{Men}} |
+$$
+
+
+A binary predictor $\hat{Y}$ satisfies **equal opportunity** with respect to $S$ and $Y$ if @hardt2016equality:
+$$
+P\big(\hat{Y} = 1 | S=0, Y=1 \big) = P\big(\hat{Y} = 1 | S=1, Y=1 \big)
+$$
+
+
+
+```{r}
+prob_threshold <- .5
+
+#' Log loss
 #' 
-#' @param type Either `"factual"`, `"naive"`, `"fairadapt"`, or `"seq"`.
-#' @param model Type of model: `"aware"` is the classifier used the sensitive
-#'        attribute, `"unaware"` otherwise.
-#' @param ind Index of rows in the datasets to compute the statistics on.
-#' @param sensitive Name of the sensitive group in which the focus is on.
-get_prob <- function(type, model = "aware", ind, sensitive = "Women") {
-  if (type == "factual") {
-    x <- get(paste0("factuals_", model))
-  } else if (type == "naive") {
-    x <- get(paste0("counterfactuals_", model, "_naive_women"))
-  } else if (type == "fairadapt") {
-    x <- get(paste0("counterfactuals_", model, "_fpt_women"))
-  } else if (type == "seq") {
-    x <- get(paste0("counterfactuals_", model, "_seq_women"))
-  } else {
-    stop("Error type.")
-  }
-  
-  val <- x |> filter(id_indiv %in% ind) |> pull("pred")
-  
-  tribble(
-    ~type, ~model, ~sensitive, ~value_type, ~value,
-    type, model, sensitive, "mean", mean(val),
-    type, model, sensitive, "sd", sd(val)
+#' @param y vector or binary obsevations
+#' @param s vector of predicted scores
+calculate_log_loss <- function(y, s){
+  s_pred <- pmin(pmax(s, 1e-15), 1 - 1e-15)
+  mean(-y*log(s_pred) - (1-y)*log(1-s_pred))
+}
+
+#' Brier Score
+#'
+#' The Brier Score \citep{brier_1950}, is expressed as: \deqn{\text{BS} =
+#' \frac{1}{n}\sum_{i=1}^{n} \big(\hat{s}(\mathbf{x}_i) - d_i\big)^{2}} where
+#' \eqn{d_i \in \{0,1\}} is the observed event for observation \eqn{i}.
+#'
+#' @param obs vector of observed binary events
+#' @param scores vector of scores
+#'
+#' @references Brier, G. W. (1950). Verification of forecasts expressed in terms
+#' of probability. Monthly Weather Review 78: 1–3.
+#'
+#' @export
+brier_score <- function(obs, scores) mean((scores - obs)^2)
+```
+
+
+We will then put in a table all the predictions made in each case: without using counterfactuals, and with using each counterfactual technique applied on women's characteristics. Since we do not get counterfactual values for men, their predictions remain unchanged in each case. We will therefore complete the dataset with their unchanged predictions.
+```{r define-tb_complement_men}
+tb_complement_men <- 
+  factuals_aware |> 
+  select(id_indiv, sex, sex_origin, income, pred) |> 
+  filter(sex_origin == "Male")
+```
+
+We put the predicted values in a table named `tb_pred`.
+
+```{r define-tb_pred}
+#| code-fold: true
+#| code-summary: Code to create `tb_pred`.
+tb_pred_aware <- 
+  factuals_aware |> 
+  select(id_indiv, sex, sex_origin, income, pred) |> 
+  mutate(type = "factual") |> 
+  bind_rows(
+    counterfactuals_aware_naive_women |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      bind_rows(tb_complement_men) |> 
+      mutate(type = "naive")
+  ) |> 
+  bind_rows(
+    counterfactuals_aware_fpt_women |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      bind_rows(tb_complement_men) |> 
+      mutate(type = "fairadapt")
+  ) |> 
+  bind_rows(
+    counterfactuals_aware_seq_women |> 
+      left_join(
+        adult |> mutate(id_indiv = row_number()) |> 
+          select(id_indiv, income), by = "id_indiv"
+      ) |> 
+      bind_rows(tb_complement_men) |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      mutate(type = "seq")
+  ) |> 
+  mutate(
+    y_binary = as.numeric(income) - 1,
+    pred_class = ifelse(
+      pred > prob_threshold, levels(adult$income)[2], 
+      levels(adult$income)[1]
+    ),
+    pred_correct = income == pred_class
   )
-}
+
+tb_pred_unaware <- 
+  factuals_unaware |> 
+  select(id_indiv, sex, sex_origin, income, pred) |> 
+  mutate(type = "factual") |> 
+  bind_rows(
+    counterfactuals_unaware_naive_women |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      bind_rows(tb_complement_men) |> 
+      mutate(type = "naive")
+  ) |> 
+  bind_rows(
+    counterfactuals_unaware_fpt_women |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      bind_rows(tb_complement_men) |> 
+      mutate(type = "fairadapt")
+  ) |> 
+  bind_rows(
+    counterfactuals_unaware_seq_women |> 
+      left_join(
+        adult |> mutate(id_indiv = row_number()) |> 
+          select(id_indiv, income), by = "id_indiv") |> 
+      bind_rows(tb_complement_men) |> 
+      select(id_indiv, sex, sex_origin, income, pred) |> 
+      mutate(type = "seq")
+  ) |> 
+  mutate(
+    y_binary = as.numeric(income) - 1,
+    pred_class = ifelse(
+      pred > prob_threshold, levels(adult$income)[2], 
+      levels(adult$income)[1]
+    ),
+    pred_correct = income == pred_class
+  )
+
+tb_pred <- 
+  tb_pred_aware |> mutate(model = "aware") |> 
+  bind_rows(
+    tb_pred_unaware |> mutate(model = "unaware")
+  ) |> 
+  mutate(
+    model = factor(
+      model, levels = c("aware", "unaware"),
+      labels = c("Aware model", "Unware model")
+    ),
+    type = factor(type, levels = c("factual", "naive", "fairadapt", "seq"))
+  )
 ```
 
-We identify the following sub-groups:
 
-```{r define-subgroups}
-adult <- adult |> mutate(id_indiv = row_number())
+We compute some metrics on the whole sample, in each case:
+```{r define-overall_perf_metrics}
+overall_perf_metrics <- 
+  tb_pred |> 
+  group_by(model, type) |> 
+  summarise(
+    mean = mean(pred),
+    eq_opp_pos = sum(pred * (y_binary == 1)) / (sum(y_binary == 1)),
+    eq_opp_neg = sum(pred * (y_binary == 0)) / (sum(y_binary == 0)),
+    acc = mean(pred_correct),
+    ll = calculate_log_loss(y_binary, pred),
+    bs = brier_score(y_binary, pred),
+    .groups = "drop"
+  ) |> 
+  mutate(sex_origin = "Whole")
+overall_perf_metrics
+```
 
-ind_women <- adult |> filter(sex == "Female") |> pull("id_indiv")
-ind_men <- adult |> filter(sex == "Male") |> pull("id_indiv")
-ind_pos <- adult |> filter(income == ">50K") |> pull("id_indiv")
-ind_neg <- adult |> filter(income == "<=50K") |> pull("id_indiv")
-ind_true_pos <- intersect(ind_pos, ind_women)
-ind_pos_women <- intersect(ind_pos, ind_women)
-ind_pos_men <- intersect(ind_pos, ind_men)
-ind_neg_women <- intersect(ind_neg, ind_women)
-ind_neg_men <- intersect(ind_neg, ind_men)
+And then we compute the same metrics but within the group of women and within the group of men.
+
+```{r define-group_perf_metrics}
+group_perf_metrics <- 
+  tb_pred |> 
+  group_by(model, type, sex_origin) |> 
+  summarise(
+    mean = mean(pred),
+    eq_opp_pos = sum(pred * (y_binary == 1)) / (sum(y_binary == 1)),
+    eq_opp_neg = sum(pred * (y_binary == 0)) / (sum(y_binary == 0)),
+    acc = mean(pred_correct),
+    ll = calculate_log_loss(y_binary, pred),
+    bs = brier_score(y_binary, pred),
+    .groups = "drop"
+  )
+group_perf_metrics
 ```
 
 
-Then, we compute the three metrics and merge them in a single table:
-```{r define-conditional_demographic_parity}
-conditional_demographic_parity <- NULL
-eq_op_pos <- NULL
-eq_op_neg <- NULL
-for (type in c("factual", "naive", "fairadapt", "seq")) {
-  for (model in c("aware", "unaware")) {
-    if (type == "factual") {
-      for (sensitive in c("Women", "Men")) {
-        # Conditional Demographic Parity
-        tmp_cdp <- 
-          get_prob(type = type, model = model, ind = ind_women) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_men, sensitive = "Men"
-            )
-          )
-        # ~ Equal Opportunity for Y=1
-        tmp_eq_op_pos <- 
-          get_prob(type = type, model = model, ind = ind_pos_women) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_pos_men, 
-              sensitive = "Men"
-            )
-          )
-        # ~ Equal Opportunity for Y=0
-        tmp_eq_op_neg <- 
-          get_prob(type = type, model = model, ind = ind_neg_women) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_neg_men, 
-              sensitive = "Men"
-            )
-          )
-      } 
-    } else {
-      tmp_cdp <- get_prob(type = type, model = model, ind = ind_women)
-      tmp_eq_op_pos <- get_prob(type = type, model = model, ind = ind_pos_women)
-      tmp_eq_op_neg <- get_prob(type = type, model = model, ind = ind_neg_women)
-    }
-    conditional_demographic_parity <- 
-      bind_rows(conditional_demographic_parity, tmp_cdp)
-    eq_op_pos <- bind_rows(eq_op_pos, tmp_eq_op_pos)
-    eq_op_neg <- bind_rows(eq_op_neg, tmp_eq_op_neg)
-  }
-}
+We compute the Counterfactual Demographic Parity:
+```{r}
+pred_women_factuals <- 
+  tb_pred |> filter(type == "factual") |> 
+  filter(sex_origin == "Female") |> 
+  select(model, id_indiv, pred_origin = pred)
 
-# Merge those in a single table:
-metrics <- 
-  conditional_demographic_parity |> mutate(metric = "CDP") |> 
-  bind_rows(eq_op_pos |> mutate(metric = "Eq. Opp. Y=1")) |> 
-  bind_rows(eq_op_neg |> mutate(metric = "Eq. Opp. Y=0"))
-
+cdp <- tb_pred |> 
+  filter(sex_origin == "Female") |> 
+  left_join(pred_women_factuals, by = c("id_indiv", "model")) |> 
+  group_by(model, type) |> 
+  summarise(
+    CDP = mean(pred - pred_origin),
+    .groups = "drop"
+  )
 ```
 
+
+The summary of the metrics are shown in @tbl-metrics-adult.
 
 ```{r}
 #| code-fold: true
 #| code-summary: The code to create the table.
-#| tbl-cap: Fairness metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
-#| label: tbl-fairness-metrics-adult
-# digits <- 2
-num_accuracy <- 0.01
-tb_res <- 
-  metrics |> 
-  mutate(type = ifelse(
-    type == "factual" & sensitive == "Men", "factual_men", type),
-    type = factor(type, levels = c("factual_men", "factual", "naive","fairadapt", "seq"))
+#| tbl-cap: Metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
+#| label: tbl-metrics-adult
+tbl_print <- 
+  group_perf_metrics |> filter(sex_origin == "Female") |> 
+  left_join(cdp, by = c("model", "type")) |> 
+  pivot_longer(cols = -c("model", "type", "sex_origin")) |> 
+  pivot_wider(names_from = type, values_from = value) |> 
+  select(-sex_origin) |> 
+  left_join(
+    group_perf_metrics |> filter(sex_origin == "Male" & type == "factual") |> 
+      pivot_longer(cols = -c("model", "type", "sex_origin"), values_to = "factual_men") |> 
+      select(model, name, factual_men),
+    by = c("model", "name")
   ) |> 
-  select(-sensitive) |> 
-  pivot_wider(names_from = "value_type", values_from = "value") |> 
-  mutate(value = paste0(
-    scales::number(mean, accuracy = num_accuracy),
-    " (",
-    scales::number(sd, accuracy = num_accuracy),
-    ")")
+  left_join(
+    overall_perf_metrics |> 
+      pivot_longer(cols = -c("model", "type", "sex_origin"), values_to = "factual_whole") |> 
+      filter(sex_origin == "Whole", type == "factual") |> 
+      select(model, name, factual_whole),
+    by = c("model", "name")
   ) |> 
-  select(-mean, -sd) |> 
-  pivot_wider(names_from = "type", values_from = "value", names_sort = TRUE) |> 
-  arrange(model, metric)
-knitr::kable(
-  tb_res[, -1], 
-  col.names = c("Metric", "Factual", "Factual", "Naive", "Fairadapt", "Seq. Transport")
-) |> 
-  kableExtra::kable_styling("striped", full_width = F) %>%
+  select(
+    model, name, factual_whole, factual_men, factual_women = factual,
+    naive, fairadapt, seq
+  ) |> 
+  mutate(
+    name = factor(
+      name,
+      levels = c("CDP", "mean", "eq_opp_pos", "eq_opp_neg", "acc", "ll", "bs"),
+      labels = c("CDP", "Mean", "Eq. Opp. Y=1", "Eq. Opp Y=0", "Accuracy", "Log-loss", "Brier Score")
+    )
+  ) |> 
+  arrange(model, name)
+
+tbl_print[, -1] |> 
+  knitr::kable(
+    digits = 2,
+    col.names = c(
+      "Metric", "Factual", "Factual", "Factual", "Naive", "Fairadapt", 
+      "Seq. Transport"
+    )
+  ) |> 
+  kableExtra::kable_styling() |> 
+  # kableExtra::pack_rows(index = table(tbl_print$sex_origin))
+  # kableExtra::collapse_rows(columns = 1, valign = "top")
   kableExtra::add_header_above(
-    c(" " = 1, "Men"=1, "Women"=4)
+    c(" " = 1, "Whole" = "1", "Men" = 1, "Women" = 4)
   ) |> 
-  kableExtra::pack_rows(index = table(tb_res$model))
+  kableExtra::pack_rows(index = table(tbl_print$model))
 ```
 
 
 ```{r, eval=FALSE}
 #| code-fold: true
-#| code-summary: LaTeX Table
+#| code-summary: LaTeX code
 knitr::kable(
-  tb_res[,-1], format = "latex", booktabs = TRUE
+  tbl_print[, -1], format = "latex", booktabs = TRUE, digits = 2,
 ) |> 
   kableExtra::kable_styling("striped", full_width = F) %>%
   kableExtra::add_header_above(
-    c(" " = 1, "Men"=1, "Women"=4)
+    c(" " = 1, "Whole" = 1, "Men" = 1, "Women" = 4)
   ) |> 
-  kableExtra::pack_rows(index = table(tb_res$model))
+  kableExtra::pack_rows(index = table(tbl_print$model))
+```
+
+
+```{r}
+# Brouillon
+tb_pred$type |> unique()
+
+lvl_neg <- levels(tb_pred$income)[1]
+lvl_pos <- levels(tb_pred$income)[2]
+
+tb_pred |> 
+  group_by(model, type, sex_origin) |> 
+  summarise(
+    TP = sum(income == lvl_pos & pred_class == lvl_pos),
+    FP = sum(income == lvl_neg & pred_class == lvl_pos),
+    FN = sum(income == lvl_pos & pred_class == lvl_neg),
+    TN = sum(income == lvl_neg & pred_class == lvl_neg),
+    P = TP + FN,
+    N = FP + TN
+  ) |> 
+  rowwise() |> 
+  mutate(
+    TPR = TP/P,
+    FPR = FN / N
+  ) |> 
+  group_by(model, type) |> 
+  mutate(
+    eq_odds_diff = abs(diff(TPR))
+  )
 ```
 
 

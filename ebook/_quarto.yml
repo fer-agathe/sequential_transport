@@ -28,6 +28,7 @@ book:
         - gaussian.qmd
         - transport-fast-grid.qmd
         - algorithm-3.qmd
+        - gaussian-dep.qmd
     - part: III. Counterfactuals with Law Dataset
       chapters:
       - data.qmd

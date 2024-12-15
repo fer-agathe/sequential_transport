@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./data.html" rel="next">
+<link href="./gaussian-dep.html" rel="next">
 <link href="./transport-fast-grid.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -254,6 +254,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gaussian-dep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Wrong Causal Assumptions</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -268,43 +274,43 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./classifier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Classifier</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-naive.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Naive Approach</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Naive Approach</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-fairadapt.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairadapt</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-ot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Multivariate Optimal Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-seq-transport.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Sequential Transport</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cf-comparison.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Counterfactuals: comparison</span></span></a>
   </div>
 </li>
       </ul>
@@ -321,7 +327,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./example-adult.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adult Dataset</span></span></a>
   </div>
 </li>
       </ul>
@@ -1732,155 +1738,157 @@ m(x_1,x_2,s)=\big(1+\exp\big[-\big((x_1+x_2)/2 + \boldsymbol{1}(s=1)\big)\big]\b
 <span id="cb96-35"><a href="#cb96-35" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>],</span>
 <span id="cb96-36"><a href="#cb96-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
 <span id="cb96-37"><a href="#cb96-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
-<span id="cb96-38"><a href="#cb96-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-39"><a href="#cb96-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-40"><a href="#cb96-40" aria-hidden="true" tabindex="-1"></a><span class="do">## Tansported ----</span></span>
-<span id="cb96-41"><a href="#cb96-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-42"><a href="#cb96-42" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb96-43"><a href="#cb96-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
-<span id="cb96-44"><a href="#cb96-44" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
-<span id="cb96-45"><a href="#cb96-45" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb96-46"><a href="#cb96-46" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb96-47"><a href="#cb96-47" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb96-48"><a href="#cb96-48" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
-<span id="cb96-49"><a href="#cb96-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
-<span id="cb96-50"><a href="#cb96-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb96-51"><a href="#cb96-51" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-52"><a href="#cb96-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
-<span id="cb96-53"><a href="#cb96-53" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
-<span id="cb96-54"><a href="#cb96-54" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb96-55"><a href="#cb96-55" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb96-56"><a href="#cb96-56" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb96-57"><a href="#cb96-57" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
-<span id="cb96-58"><a href="#cb96-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb96-59"><a href="#cb96-59" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-60"><a href="#cb96-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-61"><a href="#cb96-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model for s=1</span></span>
-<span id="cb96-62"><a href="#cb96-62" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb96-63"><a href="#cb96-63" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique1,</span>
-<span id="cb96-64"><a href="#cb96-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb96-65"><a href="#cb96-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd=</span><span class="dv">2</span>,</span>
-<span id="cb96-66"><a href="#cb96-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb96-67"><a href="#cb96-67" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-68"><a href="#cb96-68" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb96-69"><a href="#cb96-69" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb96-70"><a href="#cb96-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-71"><a href="#cb96-71" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-72"><a href="#cb96-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (s=0, x1=-2, x2=-1)</span></span>
-<span id="cb96-73"><a href="#cb96-73" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-74"><a href="#cb96-74" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-75"><a href="#cb96-75" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
-<span id="cb96-76"><a href="#cb96-76" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-77"><a href="#cb96-77" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> .<span class="dv">3</span>, coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span> <span class="sc">-</span> .<span class="dv">3</span>,</span>
-<span id="cb96-78"><a href="#cb96-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
-<span id="cb96-79"><a href="#cb96-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
-<span id="cb96-80"><a href="#cb96-80" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-81"><a href="#cb96-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-82"><a href="#cb96-82" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-83"><a href="#cb96-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x1 and then x2, i.e.,</span></span>
-<span id="cb96-84"><a href="#cb96-84" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
-<span id="cb96-85"><a href="#cb96-85" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-86"><a href="#cb96-86" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>],coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-87"><a href="#cb96-87" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb96-88"><a href="#cb96-88" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb96-89"><a href="#cb96-89" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb96-90"><a href="#cb96-90" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb96-91"><a href="#cb96-91" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-92"><a href="#cb96-92" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb96-93"><a href="#cb96-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
-<span id="cb96-94"><a href="#cb96-94" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb96-95"><a href="#cb96-95" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb96-96"><a href="#cb96-96" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-97"><a href="#cb96-97" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
-<span id="cb96-98"><a href="#cb96-98" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-99"><a href="#cb96-99" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-100"><a href="#cb96-100" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-101"><a href="#cb96-101" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span>,</span>
-<span id="cb96-102"><a href="#cb96-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">5</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb96-103"><a href="#cb96-103" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-104"><a href="#cb96-104" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for # (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
-<span id="cb96-105"><a href="#cb96-105" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-106"><a href="#cb96-106" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
-<span id="cb96-107"><a href="#cb96-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">3</span>]<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>),<span class="st">"%"</span>,<span class="at">sep=</span><span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb96-108"><a href="#cb96-108" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-109"><a href="#cb96-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-110"><a href="#cb96-110" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-111"><a href="#cb96-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x2 and then x1, i.e.,</span></span>
-<span id="cb96-112"><a href="#cb96-112" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
-<span id="cb96-113"><a href="#cb96-113" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-114"><a href="#cb96-114" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>],coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],<span class="at">pch=</span><span class="dv">19</span>,<span class="at">cex=</span>CeX)</span>
-<span id="cb96-115"><a href="#cb96-115" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb96-116"><a href="#cb96-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>],</span>
-<span id="cb96-117"><a href="#cb96-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb96-118"><a href="#cb96-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb96-119"><a href="#cb96-119" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-120"><a href="#cb96-120" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb96-121"><a href="#cb96-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb96-122"><a href="#cb96-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb96-123"><a href="#cb96-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
-<span id="cb96-124"><a href="#cb96-124" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-125"><a href="#cb96-125" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
-<span id="cb96-126"><a href="#cb96-126" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-127"><a href="#cb96-127" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb96-128"><a href="#cb96-128" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-129"><a href="#cb96-129" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb96-130"><a href="#cb96-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">6</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb96-131"><a href="#cb96-131" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-132"><a href="#cb96-132" aria-hidden="true" tabindex="-1"></a><span class="do">## New predicted value for (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
-<span id="cb96-133"><a href="#cb96-133" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-134"><a href="#cb96-134" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
-<span id="cb96-135"><a href="#cb96-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">4</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb96-136"><a href="#cb96-136" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-137"><a href="#cb96-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-138"><a href="#cb96-138" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-139"><a href="#cb96-139" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for (do(s=1), x1, x2), no transport</span></span>
-<span id="cb96-140"><a href="#cb96-140" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-141"><a href="#cb96-141" aria-hidden="true" tabindex="-1"></a>ry <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
-<span id="cb96-142"><a href="#cb96-142" aria-hidden="true" tabindex="-1"></a>plotrix<span class="sc">::</span><span class="fu">draw.circle</span>(</span>
-<span id="cb96-143"><a href="#cb96-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> ry, <span class="at">y =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> ry, </span>
-<span id="cb96-144"><a href="#cb96-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">radius =</span> ry <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)</span>
-<span id="cb96-145"><a href="#cb96-145" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-146"><a href="#cb96-146" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-147"><a href="#cb96-147" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">42</span>,</span>
-<span id="cb96-148"><a href="#cb96-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
-<span id="cb96-149"><a href="#cb96-149" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-150"><a href="#cb96-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-151"><a href="#cb96-151" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-152"><a href="#cb96-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual with optimal multivariate transport</span></span>
-<span id="cb96-153"><a href="#cb96-153" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb96-154"><a href="#cb96-154" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x_ot[<span class="dv">1</span>],coords<span class="sc">$</span>x_ot[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">15</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"#C93312"</span>)</span>
-<span id="cb96-155"><a href="#cb96-155" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
-<span id="cb96-156"><a href="#cb96-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb96-157"><a href="#cb96-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x_ot[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x_ot[<span class="dv">2</span>], </span>
-<span id="cb96-158"><a href="#cb96-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span>,</span>
-<span id="cb96-159"><a href="#cb96-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#C93312"</span>, <span class="at">lty =</span> <span class="dv">2</span></span>
-<span id="cb96-160"><a href="#cb96-160" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb96-161"><a href="#cb96-161" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb96-162"><a href="#cb96-162" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x_ot[<span class="dv">1</span>], coords<span class="sc">$</span>x_ot[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">22</span>,</span>
-<span id="cb96-163"><a href="#cb96-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">7</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX,</span>
-<span id="cb96-164"><a href="#cb96-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#C93312"</span>,</span>
-<span id="cb96-165"><a href="#cb96-165" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb96-38"><a href="#cb96-38" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-counterfactuals-new-individual-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-counterfactuals-new-individual-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.7: In the background, level curves for <span class="math inline">\((x_1,x_2)\mapsto m(0,x_1,x_2)\)</span> and <span class="math inline">\(m(1,x_1,x_2)\)</span> respectively on the left and on the right. Then, on the left, individual <span class="math inline">\((s,x_1,x_2)=(s=0,-2,-1)\)</span> (predicted 18.2% by model <span class="math inline">\(m\)</span>, and 7.6% if <span class="math inline">\(s\)</span> is set to 1 leaving <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> unchanged), and on the right, visualization of two counterfactuals <span class="math inline">\((s=1,x_1^\star,x_2^\star)\)</span> according to a causal graph where <span class="math inline">\(x_1\)</span> depends on <span class="math inline">\(x_2\)</span> (bottom right path, predicted 61.4%) and a causal graph where <span class="math inline">\(x_2\)</span> depends on <span class="math inline">\(x_1\)</span> (top left path, predicted 56.5%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model <span class="math inline">\(m\)</span> at 56.5%).
+Figure&nbsp;4.7: In the background, level curves for <span class="math inline">\((x_1,x_2)\mapsto m(0,x_1,x_2)\)</span>. The blue point corresponds to the individual <span class="math inline">\((s,x_1,x_2)=(s=0,-2,-1)\)</span> (predicted 18.2% by model <span class="math inline">\(m\)</span>, and 7.6% if <span class="math inline">\(s\)</span> is set to 1 leaving <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> unchanged).
 </figcaption>
 <div aria-describedby="fig-counterfactuals-new-individual-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="algorithm-3_files/figure-html/fig-counterfactuals-new-individual-1.png" class="img-fluid figure-img" width="672">
+<img src="algorithm-3_files/figure-html/fig-counterfactuals-new-individual-1-1.png" class="img-fluid figure-img" width="672">
 </div>
 </figure>
 </div>
 </div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 0</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(0, x1, x2)</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
+<span id="cb97-17"><a href="#cb97-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb97-18"><a href="#cb97-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-19"><a href="#cb97-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-20"><a href="#cb97-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of estimates by the model for s=1</span></span>
+<span id="cb97-21"><a href="#cb97-21" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb97-22"><a href="#cb97-22" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique1,</span>
+<span id="cb97-23"><a href="#cb97-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb97-24"><a href="#cb97-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl, <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb97-25"><a href="#cb97-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb97-26"><a href="#cb97-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-27"><a href="#cb97-27" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb97-28"><a href="#cb97-28" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb97-29"><a href="#cb97-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-30"><a href="#cb97-30" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-31"><a href="#cb97-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (s=0, x1=-2, x2=-1)</span></span>
+<span id="cb97-32"><a href="#cb97-32" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-33"><a href="#cb97-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-34"><a href="#cb97-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
+<span id="cb97-35"><a href="#cb97-35" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-36"><a href="#cb97-36" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> .<span class="dv">3</span>, coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span> <span class="sc">-</span> .<span class="dv">3</span>,</span>
+<span id="cb97-37"><a href="#cb97-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
+<span id="cb97-38"><a href="#cb97-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
+<span id="cb97-39"><a href="#cb97-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-40"><a href="#cb97-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-41"><a href="#cb97-41" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-42"><a href="#cb97-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x1 and then x2, i.e.,</span></span>
+<span id="cb97-43"><a href="#cb97-43" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
+<span id="cb97-44"><a href="#cb97-44" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-45"><a href="#cb97-45" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>],coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-46"><a href="#cb97-46" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb97-47"><a href="#cb97-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb97-48"><a href="#cb97-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb97-49"><a href="#cb97-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb97-50"><a href="#cb97-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-51"><a href="#cb97-51" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb97-52"><a href="#cb97-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
+<span id="cb97-53"><a href="#cb97-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb97-54"><a href="#cb97-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb97-55"><a href="#cb97-55" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-56"><a href="#cb97-56" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
+<span id="cb97-57"><a href="#cb97-57" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-58"><a href="#cb97-58" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-59"><a href="#cb97-59" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-60"><a href="#cb97-60" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> .<span class="dv">42</span>,</span>
+<span id="cb97-61"><a href="#cb97-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">5</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb97-62"><a href="#cb97-62" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-63"><a href="#cb97-63" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for # (do(s=1), T_1^*(x1), T_2^*(x_2 | x_1))</span></span>
+<span id="cb97-64"><a href="#cb97-64" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-65"><a href="#cb97-65" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x1_then_x2[<span class="dv">1</span>], coords<span class="sc">$</span>x1_then_x2[<span class="dv">2</span>],</span>
+<span id="cb97-66"><a href="#cb97-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">3</span>]<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>),<span class="st">"%"</span>,<span class="at">sep=</span><span class="st">""</span>), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb97-67"><a href="#cb97-67" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-68"><a href="#cb97-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-69"><a href="#cb97-69" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-70"><a href="#cb97-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual when transporting x2 and then x1, i.e.,</span></span>
+<span id="cb97-71"><a href="#cb97-71" aria-hidden="true" tabindex="-1"></a><span class="co"># (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
+<span id="cb97-72"><a href="#cb97-72" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-73"><a href="#cb97-73" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>],coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],<span class="at">pch=</span><span class="dv">19</span>,<span class="at">cex=</span>CeX)</span>
+<span id="cb97-74"><a href="#cb97-74" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb97-75"><a href="#cb97-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>],</span>
+<span id="cb97-76"><a href="#cb97-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb97-77"><a href="#cb97-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb97-78"><a href="#cb97-78" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-79"><a href="#cb97-79" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb97-80"><a href="#cb97-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb97-81"><a href="#cb97-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb97-82"><a href="#cb97-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span></span>
+<span id="cb97-83"><a href="#cb97-83" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-84"><a href="#cb97-84" aria-hidden="true" tabindex="-1"></a><span class="do">## Intermediate point</span></span>
+<span id="cb97-85"><a href="#cb97-85" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-86"><a href="#cb97-86" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb97-87"><a href="#cb97-87" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-88"><a href="#cb97-88" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb97-89"><a href="#cb97-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">6</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb97-90"><a href="#cb97-90" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-91"><a href="#cb97-91" aria-hidden="true" tabindex="-1"></a><span class="do">## New predicted value for (do(s=1), T_1^*(x1 | x2), T_2^*(x_2))</span></span>
+<span id="cb97-92"><a href="#cb97-92" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-93"><a href="#cb97-93" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x2_then_x1[<span class="dv">1</span>], coords<span class="sc">$</span>x2_then_x1[<span class="dv">2</span>],</span>
+<span id="cb97-94"><a href="#cb97-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">4</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb97-95"><a href="#cb97-95" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-96"><a href="#cb97-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-97"><a href="#cb97-97" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-98"><a href="#cb97-98" aria-hidden="true" tabindex="-1"></a><span class="co"># New predicted value for (do(s=1), x1, x2), no transport</span></span>
+<span id="cb97-99"><a href="#cb97-99" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-100"><a href="#cb97-100" aria-hidden="true" tabindex="-1"></a>ry <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
+<span id="cb97-101"><a href="#cb97-101" aria-hidden="true" tabindex="-1"></a>plotrix<span class="sc">::</span><span class="fu">draw.circle</span>(</span>
+<span id="cb97-102"><a href="#cb97-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>] <span class="sc">-</span> ry, <span class="at">y =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">-</span> ry, </span>
+<span id="cb97-103"><a href="#cb97-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">radius =</span> ry <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)</span>
+<span id="cb97-104"><a href="#cb97-104" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-105"><a href="#cb97-105" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-106"><a href="#cb97-106" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>start[<span class="dv">1</span>], coords<span class="sc">$</span>start[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">42</span>,</span>
+<span id="cb97-107"><a href="#cb97-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX</span>
+<span id="cb97-108"><a href="#cb97-108" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-109"><a href="#cb97-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-110"><a href="#cb97-110" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-111"><a href="#cb97-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Transported individual with optimal multivariate transport</span></span>
+<span id="cb97-112"><a href="#cb97-112" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb97-113"><a href="#cb97-113" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords<span class="sc">$</span>x_ot[<span class="dv">1</span>],coords<span class="sc">$</span>x_ot[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">15</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"#C93312"</span>)</span>
+<span id="cb97-114"><a href="#cb97-114" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(</span>
+<span id="cb97-115"><a href="#cb97-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> coords<span class="sc">$</span>start[<span class="dv">1</span>], <span class="at">y0 =</span> coords<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb97-116"><a href="#cb97-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> coords<span class="sc">$</span>x_ot[<span class="dv">1</span>], <span class="at">y1 =</span> coords<span class="sc">$</span>x_ot[<span class="dv">2</span>], </span>
+<span id="cb97-117"><a href="#cb97-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> .<span class="dv">8</span>,</span>
+<span id="cb97-118"><a href="#cb97-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#C93312"</span>, <span class="at">lty =</span> <span class="dv">2</span></span>
+<span id="cb97-119"><a href="#cb97-119" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-120"><a href="#cb97-120" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb97-121"><a href="#cb97-121" aria-hidden="true" tabindex="-1"></a>  coords<span class="sc">$</span>x_ot[<span class="dv">1</span>], coords<span class="sc">$</span>x_ot[<span class="dv">2</span>] <span class="sc">+</span> .<span class="dv">22</span>,</span>
+<span id="cb97-122"><a href="#cb97-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(v[<span class="dv">7</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">cex =</span> CeX,</span>
+<span id="cb97-123"><a href="#cb97-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#C93312"</span>,</span>
+<span id="cb97-124"><a href="#cb97-124" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-counterfactuals-new-individual-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-counterfactuals-new-individual-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.8: In the background, level curves for <span class="math inline">\((x_1,x_2)\mapsto m(0,x_1,x_2)\)</span> and <span class="math inline">\(m(1,x_1,x_2)\)</span> respectively on the left and on the right. Then, on the left, individual <span class="math inline">\((s,x_1,x_2)=(s=0,-2,-1)\)</span> (predicted 18.2% by model <span class="math inline">\(m\)</span>, and 7.6% if <span class="math inline">\(s\)</span> is set to 1 leaving <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> unchanged), and on the right, visualization of two counterfactuals <span class="math inline">\((s=1,x_1^\star,x_2^\star)\)</span> according to a causal graph where <span class="math inline">\(x_1\)</span> depends on <span class="math inline">\(x_2\)</span> (bottom right path, predicted 61.4%) and a causal graph where <span class="math inline">\(x_2\)</span> depends on <span class="math inline">\(x_1\)</span> (top left path, predicted 56.5%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model <span class="math inline">\(m\)</span> at 56.5%).
+Figure&nbsp;4.8: In the background, level curves for<span class="math inline">\(m(1,x_1,x_2)\)</span>. Two counterfactuals are depicted by the black dots <span class="math inline">\((s=1,x_1^\star,x_2^\star)\)</span> according to a causal graph where <span class="math inline">\(x_2\)</span> depends on <span class="math inline">\(x_1\)</span> (bottom left path, predicted 61.4%) and a causal graph where <span class="math inline">\(x_1\)</span> depends on <span class="math inline">\(x_2\)</span> (top left path, predicted 56.5%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model <span class="math inline">\(m\)</span> at 56.5%).
 </figcaption>
 <div aria-describedby="fig-counterfactuals-new-individual-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="algorithm-3_files/figure-html/fig-counterfactuals-new-individual-2.png" class="img-fluid figure-img" width="672">
+<img src="algorithm-3_files/figure-html/fig-counterfactuals-new-individual-2-1.png" class="img-fluid figure-img" width="672">
 </div>
 </figure>
 </div>
@@ -2319,8 +2327,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./data.html" class="pagination-link" aria-label="Data">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./gaussian-dep.html" class="pagination-link" aria-label="Wrong Causal Assumptions">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Wrong Causal Assumptions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
