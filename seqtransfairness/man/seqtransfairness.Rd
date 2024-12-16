@@ -34,13 +34,10 @@ adj <- matrix(
 transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
 transported
 # Transported values from S=0 to S=1, using the causal graph.
-transported_val <- as.data.frame(transported$transported)
+predict(transported)
 # Transport of two new observations
 new_obs <- data.frame(X1 = c(-2, -1), X2 = c(-1, -2), S = c(0, 0))
-transport_new <- seq_trans_new(
-  x = transported, newdata = new_obs, data = sim_dat
-)
-new_obs_transported <- as.data.frame(transport_new)
+predict(transported, newdata = new_obs, data = sim_dat)
 }
 \author{
 Fernandes Machado, Agathe and Charpentier, Arthur and Gallic, Ewen.
