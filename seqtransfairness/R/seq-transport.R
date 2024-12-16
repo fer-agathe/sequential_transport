@@ -24,6 +24,7 @@
 #'     * `top_order`: Topological ordering.
 #'     * `s`: Name of the sensitive attribute.
 #'     * `S_0`: Label of the sensitive attribute in the source distribution.
+#'     * `S_1`: Label of the sensitive attribute in the target distribution.
 #'     * `y`: Name of the outcome variable in the data.
 #'     * `num_neighbors`: Number of neighbors used when computing quantiles.
 #' @md
@@ -51,6 +52,7 @@
 #'
 #' # Sequential transport according to the causal graph
 #' transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
+#' transported
 #' # Transported values from S=0 to S=1, using the causal graph.
 #' transported_val <- as.data.frame(transported$transported)
 #' head(transported_val)
@@ -74,6 +76,9 @@ seq_trans <- function(data,
   data <-
     data |>
     mutate(across(where(is_character), ~as.factor(.x)))
+
+  s_unique <- unique(data[[s]])
+  S_1 <- s_unique[s_unique != S_0]
 
   # Topological ordering
   top_order <- topological_ordering(adj)
@@ -222,6 +227,7 @@ seq_trans <- function(data,
         top_order = top_order,
         s = s,
         S_0 = S_0,
+        S_1 = S_1,
         y = y,
         num_neighbors = num_neighbors
       )

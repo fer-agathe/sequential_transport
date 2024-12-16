@@ -7,10 +7,10 @@ print.sequential_transport <- function(x, ...) {
   params <- x$params
   top_order <- params$top_order
   cat("Outcome:", params$y, "\n")
-  cat(paste0("Sensitive: ", params$s,
-             ", with value ", params$S_0, " in source group.\n")
-  )
-  cat("Topological ordering:", top_order, "\n")
+  cat("Sensitive:", params$s, "\n")
+  cat("\t- with value", params$S_0, "in source group.\n")
+  cat("\t- twith value", params$S_1, "in target group.\n")
+  cat("\nTopological ordering:", top_order, "\n")
 
   # From fairadapt code
   mat <- rbind(colnames(params$adj), params$adj)
@@ -77,5 +77,5 @@ predict.sequential_transport <- function(object,
     pred <- seq_trans_new(x = object, newdata = newdata, data = data)
   }
   as_tibble(pred) |>
-    mutate(!!sym(object$params$s) := object$params$S_0)
+    mutate(!!sym(object$params$s) := object$params$S_1)
 }

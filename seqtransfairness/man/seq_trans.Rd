@@ -37,6 +37,7 @@ An element of class \code{"sequential_transport"} (a list):
 \item \code{top_order}: Topological ordering.
 \item \code{s}: Name of the sensitive attribute.
 \item \code{S_0}: Label of the sensitive attribute in the source distribution.
+\item \code{S_1}: Label of the sensitive attribute in the target distribution.
 \item \code{y}: Name of the outcome variable in the data.
 \item \code{num_neighbors}: Number of neighbors used when computing quantiles.
 }
@@ -68,6 +69,7 @@ adj <- matrix(
 
 # Sequential transport according to the causal graph
 transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
+transported
 # Transported values from S=0 to S=1, using the causal graph.
 transported_val <- as.data.frame(transported$transported)
 head(transported_val)
