@@ -28,7 +28,7 @@ This ebook is made of fourt parts:
   Using data simulated from bivariate Gaussian distributions in two subgroups of the population ($S=0$ and $S=1$), we illustrate the sequential transport algorithm ([Chapter -@sec-gaussian]). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context ([Chapter -@sec-regression]). We then present another algorithm which can be used if the covariates are not all numeric ([Chapter -@sec-alg-3]). Lastly, we explore what happens when assuming a wrong DAG ([Chapter -@sec-wrong-causal]).
 3. The third part shows an example with real data. 
   The law datatest used as an illustration is first presented ([Chapter -@sec-data]). In this data, the individuals (students) may be part of a protected group ($S=0$) or not ($S=1$). Then, a GLM model is estimated to predict a binary outcome ([Chapter -@sec-classifier]). We then present three methods to produce counterfactuals from group $S=0$ to group $S=1$: fairadapt ([Chapter -@sec-cf-fairadapt]), multivariate optimal transport ([Chapter -@sec-cf-ot]), and sequential transport ([Chapter -@sec-cf-seq-t]). A comparison of the results is presented in ([Chapter -@sec-cf-comparison]).
-4. The fourth part replicates the analysis from the previous part, using the UCI Adult dataset ([Chapter -@sec-adult-dataset]).
+4. The fourth part replicates the analysis from the previous part, using the UCI Adult dataset ([Chapter -@sec-adult-dataset]), and the COMPAS dataset ([Chapter -@sec-compas-dataset}]).
 
 ## Small Package
 
