@@ -17,6 +17,7 @@ In this chapter, we illustrate the interpretable counterfactual fairness methodo
 library(tidyverse)
 library(ks)
 library(dichromat)
+library(expm)
 colours <- c(
   `0` = "#5BBCD6", 
   `1` = "#FF0000", 
@@ -30,8 +31,6 @@ colours <- c(
 colfunc <- colorRampPalette(c(colours["0"], colours["1"]))
 scl <- scales::alpha(colfunc(9),.9)
 ```
-
-
 
 
 ## Data Generation
@@ -117,6 +116,17 @@ f0_2d <- kde(D_SXY0[, c("X1","X2")], H = H0, xmin = c(-5, -5), xmax = c(5, 5))
 f1_2d <- kde(D_SXY1[, c("X1","X2")], H = H1, xmin = c(-5, -5), xmax = c(5, 5))
 ```
 
+## Optimal Transport
+
+First, for comparison purposes, since $X_1$ and $X_2$ are drawn from a multivariate Gaussian distribution, we can compute the transported values using the closed form formula.
+
+```{r define-transport_ot}
+AA <- sqrtm(S0) %*% S1 %*% (sqrtm(S0))
+AA <- solve(sqrtm(S0)) %*% sqrtm(AA) %*% solve((sqrtm(S0)))
+OT <- function(x) as.vector(M1 + AA %*% (x - M0))
+transport_ot <- t(apply(D_SXY_0[, c("X1", "X2")], 1, OT))
+head(transport_ot)
+```
 
 ## Hypothetical Model {#sec-regression-model}
 
@@ -1231,7 +1241,15 @@ Let us focus on individual $(s, -2, 1)$.
 xystart <- c(-2,-1)
 ```
 
+The counterfactual with optimal transport:
+```{r define-new_obs_ot}
+(new_obs_ot <- OT(xystart))
+```
+
+
 Let us make multiple predictions for that individual, given the assumed structural model.
+
+
 
 ```{tikz, fig.width = 2, echo=FALSE, fig.height = 3}
 #| fig-cap: "Causal network with two legitimate mitigating variables $x_1$ and $x_2$."
@@ -1294,7 +1312,9 @@ coords <- data.frame(
   # 4. (T_1(x1), x2)
   x1_intermediaire = c(transport_x1(x1 = xystart[1]), xystart[2]),
   # 5. (x1, T_2(x2))
-  x2_intermediaire = c(xystart[1], transport_x2(xystart[2]))
+  x2_intermediaire = c(xystart[1], transport_x2(xystart[2])),
+  # 6. T*(x1,x2)
+  x_ot = c(new_obs_ot[1], new_obs_ot[2])
 )
 ```
 
@@ -1313,7 +1333,9 @@ v <- c(
   # 5. Prediction if (S = 1, T_1(x1), x2)
   logistique_reg(coords$x1_intermediaire[1], coords$x1_intermediaire[2], 1),
   # 6. Prediction if (S = 1, x1, T_2(x2))
-  logistique_reg(coords$x2_intermediaire[1], coords$x2_intermediaire[2], 1)
+  logistique_reg(coords$x2_intermediaire[1], coords$x2_intermediaire[2], 1),
+  # 7. Prediction if (S=1, T*(x1), T*(x2))
+  logistique_reg(coords$x_ot[1], coords$x_ot[2], 1)
 )
 v
 ```
@@ -1418,7 +1440,7 @@ text(
 And then we can show the the predictions made on the counterfactuals depending on the causal assumption.
 
 ```{r, dev.args = list(bg = 'transparent')}
-#| fig-cap: Two counterfactuals, based on either the causal assumption from @fig-DAG-a (bottom right path) or on the causal assumption from @fig-DAG-b (top left path)
+#| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. Two counterfactuals are depicted by the black dots $(s=1,x_1^\\star,x_2^\\star)$ according to a causal graph where $x_2$ depends on $x_1$ (bottom left path, predicted 40.9%) and a causal graph where $x_1$ depends on $x_2$ (top left path, predicted 54.1%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 56.5%)."
 #| label: fig-gauss-logistic-predicted-decomposition
 #| fig-width: 4
 #| fig-height: 4
@@ -1523,13 +1545,29 @@ text(
 # New predicted value for (do(s=1), x1, x2), no transport
 ###
 ry <- .2
-draw.circle(
+plotrix::draw.circle(
   x = coords$start[1] - ry, y = coords$start[2] - ry, 
   radius = ry * sqrt(2)
 )
 text(
   coords$start[1], coords$start[2] + .42,
   paste(round(v[2] * 100, 1), "%", sep = ""), pos = 4, cex = CeX
+)
+
+###
+# Transported individual with optimal multivariate transport
+###
+points(coords$x_ot[1],coords$x_ot[2], pch = 15, cex = CeX, col = "#C93312")
+segments(
+  x0 = coords$start[1], y0 = coords$start[2], 
+  x1 = coords$x_ot[1], y1 = coords$x_ot[2], 
+  lwd = .8,
+  col = "#C93312", lty = 2
+)
+text(
+  coords$x_ot[1], coords$x_ot[2],
+  paste(round(v[7] * 100, 1), "%", sep = ""), pos = 4, cex = CeX,
+  col = "#C93312",
 )
 ```
 
