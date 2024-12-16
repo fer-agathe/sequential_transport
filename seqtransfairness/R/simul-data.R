@@ -27,6 +27,7 @@
 #'
 #' @importFrom mnormt rmnorm
 #' @importFrom stats rbinom
+#' @importFrom tibble as_tibble
 #'
 #' @examples
 #' sim_dat <- simul_dataset()
@@ -54,5 +55,5 @@ simul_dataset <- function(n_0 = 100,
   D_SXY_0$Y <- rbinom(n_0, size = 1, prob = p_0)
   D_SXY_1$Y <- rbinom(n_1, size = 1, prob = p_1)
   D_SXY <- rbind(D_SXY_0, D_SXY_1)
-  D_SXY
+  as_tibble(D_SXY)
 }

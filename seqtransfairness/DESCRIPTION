@@ -19,5 +19,6 @@ Imports:
     purrr,
     rlang,
     stringr,
+    tibble,
     tidyselect
 RoxygenNote: 7.3.2
