@@ -29,6 +29,31 @@
 #' @md
 #' @export
 #'
+#' @examples
+#' # Data with two groups: S=0, S=1, an outcome Y and two covariates X1 and X2
+#' sim_dat <- simul_dataset()
+#' # Causal graph:
+#' variables <- c("S", "X1", "X2", "Y")
+#' adj <- matrix(
+#'   # S  X1 X2 Y
+#'   c(0, 1, 1, 1,# S
+#'     0, 0, 1, 1,# X1
+#'     0, 0, 0, 1,# X2
+#'     0, 0, 0, 0  # Y
+#'   ),
+#'   ncol = length(variables),
+#'   dimnames = rep(list(variables), 2),
+#'   byrow = TRUE
+#' )
+#' # To visualize the causal graph:
+#' causal_graph <- fairadapt::graphModel(adj)
+#' plot(causal_graph)
+#'
+#' # Sequential transport according to the causal graph
+#' transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
+#' # Transported values from S=0 to S=1, using the causal graph.
+#' transported_val <- as.data.frame(transported$transported)
+#' head(transported_val)
 #' @importFrom stats predict ecdf quantile
 #' @importFrom dplyr across filter mutate pull select
 #' @importFrom tidyselect where
@@ -37,6 +62,7 @@
 #' @importFrom Hmisc wtd.quantile
 #' @importFrom nnet multinom
 #' @importFrom purrr map_chr
+#' @seealso [seq_trans_new()], [simul_dataset()]
 seq_trans <- function(data,
                       adj,
                       s,
@@ -218,6 +244,36 @@ seq_trans <- function(data,
 #' @returns A list with the transported values. Each element contains the
 #'          transported values of a variable.
 #'
+#' @examples
+#' # Data with two groups: S=0, S=1, an outcome Y and two covariates X1 and X2
+#' sim_dat <- simul_dataset()
+#' # Causal graph:
+#' variables <- c("S", "X1", "X2", "Y")
+#' adj <- matrix(
+#'   # S  X1 X2 Y
+#'   c(0, 1, 1, 1,# S
+#'     0, 0, 1, 1,# X1
+#'     0, 0, 0, 1,# X2
+#'     0, 0, 0, 0  # Y
+#'   ),
+#'   ncol = length(variables),
+#'   dimnames = rep(list(variables), 2),
+#'   byrow = TRUE
+#' )
+#'
+#' # Sequential transport according to the causal graph
+#' transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
+#' # Transported values from S=0 to S=1, using the causal graph.
+#' transported_val <- as.data.frame(transported$transported)
+#' head(transported_val)
+#'
+#' # Transport of two new observations
+#' new_obs <- data.frame(X1 = c(-2, -1), X2 = c(-1, -2), S = c(0, 0))
+#' transport_new <- seq_trans_new(
+#'   x = transported, newdata = new_obs, data = sim_dat
+#' )
+#' new_obs_transported <- as.data.frame(transport_new)
+#' new_obs_transported
 #' @importFrom stats predict quantile
 #' @importFrom dplyr across filter mutate pull select
 #' @importFrom purrr map_dbl
@@ -226,6 +282,8 @@ seq_trans <- function(data,
 #' @importFrom Hmisc wtd.quantile
 #' @importFrom nnet multinom
 #' @importFrom purrr map_chr
+#' @seealso [seq_trans()], [simul_dataset()]
+#' @md
 seq_trans_new <- function(x,
                           newdata,
                           data) {

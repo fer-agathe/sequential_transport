@@ -46,3 +46,32 @@ A list with the following elements:
 The sensitive attribute, S, is assumed to be a binary variable with value
 $S_0$ in the source distribution and $S_1$ in the target distribution.
 }
+\examples{
+# Data with two groups: S=0, S=1, an outcome Y and two covariates X1 and X2
+sim_dat <- simul_dataset()
+# Causal graph:
+variables <- c("S", "X1", "X2", "Y")
+adj <- matrix(
+  # S  X1 X2 Y
+  c(0, 1, 1, 1,# S
+    0, 0, 1, 1,# X1
+    0, 0, 0, 1,# X2
+    0, 0, 0, 0  # Y
+  ),
+  ncol = length(variables),
+  dimnames = rep(list(variables), 2),
+  byrow = TRUE
+)
+# To visualize the causal graph:
+causal_graph <- fairadapt::graphModel(adj)
+plot(causal_graph)
+
+# Sequential transport according to the causal graph
+transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
+# Transported values from S=0 to S=1, using the causal graph.
+transported_val <- as.data.frame(transported$transported)
+head(transported_val)
+}
+\seealso{
+\code{\link[=seq_trans_new]{seq_trans_new()}}, \code{\link[=simul_dataset]{simul_dataset()}}
+}
