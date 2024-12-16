@@ -13,7 +13,7 @@
 #' @param silent If `TRUE`, the messages showing progress in the estimation are
 #'        not shown. Default to `silent=FALSE`.
 #'
-#' @returns A list with the following elements:
+#' @returns An element of class `"sequential_transport"` (a list):
 #' * `transported`: A named list with the transported values. The names are those of the variables.
 #' * `weights`: A list with the weights of each observation in the two groups.
 #' * `ecdf`: A list with empirical distribution functions for numerical variables.
@@ -46,8 +46,8 @@
 #'   byrow = TRUE
 #' )
 #' # To visualize the causal graph:
-#' causal_graph <- fairadapt::graphModel(adj)
-#' plot(causal_graph)
+#' # causal_graph <- fairadapt::graphModel(adj)
+#' # plot(causal_graph)
 #'
 #' # Sequential transport according to the causal graph
 #' transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")
@@ -210,7 +210,7 @@ seq_trans <- function(data,
     }
   }
 
-  return(
+  structure(
     list(
       transported = list_transported,
       weights = list_weights,
@@ -225,9 +225,12 @@ seq_trans <- function(data,
         y = y,
         num_neighbors = num_neighbors
       )
-    )
+    ),
+    class = "sequential_transport"
   )
 }
+
+
 
 #' Sequential Transport of New Observations Using a Pre-Defined Causal Graph
 #'
@@ -430,12 +433,26 @@ seq_trans_new <- function(x,
 #' @source This function comes from the fairadapt package. Drago Plecko,
 #'         Nicolai Meinshausen (2020). Fair data adaptation with quantile
 #'         preservation Journal of Machine Learning Research, 21.242, 1-44.
-#'         URL https://www.jmlr.org/papers/v21/19-966.html.
+#'         URL: https://www.jmlr.org/papers/v21/19-966.html.
 #' @param adj_mat Adjacency matrix with names of the variables for both rows and
 #'        columns.
 #' @return A character vector (names of the variables) providing a topological
 #'         ordering.
 #' @export
+#' @examples
+#' variables <- c("S", "X1", "X2", "Y")
+#' adj <- matrix(
+#'   # S  X1 X2 Y
+#'   c(0, 1, 1, 1,# S
+#'     0, 0, 1, 1,# X1
+#'     0, 0, 0, 1,# X2
+#'     0, 0, 0, 0  # Y
+#'   ),
+#'   ncol = length(variables),
+#'   dimnames = rep(list(variables), 2),
+#'   byrow = TRUE
+#' )
+#' topological_ordering(adj)
 topological_ordering <- function(adj_mat) {
   nrw <- nrow(adj_mat)
   num_walks <- adj_mat

@@ -8,6 +8,10 @@
 #' a train set. Predicted scores are then returned on both the train and the
 #' test set.
 #'
+#' WARNING
+#' This function is used to illustrate the method. We do not recommend
+#' using it for other purposes.
+#'
 #' @param train_data Train set.
 #' @param test_data Test set.
 #' @param s Name of the sensitive attribute.
@@ -20,9 +24,32 @@
 #' * `pred_train`: Estimated scores on the train set.
 #' * `pred_test`: Estimated scores on the test set.
 #'
+#' @export
+#'
 #' @importFrom dplyr select
 #' @importFrom rlang !!
 #' @importFrom stats glm predict as.formula binomial
+#' @seealso [simul_dataset()], [split_dataset()]
+#' @examples
+#' # WARNING: this function is used to illustrate the method. We do not recommend
+#' # using it for other purposes.
+#'
+#' # Simulate data
+#' df <- simul_dataset()
+#' # Split: train (70%) / test (30%)
+#' sets <- split_dataset(df, train_ratio = 0.7)
+#' data_train <- sets$data_train
+#' data_test <- sets$data_test
+#' # Logistic regression to predict Y, making the model blind to S
+#' pred_unaware <- log_reg_train(
+#'   data_train, data_test, s = "S", y = "Y", type = "unaware"
+#' )
+#' # Fitted model:
+#' pred_unaware$model
+#' # Predicted values on train set
+#' head(pred_unaware$pred_train)
+#' # Predicted values on test set
+#' head(pred_unaware$pred_test)
 log_reg_train <- function(train_data,
                           test_data,
                           s,

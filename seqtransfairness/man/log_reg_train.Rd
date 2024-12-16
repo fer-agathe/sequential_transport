@@ -31,4 +31,32 @@ that may include (aware model) or may not include (unaware model) a sensitive
 binary attribute (S). A logistic regression is used to to so. It is fitted on
 a train set. Predicted scores are then returned on both the train and the
 test set.
+
+WARNING
+This function is used to illustrate the method. We do not recommend
+using it for other purposes.
+}
+\examples{
+# WARNING: this function is used to illustrate the method. We do not recommend
+# using it for other purposes.
+
+# Simulate data
+df <- simul_dataset()
+# Split: train (70\%) / test (30\%)
+sets <- split_dataset(df, train_ratio = 0.7)
+data_train <- sets$data_train
+data_test <- sets$data_test
+# Logistic regression to predict Y, making the model blind to S
+pred_unaware <- log_reg_train(
+  data_train, data_test, s = "S", y = "Y", type = "unaware"
+)
+# Fitted model:
+pred_unaware$model
+# Predicted values on train set
+head(pred_unaware$pred_train)
+# Predicted values on test set
+head(pred_unaware$pred_test)
+}
+\seealso{
+[simul_dataset()], [split_dataset()]
 }
