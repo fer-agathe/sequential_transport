@@ -24,7 +24,7 @@ estimation. Default to 5.}
 not shown. Default to \code{silent=FALSE}.}
 }
 \value{
-A list with the following elements:
+An element of class \code{"sequential_transport"} (a list):
 \itemize{
 \item \code{transported}: A named list with the transported values. The names are those of the variables.
 \item \code{weights}: A list with the weights of each observation in the two groups.
@@ -63,8 +63,8 @@ adj <- matrix(
   byrow = TRUE
 )
 # To visualize the causal graph:
-causal_graph <- fairadapt::graphModel(adj)
-plot(causal_graph)
+# causal_graph <- fairadapt::graphModel(adj)
+# plot(causal_graph)
 
 # Sequential transport according to the causal graph
 transported <- seq_trans(data = sim_dat, adj = adj, s = "S", S_0 = 0, y = "Y")

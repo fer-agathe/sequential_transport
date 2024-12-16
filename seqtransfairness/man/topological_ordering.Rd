@@ -7,7 +7,7 @@
 This function comes from the fairadapt package. Drago Plecko,
         Nicolai Meinshausen (2020). Fair data adaptation with quantile
         preservation Journal of Machine Learning Research, 21.242, 1-44.
-        URL https://www.jmlr.org/papers/v21/19-966.html.
+        URL: https://www.jmlr.org/papers/v21/19-966.html.
 }
 \usage{
 topological_ordering(adj_mat)
@@ -22,4 +22,19 @@ A character vector (names of the variables) providing a topological
 }
 \description{
 Topological Ordering
+}
+\examples{
+variables <- c("S", "X1", "X2", "Y")
+adj <- matrix(
+  # S  X1 X2 Y
+  c(0, 1, 1, 1,# S
+    0, 0, 1, 1,# X1
+    0, 0, 0, 1,# X2
+    0, 0, 0, 0  # Y
+  ),
+  ncol = length(variables),
+  dimnames = rep(list(variables), 2),
+  byrow = TRUE
+)
+topological_ordering(adj)
 }

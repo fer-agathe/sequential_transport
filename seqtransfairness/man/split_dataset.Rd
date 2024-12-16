@@ -4,14 +4,14 @@
 \alias{split_dataset}
 \title{Define the function to split the dataset into train/test sets}
 \usage{
-split_dataset(data, seed, train_ratio = 0.7)
+split_dataset(data, seed = NULL, train_ratio = 0.7)
 }
 \arguments{
-\item{data}{dataset}
+\item{data}{Dataset.}
 
-\item{seed}{seed number to use for replication}
+\item{seed}{Seed number to use for replication, if provided.}
 
-\item{train_ratio}{ratio of data to use in the train set (default to 0.7)}
+\item{train_ratio}{Ratio of data to use in the train set (default to 0.7).}
 }
 \value{
 A list with two elements:
@@ -22,4 +22,13 @@ A list with two elements:
 }
 \description{
 Define the function to split the dataset into train/test sets
+}
+\examples{
+df <- simul_dataset()
+sets <- split_dataset(df)
+data_train <- sets$data_train
+data_test <- sets$data_test
+}
+\seealso{
+\code{\link[=simul_dataset]{simul_dataset()}}
 }
