@@ -21,8 +21,14 @@ characteristics of individuals from group 0.}
 \item{threshold}{Threshold above which predicted scores are classified as 1.}
 }
 \value{
-A tibble with the metrics in rows in each group (in column). The
-following metrics are returned:
+A list with four elements.
+
+The first element, \code{group_metrics}, is a tibble that contains metrics
+computed on three subsets: group 0 where predicted scores are those computed
+using factuals (\code{group_0}), subset 0 where predicted scores are those
+computed using counterfactuals (\code{group_0_t}), and subset 1 where predicted
+scores are those computed using factuals (\code{group_1}). The following metrics
+are computed:
 \itemize{
 \item \code{mean_pred}: Mean predicted scores
 \item \code{n_obs}: Number of observations
@@ -37,6 +43,22 @@ following metrics are returned:
 \item \code{TNR}: True negative rate (\code{TN} / \code{N})
 \item \code{FNR}: False negative rate (\code{FN} / \code{P})
 }
+
+The three remaining elements contain fairness metrics calculated by
+comparing criteria across two subsets: Group 0 vs. Group 1
+(\code{factuals_metrics}), Group 0 with counterfactuals vs. Group 1
+(\code{counter_metrics_1}), and Group 0 vs. Group 0 with counterfactuals
+(\code{counter_metrics_0}). See the details section for details on the metrics.
+The following are returned, as a named list of numeric:
+\itemize{
+\item \code{demog_par}: Counterfactual Demographic Parity (based on positive rates).
+\item \code{eq_opp}: Counterfactual Equalized Opportunities (based on true positive
+rates).
+\item \code{class_bal_fpr}: Counterfactual Balance (based on false positive rates)
+\item \code{class_bal_fnr}: Counterfactual Balance (based on false negative rates)
+\item \code{eq_treatment}: Counterfactual Equal Treatment (based on ratios of false
+positive rates over false negatives rates).
+}
 }
 \description{
 From predicted scores of a binary scoring classifier in two groups (group 0,
@@ -46,6 +68,49 @@ various metrics within each group. The scoring classifier is turned into a
 binary classifier by setting a threshold above which individuals are
 predicted as 1 (or as the second level of the binary outcome if it is a
 factor variable).
+}
+\details{
+The counterfactual fairness metrics are computed by comparing metrics over
+two groups.
+
+\strong{Let us consider here Group 0 vs. Group 0 using counterfactuals.}
+
+The \strong{Counterfactual Demographic Parity} is computed as follows:
+\deqn{\text{CDP} = \frac{1}{n_0} \sum_{i \in \mathcal{D}_0}
+m(1, \boldsymbol{x}^\star_i) - m(0, \boldsymbol{x}_i),}
+where \eqn{n_0} is the number of observations in group 0, \eqn{\mathcal{D}_0}
+is the set of observations in group 0, \eqn{m(s,\boldsymbol{x})} is a scoring
+classifier which returns values in \eqn{0,1}, \eqn{s} is the sensitive
+attribute, \eqn{\boldsymbol{x}} are the features, and
+\eqn{\boldsymbol{x}^\star} are the counterfactuals values of
+\eqn{\boldsymbol{x}}.
+
+The \strong{Counterfactual Equalized Opportunity} is computed as follows:
+\deqn{\text{CEqOp} = \text{TPR}_{0\star} - \text{TPR}_0,}
+where \eqn{\text{TPR}_{0\star}} is the true positive rate in group 0 using
+the counterfactuals and \eqn{\text{TPR}_{0}} is the same rate in group 0
+using the factuals.
+
+The \strong{Counterfactual Class Balance} based false positive rates is computes
+as follows:
+\deqn{\text{CCB(FPR)} = \frac{\text{FPR}_{0\star}}{\text{FPR}_{O}},}
+where \eqn{\text{FPR}_{0\star}} is the false positive rate computed in group
+0 using the counterfactuals, ans \eqn{\text{FPR}_{O}} is the same rate
+computed in group 0 using the factuals.
+
+The version based on false negative rates writes:
+\deqn{\text{CCB(FNR)} = \frac{\text{FNR}_{0\star}}{\text{FNR}_{O}},}
+where \eqn{\text{FNR}_{0\star}} is the false negate rate computed in group
+0 using the counterfactuals, ans \eqn{\text{FNR}_{O}} is the same rate
+computed in group 0 using the factuals.
+
+The \strong{Counterfactual Equalized Treatment} writes:
+\deqn{\frac{\text{FPR}_{0\star}}{\text{FNR}_{0\star}} -
+\frac{\text{FPR}_{0}}{\text{FNR}_{0}},}
+where \eqn{\text{FPR}_{0\star}} and \eqn{\text{FNR}_{0\star}} are the false
+positive and false negative rates computed using the factuals in group 0, and
+\eqn{\text{FPR}_{0}} and \eqn{\text{FNR}_{0}} are their counterparts in the
+same group, but using the factuals.
 }
 \examples{
 obs_0 <-    c( 0,  0,  0,  0,  1,  1,  1)
