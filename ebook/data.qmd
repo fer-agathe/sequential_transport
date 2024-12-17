@@ -212,10 +212,10 @@ The assumed causal graph we use here is different from that of the different pap
 
 We make the following assumptions:
 
-- The sensitive attribute, \(S\) (race), has no parents.
-- The two other explanatory variables, \(X_1\) (UGPA) and \(X_2\) (LSAT), both directly depend on the sensitive attribute.
-- The second variable, \(X_2\) (LSAT), also depends on the first variable, \(X_1\) (UGPA). This is done for illustrative purposes, assuming that the score obtained on the LSAT is influenced by the UGPA.
-- The two variables, \(X_1\) (UGPA) and \(X_2\) (LSAT), cause the target variable \(Y\), i.e., whether the student obtained a high standardized first-year average (ZFYA).
+- The sensitive attribute, $S$ (race), has no parents.
+- The two other explanatory variables, $X_1$ (UGPA) and $X_2$ (LSAT), both directly depend on the sensitive attribute.
+- The second variable, $X_2$ (LSAT), also depends on the first variable, $X_1$ (UGPA). This is done for illustrative purposes, assuming that the score obtained on the LSAT is influenced by the UGPA.
+- The two variables, $X_1$ (UGPA) and $X_2$ (LSAT), cause the target variable $Y$, i.e., whether the student obtained a high standardized first-year average (ZFYA).
 
 The corresponding Structural Equation Model writes:
 
@@ -228,7 +228,7 @@ Y = h_3(X_1, X_2, U_Y): \text{ ZFYA, dependent on } X_1 \text{ and } X_2 \\
 \end{cases}
 $$
 
-where \(U_1\), \(U_2\), and \(U_Y\) are independent error terms.
+where $U_1$, $U_2$, and $U_Y$ are independent error terms.
 
 In R, we construct the upper triangular adjacency matrix to reflect our assumed causal structure:
 ```{r causal-set-up, message=FALSE, warning=FALSE}

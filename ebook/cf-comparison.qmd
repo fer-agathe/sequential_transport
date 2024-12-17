@@ -6,7 +6,7 @@
 
 ## Objectives
 
-This chapter compares the different methods used to create counterfactuals by examining the impacts on the new predictions made by the classifiers (aware and unaware).
+This chapter compares the different methods previously used (naive approche in [Chapter -@sec-cf-naive], fairadapt in [Chapter -@sec-cf-fairadapt], multivariate optimal transport in [Chapter -@sec-cf-ot], and sequential transport in [Chapter -@sec-cf-seq-t]) to create counterfactuals $\boldsymbol{x}^\star$ by examining the impacts on the new predictions $m(1,\boldsymbol{x}^\star)$ made by the classifiers (aware and unaware).
 
 :::
 
@@ -805,7 +805,7 @@ text(x = .53, y = 6, "Seq. T.", col = colours_all[["Seq. T."]])
 
 :::
 
-## Metrics
+## Metrics {#sec-cf-comparison-metrics}
 
 
 We load the dataset on which the classifiers were trained (see [Chapter -@sec-classifier]).
@@ -976,7 +976,7 @@ The predictions by the model using the factuals are stored in `factuals_aware` a
 
 <!-- ``` -->
 
-We now turn to some metrics based on the predictions made for each model, based on the factual values in each group, and on the counterfactual values for individuals from the group of Black individuals. For most metrics, the scoring classifier $ m(\cdot) $ is transformed into a threshold-based classifier $ m_t(\cdot) $, where $ m_t(\cdot)=1 $ if $ m(\cdot) > t $, and $ m_t(\cdot)=0 $ otherwise. We set the threshold to $t=.5$.
+We now turn to some metrics based on the predictions made for each model, based on the factual values in each group, and on the counterfactual values for individuals from the group of Black individuals. For most metrics, the scoring classifier $m(\cdot)$ is transformed into a threshold-based classifier $m_t(\cdot)$, where $m_t(\cdot)=1$ if $m(\cdot) > t$, and $m_t(\cdot)=0$ otherwise. We set the threshold to $t=.5$.
 
 ```{r define-threshold}
 threshold <- .5
@@ -1033,7 +1033,7 @@ We are particularly interested in the true positive rates (TPR) and the false po
 
 1. **Counterfactual Equality of Opportinities**
   $$\text{CEqOp} = \text{TPR}_0^\star - \text{TPR}_0,$$
-  where $\text{TPR}_0^\star$ is the true positive rate in $\mathcal{D}_0$ when predictions are made using the counterfactuals $m_t(1, \boldsymbol{x}^\star)$, and $\text{TPR}_0$ is the true positive rate in $\mathcal{D}_0$ when predictions are based on the individuals' original values in $\mathcal{D}_0$. A positive value of $\text{CEqOp}$ indicates that the initial model was unfair towards the protected class.
+  where $\text{TPR}_0^\star$ is the true positive rate in the sample of Black individuals $\mathcal{D}_0$ when predictions are made using the counterfactuals $m_t(1, \boldsymbol{x}^\star)$, and $\text{TPR}_0$ is the true positive rate in $\mathcal{D}_0$ when predictions are based on the individuals' original values in $\mathcal{D}_0$. A positive value of $\text{CEqOp}$ indicates that the initial model was unfair towards the protected class.
 2. **Counterfactual Class balance (false negative rates)**  
   $$CCB(F) = \frac{\text{TNR}_0^\star}{\text{TNR}_0}$$
 where $\text{TNR}_0^\star$ is the true negative rate of individuals in $\mathcal{D}_0$ calculated based on $m_t(1, \boldsymbol{x}^\star)$, and $\text{TNR}_0$ is the true negative rate of these individuals computed using $m_t(1, \boldsymbol{x})$
@@ -1138,8 +1138,14 @@ metrics_bin_classif <- function(obs,
 #' @param pred_1 Vector of predicted scores in group 1.
 #' @param threshold Threshold above which predicted scores are classified as 1.
 #'
-#' @returns A tibble with the metrics in rows in each group (in column). The
-#'  following metrics are returned:
+#' @returns A list with four elements.
+#'
+#' The first element, `group_metrics`, is a tibble that contains metrics
+#' computed on three subsets: group 0 where predicted scores are those computed
+#' using factuals (`group_0`), subset 0 where predicted scores are those
+#' computed using counterfactuals (`group_0_t`), and subset 1 where predicted
+#' scores are those computed using factuals (`group_1`). The following metrics
+#' are computed:
 #' * `mean_pred`: Mean predicted scores
 #' * `n_obs`: Number of observations
 #' * `TP`: Count of true positives
@@ -1152,6 +1158,20 @@ metrics_bin_classif <- function(obs,
 #' * `FPR`: False positive rate (`FP` / `N`)
 #' * `TNR`: True negative rate (`TN` / `N`)
 #' * `FNR`: False negative rate (`FN` / `P`)
+#'
+#' The three remaining elements contain fairness metrics calculated by
+#' comparing criteria across two subsets: Group 0 vs. Group 1
+#' (`factuals_metrics`), Group 0 with counterfactuals vs. Group 1
+#' (`counter_metrics_1`), and Group 0 vs. Group 0 with counterfactuals
+#' (`counter_metrics_0`). See the details section for details on the metrics.
+#' The following are returned, as a named list of numeric:
+#' * `demog_par`: Counterfactual Demographic Parity (based on positive rates).
+#' * `eq_opp`: Counterfactual Equalized Opportunities (based on true positive
+#'  rates).
+#' * `class_bal_fpr`: Counterfactual Balance (based on false positive rates)
+#' * `class_bal_fnr`: Counterfactual Balance (based on false negative rates)
+#' *  `eq_treatment`: Counterfactual Equal Treatment (based on ratios of false
+#'  positive rates over false negatives rates).
 counter_fair_metrics <- function(obs_0,
                                  obs_1,
                                  pred_0,
@@ -1172,26 +1192,27 @@ counter_fair_metrics <- function(obs_0,
   metrics_1_vs_0 <- c(
     demog_par = m_0[["P"]]/m_0[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
     eq_opp = m_0[["TPR"]] - m_1[["TPR"]],
-    class_bal_true = m_0[["FPR"]] / m_1[["FPR"]],
-    class_bal_false = m_0[["FNR"]] / m_1[["FNR"]],
-    eq_treatment = (m_0[["FPR"]] / m_0[["FN"]]) - (m_1[["FPR"]] / m_1[["FN"]])
+    class_bal_fpr = m_0[["FPR"]] / m_1[["FPR"]],
+    class_bal_fnr = m_0[["FNR"]] / m_1[["FNR"]],
+    eq_treatment = (m_0[["FPR"]] / m_0[["FNR"]]) -
+      (m_1[["FPR"]] / m_1[["FNR"]])
   )
   # Group 1 vs. Group 0_t
   metrics_1_vs_0_t <- c(
     demog_par = m_0_t[["P"]]/m_0_t[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
     eq_opp = m_0_t[["TPR"]] - m_1[["TPR"]],
-    class_bal_true = m_0_t[["FPR"]] / m_1[["FPR"]],
-    class_bal_false = m_0_t[["FNR"]] / m_1[["FNR"]],
+    class_bal_fpr = m_0_t[["FPR"]] / m_1[["FPR"]],
+    class_bal_fnr = m_0_t[["FNR"]] / m_1[["FNR"]],
     eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FN"]]) -
-      (m_1[["FPR"]] / m_1[["FN"]])
+      (m_1[["FPR"]] / m_1[["FNR"]])
   )
 
   # Group 0 vs Group 0_t
   metrics_0_vs_0_t <- c(
     c_demog_parity = m_0_t[["mean_pred"]] - m_0[["mean_pred"]],
     c_eq_op = m_0_t[["TPR"]] - m_0[["TPR"]],
-    c_class_bal_true = m_0_t[["FPR"]] / m_0[["FPR"]],
-    c_class_bal_false = m_0_t[["FNR"]] / m_0[["FNR"]],
+    class_bal_fpr = m_0_t[["FPR"]] / m_0[["FPR"]],
+    class_bal_fnr = m_0_t[["FNR"]] / m_0[["FNR"]],
     c_eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FNR"]]) -
       (m_0[["FPR"]] / m_0[["FNR"]])
   )
@@ -1283,7 +1304,7 @@ counter_metrics <-
   ) |> 
   pivot_wider(names_from = "cf_type", values_from = "value") |> 
   rename(metric = name) |> 
-  filter(metric %in% c("c_demog_parity", "c_eq_op", "c_class_bal_false", "c_eq_treatment"))
+  filter(metric %in% c("c_demog_parity", "c_eq_op", "class_bal_fnr", "c_eq_treatment"))
 
 tb_metrics <- 
   group_metrics |> mutate(type = "groups") |> 
@@ -1292,7 +1313,7 @@ tb_metrics <-
     metric = factor(
       metric, 
       levels = c(
-        "TPR", "FPR", "c_demog_parity", "c_eq_op", "c_class_bal_false",
+        "TPR", "FPR", "c_demog_parity", "c_eq_op", "class_bal_fnr",
         "c_eq_treatment", "n_obs"
       )
     ),

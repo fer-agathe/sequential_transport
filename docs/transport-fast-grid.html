@@ -403,7 +403,7 @@ Objectives
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data, using <span class="citation" data-cites="alg-3">(<a href="references.html#ref-alg-3" role="doc-biblioref"><strong>alg-3?</strong></a>)</span>. Note that this algorithm works only for numerical covariates.</p>
+<p>In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data, using <a href="./gaussian.html#alg-3">our algorithm</a>. Note that this algorithm works only for numerical covariates.</p>
 </div>
 </div>
 <div class="cell">
@@ -537,10 +537,10 @@ m(x_1,x_2,s)=\big(1+\exp\big[-\big((x_1+x_2)/2 + \boldsymbol{1}(s=1)\big)\big]\b
 </section>
 <section id="sec-regression-algo-example" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="sec-regression-algo-example"><span class="header-section-number">3.4</span> Illustrative example: small grid</h2>
-<p>We have two features <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> (i.e., <span class="math inline">\(\boldsymbol{v} = \{x_1, x_2\}\)</span>) that need to be transported from group <span class="math inline">\(s=0\)</span> to group <span class="math inline">\(s=1\)</span>. We will therefore use a grid in dimension 2 to apply <span class="citation" data-cites="alg-3">(<a href="references.html#ref-alg-3" role="doc-biblioref"><strong>alg-3?</strong></a>)</span>. Recall that we assume that <span class="math inline">\(x_1\)</span> depends on <span class="math inline">\(s\)</span> only, and that <span class="math inline">\(x_2\)</span> depends on both <span class="math inline">\(x_1\)</span> and <span class="math inline">\(s\)</span>. Hence, to transport <span class="math inline">\(x_2\)</span>, we need to transport <span class="math inline">\(x_1\)</span> before.</p>
+<p>We have two features <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> (i.e., <span class="math inline">\(\boldsymbol{v} = \{x_1, x_2\}\)</span>) that need to be transported from group <span class="math inline">\(s=0\)</span> to group <span class="math inline">\(s=1\)</span>. We will therefore use a grid in dimension 2 to apply <a href="./gaussian.html#alg-3">our algorithm</a>. Recall that we assume that <span class="math inline">\(x_1\)</span> depends on <span class="math inline">\(s\)</span> only, and that <span class="math inline">\(x_2\)</span> depends on both <span class="math inline">\(x_1\)</span> and <span class="math inline">\(s\)</span>. Hence, to transport <span class="math inline">\(x_2\)</span>, we need to transport <span class="math inline">\(x_1\)</span> before.</p>
 <section id="transport-of-x_1" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="transport-of-x_1"><span class="header-section-number">3.4.1</span> Transport of <span class="math inline">\(x_1\)</span></h3>
-<p>We transport the first dimension. In the notations of <span class="citation" data-cites="alg-3">(<a href="references.html#ref-alg-3" role="doc-biblioref"><strong>alg-3?</strong></a>)</span>, <span class="math inline">\(j = x_1\)</span>.</p>
+<p>We transport the first dimension. In the notations of <a href="./gaussian.html#alg-3">our algorithm</a>, <span class="math inline">\(j = x_1\)</span>.</p>
 <p>For now, we define <span class="math inline">\(k=10\)</span> cells in each dimension (we will use 500 after), to obtain <span class="math inline">\(\boldsymbol{g}_{x_1|s}\)</span> To define the coordinates of the grid, we expand the domain of observed values in each value by a value <span class="math inline">\(h\)</span> that we set to .2 here.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n_grid_example <span class="ot">&lt;-</span> <span class="dv">10</span></span>

@@ -6,7 +6,7 @@
 
 ## Objectives
 
-In this chapter, we generate 
+In this chapter, we generate a dataset consisting of an outcome variable $Y \in \{0,1\}$, two covariates $\boldsymbol{X} = (X_1, X_2)$, and a sensitive attribute $S \in \{0,1\}$. The two covariates are independently distributed. We then explore different causal assumptions: the correct assumption, a first incorrect assumption where $X_1$ causes $X_2$, and a second incorrect assumption where $X_2$ causes $X_1$. We then build various types of counterfactuals: (i) naive counterfactuals, where the sensitive attribute for individuals in the protected group ($S=0$) is changed to $S=1$ while all other characteristics remain unchanged (*ceteris paribus*), (ii) multivariate optimal transport, and (iii) sequential transport under the three causal assumptions. The consequences of these assumptions are then examined on an individual basis, and then over the entire protected group.
 
 :::
 

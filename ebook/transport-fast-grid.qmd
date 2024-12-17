@@ -7,7 +7,10 @@
 
 ## Objectives
 
-In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data, using @alg-3. Note that this algorithm works only for numerical covariates.
+In this chapter, we illustrate the interpretable counterfactual fairness methodology based on sequential transport on simulated data, using [our algorithm](gaussian.qmd#alg-3). Note that this algorithm works only for numerical covariates.
+
+
+
 
 :::
 
@@ -149,11 +152,11 @@ logistique_reg <- function(x1, x2, s) {
 
 ## Illustrative example: small grid {#sec-regression-algo-example}
 
-We have two features $x_1$ and $x_2$ (i.e., $\boldsymbol{v} = \{x_1, x_2\}$) that need to be transported from group $s=0$ to group $s=1$. We will therefore use a grid in dimension 2 to apply @alg-3. Recall that we assume that $x_1$ depends on $s$ only, and that $x_2$ depends on both $x_1$ and $s$. Hence, to transport $x_2$, we need to transport $x_1$ before.
+We have two features $x_1$ and $x_2$ (i.e., $\boldsymbol{v} = \{x_1, x_2\}$) that need to be transported from group $s=0$ to group $s=1$. We will therefore use a grid in dimension 2 to apply [our algorithm](gaussian.qmd#alg-3). Recall that we assume that $x_1$ depends on $s$ only, and that $x_2$ depends on both $x_1$ and $s$. Hence, to transport $x_2$, we need to transport $x_1$ before.
 
 ### Transport of $x_1$
 
-We transport the first dimension. In the notations of @alg-3, $j = x_1$.
+We transport the first dimension. In the notations of [our algorithm](gaussian.qmd#alg-3), $j = x_1$.
 
 For now, we define $k=10$ cells in each dimension (we will use 500 after), to obtain $\boldsymbol{g}_{x_1|s}$ To define the coordinates of the grid, we expand the domain of observed values in each value by a value $h$ that we set to .2 here.
 ```{r}

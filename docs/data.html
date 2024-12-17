@@ -465,7 +465,7 @@ Objectives
 <li><code>UGPA</code>: Undergraduate GPA of the student (numeric).</li>
 <li><code>region_first</code>: region in which the student took their first bar examination (Far West, Great Lakes, Midsouth, Midwest, Mountain West, Northeast, New England, Northwest, South Central, South East) (character)</li>
 <li><code>ZFYA</code>: standardized first-year law school grades (first year average grade, FYA) (numeric).</li>
-<li><code>sander_index</code>: Sander index of the student: weighted average of normalized UGPA and LSAT scores (however, no details are given for this specific dataset, see <span class="citation" data-cites="sander2004systemic">(<a href="references.html#ref-sander2004systemic" role="doc-biblioref"><strong>sander2004systemic?</strong></a>)</span>, p.&nbsp;393) (numeric)</li>
+<li><code>sander_index</code>: Sander index of the student: weighted average of normalized UGPA and LSAT scores (however, no details are given for this specific dataset, see <span class="citation" data-cites="sander2004systemic">Sander (<a href="references.html#ref-sander2004systemic" role="doc-biblioref">2004</a>)</span>, p.&nbsp;393) (numeric)</li>
 <li><code>first_pf</code>: Probably a binary variable that indicates whether the student passed on their first trial ? No information is given about this variable… (numeric 0/1).</li>
 </ul>
 <section id="data-pre-processing" class="level2" data-number="6.1">
@@ -647,10 +647,10 @@ Figure&nbsp;6.2: Distribution of the standardized first-year law school grades a
 <p>The assumed causal graph we use here is different from that of the different papers <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>, <span class="citation" data-cites="Kusner17">Kusner et al. (<a href="references.html#ref-Kusner17" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="black2020fliptest">Black, Yeom, and Fredrikson (<a href="references.html#ref-black2020fliptest" role="doc-biblioref">2020</a>)</span> using the same dataset.</p>
 <p>We make the following assumptions:</p>
 <ul>
-<li>The sensitive attribute, (S) (race), has no parents.</li>
-<li>The two other explanatory variables, (X_1) (UGPA) and (X_2) (LSAT), both directly depend on the sensitive attribute.</li>
-<li>The second variable, (X_2) (LSAT), also depends on the first variable, (X_1) (UGPA). This is done for illustrative purposes, assuming that the score obtained on the LSAT is influenced by the UGPA.</li>
-<li>The two variables, (X_1) (UGPA) and (X_2) (LSAT), cause the target variable (Y), i.e., whether the student obtained a high standardized first-year average (ZFYA).</li>
+<li>The sensitive attribute, <span class="math inline">\(S\)</span> (race), has no parents.</li>
+<li>The two other explanatory variables, <span class="math inline">\(X_1\)</span> (UGPA) and <span class="math inline">\(X_2\)</span> (LSAT), both directly depend on the sensitive attribute.</li>
+<li>The second variable, <span class="math inline">\(X_2\)</span> (LSAT), also depends on the first variable, <span class="math inline">\(X_1\)</span> (UGPA). This is done for illustrative purposes, assuming that the score obtained on the LSAT is influenced by the UGPA.</li>
+<li>The two variables, <span class="math inline">\(X_1\)</span> (UGPA) and <span class="math inline">\(X_2\)</span> (LSAT), cause the target variable <span class="math inline">\(Y\)</span>, i.e., whether the student obtained a high standardized first-year average (ZFYA).</li>
 </ul>
 <p>The corresponding Structural Equation Model writes:</p>
 <p><span class="math display">\[
@@ -661,7 +661,7 @@ X_2 = h_2(S, X_1, U_2): \text{ LSAT, dependent on } S \text{ and } X_1 \\
 Y = h_3(X_1, X_2, U_Y): \text{ ZFYA, dependent on } X_1 \text{ and } X_2 \\
 \end{cases}
 \]</span></p>
-<p>where (U_1), (U_2), and (U_Y) are independent error terms.</p>
+<p>where <span class="math inline">\(U_1\)</span>, <span class="math inline">\(U_2\)</span>, and <span class="math inline">\(U_Y\)</span> are independent error terms.</p>
 <p>In R, we construct the upper triangular adjacency matrix to reflect our assumed causal structure:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">colnames</span>(df_race)</span>
@@ -723,6 +723,9 @@ De Lara, Lucas, Alberto González-Sanz, Nicholas Asher, Laurent Risser, and Jean
 </div>
 <div id="ref-Kusner17" class="csl-entry" role="listitem">
 Kusner, Matt J, Joshua Loftus, Chris Russell, and Ricardo Silva. 2017. <span>“Counterfactual Fairness.”</span> In <em>Advances in Neural Information Processing Systems 30</em>, edited by I. Guyon, U. V. Luxburg, S. Bengio, H. Wallach, R. Fergus, S. Vishwanathan, and R. Garnett, 4066–76. NIPS.
+</div>
+<div id="ref-sander2004systemic" class="csl-entry" role="listitem">
+Sander, Richard H. 2004. <span>“A Systemic Analysis of Affirmative Action in American Law Schools.”</span> <em>Stan. L. Rev.</em> 57: 367.
 </div>
 <div id="ref-Wightman1998LSACNL" class="csl-entry" role="listitem">
 Wightman, Linda F. 1998. <span>“LSAC National Longitudinal Bar Passage Study. LSAC Research Report Series.”</span> In. <a href="https://api.semanticscholar.org/CorpusID:151073942">https://api.semanticscholar.org/CorpusID:151073942</a>.

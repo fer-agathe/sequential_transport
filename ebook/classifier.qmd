@@ -6,7 +6,7 @@
 
 ## Objectives
 
-This chapter presents classifier (logistic regression) trained on the dataset presented in @sec-data.
+This chapter introduces the scoring classifiers $m(\cdot)$ trained on the dataset described in @sec-data. We use logistic regression to predict the outcome $Y$ based on the covariates $\boldsymbol{X}$. Two types of models are considered: one that includes the sensitive attribute in the predictive model (**aware model**) and one that excludes it (**unaware model**).
 
 :::
 
@@ -53,7 +53,7 @@ colours_all <- c(
 
 
 
-Following @Kusner17, a logistic regression model is trained. To convert \(Y\) into a categorical variable, the median is used as a threshold, in line with @black2020fliptest. The race, denoted as the sensitive attribute \(S\), has two categories: White and Black. The dataset is divided into training and testing sets. The classifier is first trained and used to compute the necessary quantities for counterfactual inference on the training set. Subsequently, the trained classifier is applied to the test set to make predictions and perform counterfactual analyses. The results of the counterfactuals will also be evaluated on the training set due to the limitation that Optimal Transport in the multivariate case cannot be computed for new samples, unlike the methodologies used in FairAdapt (@plevcko2021fairadapt) and the approach developed in this paper.
+Following @Kusner17, a logistic regression model is trained. To convert $Y$ into a categorical variable, the median is used as a threshold, in line with @black2020fliptest. The race, denoted as the sensitive attribute $S$, has two categories: White and Black. The dataset is divided into training and testing sets. The classifier is first trained and used to compute the necessary quantities for counterfactual inference on the training set. Subsequently, the trained classifier is applied to the test set to make predictions and perform counterfactual analyses. The results of the counterfactuals will also be evaluated on the training set due to the limitation that Optimal Transport in the multivariate case cannot be computed for new samples, unlike the methodologies used in FairAdapt (@plevcko2021fairadapt) and the approach developed in this paper.
 
 
 ## Load Data

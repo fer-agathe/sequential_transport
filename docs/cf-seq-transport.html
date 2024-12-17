@@ -392,7 +392,7 @@ Objectives
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter uses sequential transport (developped in our paper) to make counterfactual inference.</p>
+<p>This chapter uses sequential transport (methodology developped in our paper) to make counterfactual inference. We obtain counterfactual values <span class="math inline">\(\boldsymbol{x}^\star\)</span> for individuals from the protected group <span class="math inline">\(S=0\)</span>. Then, we use the aware and unaware classifiers <span class="math inline">\(m(\cdot)\)</span> (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>) to make new predictions <span class="math inline">\(m(s=1,\boldsymbol{x}^\star)\)</span> for individuals in the protected class, i.e., observations in <span class="math inline">\(\mathcal{D}_0\)</span>.</p>
 </div>
 </div>
 <p>In the article, we use three methods to create counterfactuals:</p>
@@ -450,11 +450,11 @@ Objectives
 </div>
 <section id="load-data-and-classifier" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="load-data-and-classifier"><span class="header-section-number">11.1</span> Load Data and Classifier</h2>
-<p>We load the dataset where the sensitive attribute ((S)) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>6.3</span></a>:</p>
+<p>We load the dataset where the sensitive attribute (<span class="math inline">\(S\)</span>) is the race, obtained <a href="data.html#sec-data-save" class="quarto-xref">Chapter&nbsp;<span>6.3</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable ((Y), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="classifier.html#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span>7.5</span></a>:</p>
+<p>We also load the dataset where the sensitive attribute is also the race, but where where the target variable (<span class="math inline">\(Y\)</span>, ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in <a href="classifier.html#sec-classifier-save" class="quarto-xref">Chapter&nbsp;<span>7.5</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race_c.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

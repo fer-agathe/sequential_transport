@@ -359,7 +359,7 @@ window.Quarto = {
   <li><a href="#load-data-and-classifier" id="toc-load-data-and-classifier" class="nav-link active" data-scroll-target="#load-data-and-classifier"><span class="header-section-number">12.1</span> Load Data and Classifier</a></li>
   <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"><span class="header-section-number">12.2</span> Comparison</a></li>
   <li><a href="#densities" id="toc-densities" class="nav-link" data-scroll-target="#densities"><span class="header-section-number">12.3</span> Densities</a></li>
-  <li><a href="#metrics" id="toc-metrics" class="nav-link" data-scroll-target="#metrics"><span class="header-section-number">12.4</span> Metrics</a></li>
+  <li><a href="#sec-cf-comparison-metrics" id="toc-sec-cf-comparison-metrics" class="nav-link" data-scroll-target="#sec-cf-comparison-metrics"><span class="header-section-number">12.4</span> Metrics</a></li>
   </ul>
 </nav>
     </div>
@@ -395,7 +395,7 @@ Objectives
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter compares the different methods used to create counterfactuals by examining the impacts on the new predictions made by the classifiers (aware and unaware).</p>
+<p>This chapter compares the different methods previously used (naive approche in <a href="cf-naive.html" class="quarto-xref">Chapter&nbsp;<span>8</span></a>, fairadapt in <a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>9</span></a>, multivariate optimal transport in <a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>10</span></a>, and sequential transport in <a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>11</span></a>) to create counterfactuals <span class="math inline">\(\boldsymbol{x}^\star\)</span> by examining the impacts on the new predictions <span class="math inline">\(m(1,\boldsymbol{x}^\star)\)</span> made by the classifiers (aware and unaware).</p>
 </div>
 </div>
 <div class="cell">
@@ -1243,8 +1243,8 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 </div>
 </div>
 </section>
-<section id="metrics" class="level2" data-number="12.4">
-<h2 data-number="12.4" class="anchored" data-anchor-id="metrics"><span class="header-section-number">12.4</span> Metrics</h2>
+<section id="sec-cf-comparison-metrics" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sec-cf-comparison-metrics"><span class="header-section-number">12.4</span> Metrics</h2>
 <p>We load the dataset on which the classifiers were trained (see <a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>7</span></a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/df_race_c.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1391,7 +1391,7 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 <!--   ) |>  -->
 <!--   kableExtra::pack_rows(index = table(tb_res$model)) -->
 <!-- ``` -->
-<p>We now turn to some metrics based on the predictions made for each model, based on the factual values in each group, and on the counterfactual values for individuals from the group of Black individuals. For most metrics, the scoring classifier $ m() $ is transformed into a threshold-based classifier $ m_t() $, where $ m_t()=1 $ if $ m() &gt; t $, and $ m_t()=0 $ otherwise. We set the threshold to <span class="math inline">\(t=.5\)</span>.</p>
+<p>We now turn to some metrics based on the predictions made for each model, based on the factual values in each group, and on the counterfactual values for individuals from the group of Black individuals. For most metrics, the scoring classifier <span class="math inline">\(m(\cdot)\)</span> is transformed into a threshold-based classifier <span class="math inline">\(m_t(\cdot)\)</span>, where <span class="math inline">\(m_t(\cdot)=1\)</span> if <span class="math inline">\(m(\cdot) &gt; t\)</span>, and <span class="math inline">\(m_t(\cdot)=0\)</span> otherwise. We set the threshold to <span class="math inline">\(t=.5\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> .<span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1442,7 +1442,7 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 </ol>
 <p>We are particularly interested in the true positive rates (TPR) and the false positive rates (FPR). The <code class="sourceCode r"><span class="fu">counter_fair_metrics</span>()</code> computes a few counterfactual fairness metrics:</p>
 <ol type="1">
-<li><strong>Counterfactual Equality of Opportinities</strong> <span class="math display">\[\text{CEqOp} = \text{TPR}_0^\star - \text{TPR}_0,\]</span> where <span class="math inline">\(\text{TPR}_0^\star\)</span> is the true positive rate in <span class="math inline">\(\mathcal{D}_0\)</span> when predictions are made using the counterfactuals <span class="math inline">\(m_t(1, \boldsymbol{x}^\star)\)</span>, and <span class="math inline">\(\text{TPR}_0\)</span> is the true positive rate in <span class="math inline">\(\mathcal{D}_0\)</span> when predictions are based on the individuals’ original values in <span class="math inline">\(\mathcal{D}_0\)</span>. A positive value of <span class="math inline">\(\text{CEqOp}\)</span> indicates that the initial model was unfair towards the protected class.</li>
+<li><strong>Counterfactual Equality of Opportinities</strong> <span class="math display">\[\text{CEqOp} = \text{TPR}_0^\star - \text{TPR}_0,\]</span> where <span class="math inline">\(\text{TPR}_0^\star\)</span> is the true positive rate in the sample of Black individuals <span class="math inline">\(\mathcal{D}_0\)</span> when predictions are made using the counterfactuals <span class="math inline">\(m_t(1, \boldsymbol{x}^\star)\)</span>, and <span class="math inline">\(\text{TPR}_0\)</span> is the true positive rate in <span class="math inline">\(\mathcal{D}_0\)</span> when predictions are based on the individuals’ original values in <span class="math inline">\(\mathcal{D}_0\)</span>. A positive value of <span class="math inline">\(\text{CEqOp}\)</span> indicates that the initial model was unfair towards the protected class.</li>
 <li><strong>Counterfactual Class balance (false negative rates)</strong><br>
 <span class="math display">\[CCB(F) = \frac{\text{TNR}_0^\star}{\text{TNR}_0}\]</span> where <span class="math inline">\(\text{TNR}_0^\star\)</span> is the true negative rate of individuals in <span class="math inline">\(\mathcal{D}_0\)</span> calculated based on <span class="math inline">\(m_t(1, \boldsymbol{x}^\star)\)</span>, and <span class="math inline">\(\text{TNR}_0\)</span> is the true negative rate of these individuals computed using <span class="math inline">\(m_t(1, \boldsymbol{x})\)</span></li>
 <li><strong>Counterfactual Equal Treatment</strong><br>
@@ -1544,80 +1544,101 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param pred_1 Vector of predicted scores in group 1.</span></span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param threshold Threshold above which predicted scores are classified as 1.</span></span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' @returns A tibble with the metrics in rows in each group (in column). The</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="co">#'  following metrics are returned:</span></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `mean_pred`: Mean predicted scores</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `n_obs`: Number of observations</span></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TP`: Count of true positives</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FP`: Count of false positives</span></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FN`: Count of false negatives</span></span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TN`: Count of true negatives</span></span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `P`: Count of positives (`TP` + `FN`)</span></span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `N`: Count of positives (`FP` + `TN`)</span></span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TPR`: True positive rate (`TP` / `P`)</span></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FPR`: False positive rate (`FP` / `N`)</span></span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TNR`: True negative rate (`TN` / `N`)</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FNR`: False negative rate (`FN` / `P`)</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>counter_fair_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(obs_0,</span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>                                 obs_1,</span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>                                 pred_0,</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>                                 pred_0_t,</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>                                 pred_1,</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>                                 threshold) {</span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  m_0 <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_0, <span class="at">pred =</span> pred_0, <span class="at">threshold =</span> threshold</span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>  m_0_t <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_0, <span class="at">pred =</span> pred_0_t, <span class="at">threshold =</span> threshold</span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  m_1 <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_1, <span class="at">pred =</span> pred_1, <span class="at">threshold =</span> threshold</span>
-<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 1 vs. Group 0</span></span>
-<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>  metrics_1_vs_0 <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">demog_par =</span> m_0[[<span class="st">"P"</span>]]<span class="sc">/</span>m_0[[<span class="st">"n_obs"</span>]] <span class="sc">-</span> m_1[[<span class="st">"P"</span>]]<span class="sc">/</span>m_1[[<span class="st">"n_obs"</span>]],</span>
-<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_opp =</span> m_0[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_1[[<span class="st">"TPR"</span>]],</span>
-<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_true =</span> m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FPR"</span>]],</span>
-<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_false =</span> m_0[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]],</span>
-<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_treatment =</span> (m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FN"</span>]]) <span class="sc">-</span> (m_1[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FN"</span>]])</span>
-<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 1 vs. Group 0_t</span></span>
-<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>  metrics_1_vs_0_t <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">demog_par =</span> m_0_t[[<span class="st">"P"</span>]]<span class="sc">/</span>m_0_t[[<span class="st">"n_obs"</span>]] <span class="sc">-</span> m_1[[<span class="st">"P"</span>]]<span class="sc">/</span>m_1[[<span class="st">"n_obs"</span>]],</span>
-<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_opp =</span> m_0_t[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_1[[<span class="st">"TPR"</span>]],</span>
-<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_true =</span> m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FPR"</span>]],</span>
-<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_false =</span> m_0_t[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]],</span>
-<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_treatment =</span> (m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0_t[[<span class="st">"FN"</span>]]) <span class="sc">-</span></span>
-<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>      (m_1[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FN"</span>]])</span>
-<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 0 vs Group 0_t</span></span>
-<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a>  metrics_0_vs_0_t <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_demog_parity =</span> m_0_t[[<span class="st">"mean_pred"</span>]] <span class="sc">-</span> m_0[[<span class="st">"mean_pred"</span>]],</span>
-<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_eq_op =</span> m_0_t[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_0[[<span class="st">"TPR"</span>]],</span>
-<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_class_bal_true =</span> m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FPR"</span>]],</span>
-<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_class_bal_false =</span> m_0_t[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FNR"</span>]],</span>
-<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_eq_treatment =</span> (m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0_t[[<span class="st">"FNR"</span>]]) <span class="sc">-</span></span>
-<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>      (m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FNR"</span>]])</span>
-<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>  group_metrics <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">enframe</span>(m_0, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_0"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
-<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>      tibble<span class="sc">::</span><span class="fu">enframe</span>(m_0_t, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_0_t"</span>),</span>
-<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="st">"metric"</span></span>
-<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
-<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>      tibble<span class="sc">::</span><span class="fu">enframe</span>(m_1, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_1"</span>),</span>
-<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="st">"metric"</span></span>
-<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
-<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">group_metrics =</span> group_metrics,</span>
-<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">factuals_metrics =</span> metrics_1_vs_0,</span>
-<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">counter_metrics_1 =</span> metrics_1_vs_0_t,</span>
-<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">counter_metrics_0 =</span> metrics_0_vs_0_t</span>
-<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' @returns A list with four elements.</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' The first element, `group_metrics`, is a tibble that contains metrics</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="co">#' computed on three subsets: group 0 where predicted scores are those computed</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="co">#' using factuals (`group_0`), subset 0 where predicted scores are those</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="co">#' computed using counterfactuals (`group_0_t`), and subset 1 where predicted</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co">#' scores are those computed using factuals (`group_1`). The following metrics</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="co">#' are computed:</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `mean_pred`: Mean predicted scores</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `n_obs`: Number of observations</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TP`: Count of true positives</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FP`: Count of false positives</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FN`: Count of false negatives</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TN`: Count of true negatives</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `P`: Count of positives (`TP` + `FN`)</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `N`: Count of positives (`FP` + `TN`)</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TPR`: True positive rate (`TP` / `P`)</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FPR`: False positive rate (`FP` / `N`)</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `TNR`: True negative rate (`TN` / `N`)</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `FNR`: False negative rate (`FN` / `P`)</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a><span class="co">#' The three remaining elements contain fairness metrics calculated by</span></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="co">#' comparing criteria across two subsets: Group 0 vs. Group 1</span></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a><span class="co">#' (`factuals_metrics`), Group 0 with counterfactuals vs. Group 1</span></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="co">#' (`counter_metrics_1`), and Group 0 vs. Group 0 with counterfactuals</span></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="co">#' (`counter_metrics_0`). See the details section for details on the metrics.</span></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="co">#' The following are returned, as a named list of numeric:</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `demog_par`: Counterfactual Demographic Parity (based on positive rates).</span></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `eq_opp`: Counterfactual Equalized Opportunities (based on true positive</span></span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a><span class="co">#'  rates).</span></span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `class_bal_fpr`: Counterfactual Balance (based on false positive rates)</span></span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="co">#' * `class_bal_fnr`: Counterfactual Balance (based on false negative rates)</span></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a><span class="co">#' *  `eq_treatment`: Counterfactual Equal Treatment (based on ratios of false</span></span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a><span class="co">#'  positive rates over false negatives rates).</span></span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>counter_fair_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(obs_0,</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>                                 obs_1,</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>                                 pred_0,</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>                                 pred_0_t,</span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>                                 pred_1,</span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>                                 threshold) {</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>  m_0 <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_0, <span class="at">pred =</span> pred_0, <span class="at">threshold =</span> threshold</span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>  m_0_t <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_0, <span class="at">pred =</span> pred_0_t, <span class="at">threshold =</span> threshold</span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a>  m_1 <span class="ot">&lt;-</span> <span class="fu">metrics_bin_classif</span>(</span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> obs_1, <span class="at">pred =</span> pred_1, <span class="at">threshold =</span> threshold</span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 1 vs. Group 0</span></span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a>  metrics_1_vs_0 <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">demog_par =</span> m_0[[<span class="st">"P"</span>]]<span class="sc">/</span>m_0[[<span class="st">"n_obs"</span>]] <span class="sc">-</span> m_1[[<span class="st">"P"</span>]]<span class="sc">/</span>m_1[[<span class="st">"n_obs"</span>]],</span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_opp =</span> m_0[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_1[[<span class="st">"TPR"</span>]],</span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fpr =</span> m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FPR"</span>]],</span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fnr =</span> m_0[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]],</span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_treatment =</span> (m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FNR"</span>]]) <span class="sc">-</span></span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a>      (m_1[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]])</span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 1 vs. Group 0_t</span></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>  metrics_1_vs_0_t <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">demog_par =</span> m_0_t[[<span class="st">"P"</span>]]<span class="sc">/</span>m_0_t[[<span class="st">"n_obs"</span>]] <span class="sc">-</span> m_1[[<span class="st">"P"</span>]]<span class="sc">/</span>m_1[[<span class="st">"n_obs"</span>]],</span>
+<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_opp =</span> m_0_t[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_1[[<span class="st">"TPR"</span>]],</span>
+<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fpr =</span> m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FPR"</span>]],</span>
+<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fnr =</span> m_0_t[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]],</span>
+<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">eq_treatment =</span> (m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0_t[[<span class="st">"FN"</span>]]) <span class="sc">-</span></span>
+<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a>      (m_1[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_1[[<span class="st">"FNR"</span>]])</span>
+<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group 0 vs Group 0_t</span></span>
+<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a>  metrics_0_vs_0_t <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_demog_parity =</span> m_0_t[[<span class="st">"mean_pred"</span>]] <span class="sc">-</span> m_0[[<span class="st">"mean_pred"</span>]],</span>
+<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_eq_op =</span> m_0_t[[<span class="st">"TPR"</span>]] <span class="sc">-</span> m_0[[<span class="st">"TPR"</span>]],</span>
+<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fpr =</span> m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FPR"</span>]],</span>
+<span id="cb25-94"><a href="#cb25-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">class_bal_fnr =</span> m_0_t[[<span class="st">"FNR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FNR"</span>]],</span>
+<span id="cb25-95"><a href="#cb25-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_eq_treatment =</span> (m_0_t[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0_t[[<span class="st">"FNR"</span>]]) <span class="sc">-</span></span>
+<span id="cb25-96"><a href="#cb25-96" aria-hidden="true" tabindex="-1"></a>      (m_0[[<span class="st">"FPR"</span>]] <span class="sc">/</span> m_0[[<span class="st">"FNR"</span>]])</span>
+<span id="cb25-97"><a href="#cb25-97" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-98"><a href="#cb25-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-99"><a href="#cb25-99" aria-hidden="true" tabindex="-1"></a>  group_metrics <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">enframe</span>(m_0, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_0"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-100"><a href="#cb25-100" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
+<span id="cb25-101"><a href="#cb25-101" aria-hidden="true" tabindex="-1"></a>      tibble<span class="sc">::</span><span class="fu">enframe</span>(m_0_t, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_0_t"</span>),</span>
+<span id="cb25-102"><a href="#cb25-102" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="st">"metric"</span></span>
+<span id="cb25-103"><a href="#cb25-103" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb25-104"><a href="#cb25-104" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
+<span id="cb25-105"><a href="#cb25-105" aria-hidden="true" tabindex="-1"></a>      tibble<span class="sc">::</span><span class="fu">enframe</span>(m_1, <span class="at">name =</span> <span class="st">"metric"</span>, <span class="at">value =</span> <span class="st">"group_1"</span>),</span>
+<span id="cb25-106"><a href="#cb25-106" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="st">"metric"</span></span>
+<span id="cb25-107"><a href="#cb25-107" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-108"><a href="#cb25-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb25-109"><a href="#cb25-109" aria-hidden="true" tabindex="-1"></a>    <span class="at">group_metrics =</span> group_metrics,</span>
+<span id="cb25-110"><a href="#cb25-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">factuals_metrics =</span> metrics_1_vs_0,</span>
+<span id="cb25-111"><a href="#cb25-111" aria-hidden="true" tabindex="-1"></a>    <span class="at">counter_metrics_1 =</span> metrics_1_vs_0_t,</span>
+<span id="cb25-112"><a href="#cb25-112" aria-hidden="true" tabindex="-1"></a>    <span class="at">counter_metrics_0 =</span> metrics_0_vs_0_t</span>
+<span id="cb25-113"><a href="#cb25-113" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-114"><a href="#cb25-114" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Let us compute these metrics on our different predicted values.</p>
@@ -1687,7 +1708,7 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 <span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"cf_type"</span>, <span class="at">values_from =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">metric =</span> name) <span class="sc">|&gt;</span> </span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(metric <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"c_demog_parity"</span>, <span class="st">"c_eq_op"</span>, <span class="st">"c_class_bal_false"</span>, <span class="st">"c_eq_treatment"</span>))</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(metric <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"c_demog_parity"</span>, <span class="st">"c_eq_op"</span>, <span class="st">"class_bal_fnr"</span>, <span class="st">"c_eq_treatment"</span>))</span>
 <span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>tb_metrics <span class="ot">&lt;-</span> </span>
 <span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>  group_metrics <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"groups"</span>) <span class="sc">|&gt;</span> </span>
@@ -1696,7 +1717,7 @@ Figure&nbsp;12.4: Densities of predicted scores for Black individuals with factu
 <span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="fu">factor</span>(</span>
 <span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>      metric, </span>
 <span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
-<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"TPR"</span>, <span class="st">"FPR"</span>, <span class="st">"c_demog_parity"</span>, <span class="st">"c_eq_op"</span>, <span class="st">"c_class_bal_false"</span>,</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"TPR"</span>, <span class="st">"FPR"</span>, <span class="st">"c_demog_parity"</span>, <span class="st">"c_eq_op"</span>, <span class="st">"class_bal_fnr"</span>,</span>
 <span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"c_eq_treatment"</span>, <span class="st">"n_obs"</span></span>
 <span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>      )</span>
 <span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>    ),</span>
@@ -1792,7 +1813,7 @@ Table&nbsp;12.1: Metrics to Assess Fairness of the Model (law school dataset).
 <td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left; padding-left: 2em;" data-indentlevel="1">c_class_bal_false</td>
+<td style="text-align: left; padding-left: 2em;" data-indentlevel="1">class_bal_fnr</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;">0.85</td>
 <td style="text-align: right;">0.36</td>
@@ -1858,7 +1879,7 @@ Table&nbsp;12.1: Metrics to Assess Fairness of the Model (law school dataset).
 <td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left; padding-left: 2em;" data-indentlevel="1">c_class_bal_false</td>
+<td style="text-align: left; padding-left: 2em;" data-indentlevel="1">class_bal_fnr</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;">1.00</td>
 <td style="text-align: right;">0.45</td>

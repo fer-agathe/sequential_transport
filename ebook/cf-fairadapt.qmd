@@ -4,7 +4,7 @@
 
 ## Objectives
 
-This chapter uses fairadapt (@plevcko2020fair) to make counterfactual inference.
+This chapter uses fairadapt (@plevcko2020fair) to make counterfactual inference. We obtain counterfactual values $\boldsymbol{x}^\star$ for individuals from the protected group $S=0$. Then, we use the aware and unaware classifiers $m(\cdot)$ (see [Chapter -@sec-classifier]) to make new predictions $m(s=1,\boldsymbol{x}^\star)$ for individuals in the protected class, i.e., observations in $\mathcal{D}_0$.
 
 :::
 
@@ -62,13 +62,13 @@ colours_all <- c(
 
 ## Load Data and Classifier
 
-We load the dataset where the sensitive attribute (\(S\)) is the race, obtained [Chapter -@sec-data-save]:
+We load the dataset where the sensitive attribute ($S$) is the race, obtained [Chapter -@sec-data-save]:
 ```{r}
 load("../data/df_race.rda")
 ```
 
 
-We also load the dataset where the sensitive attribute is also the race, but where where the target variable (\(Y\), ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in [Chapter -@sec-classifier-save]:
+We also load the dataset where the sensitive attribute is also the race, but where where the target variable ($Y$, ZFYA) is binary (1 if the student obtained a standardized first year average over the median, 0 otherwise). This dataset was saved in [Chapter -@sec-classifier-save]:
 ```{r}
 load("../data/df_race_c.rda")
 ```

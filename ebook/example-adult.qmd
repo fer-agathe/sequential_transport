@@ -600,6 +600,435 @@ ggplot(
   theme(legend.position = "bottom")
 ```
 
+## Multivariate Optimal Transport {#sec-adult-dataset-ot}
+
+
+We apply multivariate optimal transport (OT), following the methodology developed in @de2024transport.
+
+The codes are run in python. We use the {reticulate} R package to call python in this notebook. Let us save the dataset in a CSV format so we can easily import in in python.
+
+```{r write-factuals_aware}
+write.csv(
+  factuals_aware, file = "../data/factuals_aware-adult.csv", 
+  row.names = FALSE
+)
+```
+
+In this quarto docment, we work on a virtual environment.
+
+```{r}
+library(reticulate)
+use_virtualenv("~/quarto-python-env", required = TRUE)
+# reticulate::install_miniconda(force = TRUE)
+# py_install("POT")
+```
+
+Some libraries need to be loaded (including POT called ot).
+
+
+```{python import-libraries}
+import ot
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as pl
+import ot.plot
+from scipy.spatial.distance import cdist
+```
+
+First, we import the data, and drop characteristics that do not need to be transported.
+
+```{python read-data}
+df_aware = pd.read_csv('../data/factuals_aware-adult.csv')
+x_S = df_aware.drop(columns=['sex_origin', 'pred', 'type', 'id_indiv'])
+```
+
+We split the dataset into two subsets based on the sensitive attribute.
+```{python define-x_S_0}
+x_S_0 = x_S[x_S['sex'] == 'Female']
+x_S_1 = x_S[x_S['sex'] == 'Male']
+
+x_S_0 = x_S_0.drop(columns=['sex'])
+x_S_1 = x_S_1.drop(columns=['sex'])
+```
+
+The number of individuals in each subset:
+```{python define-n_0}
+n_0 = len(x_S_0)
+n_1 = len(x_S_1)
+```
+
+We split numerical and categorical data and keep track of the names of numerical and categorical variables:
+
+```{python define-num_0}
+num_cols = x_S_0.select_dtypes(include=[np.number]).columns
+cat_cols = x_S_0.select_dtypes(include=[object, 'category']).columns
+num_0, num_1 = x_S_0[num_cols], x_S_1[num_cols]
+cat_0, cat_1 = x_S_0[cat_cols], x_S_1[cat_cols]
+
+category_counts = x_S_0[cat_cols].nunique()
+```
+
+Categorical variables are one-hot encoded:
+```{python define-cat_0_encoded}
+cat_0_encoded, cat_1_encoded = {}, {}
+for col in cat_cols:
+    cat_0_encoded[col] = pd.get_dummies(cat_0[col], prefix=col)
+    cat_1_encoded[col] = pd.get_dummies(cat_1[col], prefix=col)
+    
+    # Align categories for the current column
+    cat_0_encoded[col], cat_1_encoded[col] = cat_0_encoded[col].align(
+        cat_1_encoded[col], join='outer', axis=1, fill_value=0
+    )
+```
+
+For numerical variables, we compute the Euclidean distance.
+
+```{python define-num_dist}
+num_dist = cdist(num_0.to_numpy(), num_1.to_numpy(), metric='euclidean')
+```
+
+For categorical variables, we use the hamming distance.
+
+```{python fill-cat_dists}
+cat_dists = list()
+for col in cat_cols:
+    dist = cdist(cat_0_encoded[col].to_numpy(), cat_1_encoded[col].to_numpy(), metric='hamming')
+    cat_dists.append(dist)
+```
+
+Then we need to combine the two distance matrices. We use weights equal to the proportion of numerical variables and the proportion of categorical variables, respectively for distances based on numerical and categorical variables.
+
+```{python define-combined_cost}
+# Weight for numerical distance
+alpha = len(num_cols) / (len(num_cols) + len(cat_cols))
+
+combined_cost = alpha * num_dist
+
+for i in range(len(cat_dists)):
+  beta = .5 / category_counts.iloc[i]
+  combined_cost += beta * cat_dists[i]
+```
+
+
+Then, we can compute the transport map:
+
+```{python}
+# Uniform weights (equal distribution)
+w_0 = ot.unif(len(x_S_0)) # Source weights
+w_1 = ot.unif(len(x_S_1)) # Target weights
+
+# Compute transport plan
+transport_plan = ot.emd(w_0, w_1, combined_cost)
+```
+
+Using this transport plan, we transport the numerical variables (only for individuals from the protected group):
+```{python define-# Transport numerical data}
+num_transported = n_0 * transport_plan @ num_1.to_numpy()
+```
+
+We do the same for categorical data, and we reconstruct labels (the label reconstruction is not perfect here):
+```{python define-transported_cats}
+transported_cats = {}
+
+for col in cat_cols:
+    cat_probs = transport_plan @ cat_1_encoded[col].to_numpy()
+    cat_columns = cat_1_encoded[col].columns
+    transported_cats[col] = pd.Series(cat_probs.argmax(axis=1)).map(lambda x: cat_columns[x].split('_', 1)[1])
+```
+
+We combine the transported numerical data and the transported categorical data:
+
+```{python define-transformed_data}
+transformed_data = pd.DataFrame(num_transported, columns=num_cols)
+```
+
+```{python add-categ-transformed_data}
+for col in cat_cols:
+    transformed_data[col] = transported_cats[col].values
+```
+
+
+Laslt, we export the data to a CSV file.
+```{python}
+csv_file_path = '../data/counterfactuals-ot-women-adult.csv'
+transformed_data.to_csv(csv_file_path, index=False)
+```
+
+Then, we can get back to using R. We load the transported data.
+```{r read-df_counterfactuals_ot_women}
+df_counterfactuals_ot_women <- read_csv('../data/counterfactuals-ot-women-adult.csv') |> 
+  mutate(
+    id_indiv = ind_women,
+    sex_origin = "Female",
+    sex = "Male"
+  ) |> 
+  mutate(
+    native_country = str_remove(native_country, "^country_"),
+    marital_status = str_remove(marital_status, "^status_"),
+  )
+```
+We make predictions based on those counterfactuals obtained with multivariate optimal transport, on both models (the unaware model, and the aware model):
+
+```{r define-pred_ot_unaware, warning=FALSE, message=FALSE}
+pred_ot_unaware <- predict(
+  model_unaware, newdata = df_counterfactuals_ot_women, type = "response"
+)
+
+pred_ot_aware <- predict(
+  model_aware, newdata = df_counterfactuals_ot_women, type = "response"
+)
+```
+
+
+```{r define-counterfactuals_unaware_ot_women}
+counterfactuals_unaware_ot_women <- 
+  df_counterfactuals_ot_women |> 
+  mutate(pred = pred_ot_unaware, type = "counterfactual")
+counterfactuals_aware_ot_women <- 
+  df_counterfactuals_ot_women |> 
+  mutate(pred = pred_ot_aware, type = "counterfactual")
+```
+
+Let us put in a single table the predictions made by the classifier (either aware or unaware) on Women based on their factual characteristics, and those made based on the counterfactuals:
+
+```{r define-aware_ot_women}
+aware_ot_women <- bind_rows(
+  factuals_aware |> mutate(id_indiv = row_number(), sex_origin = sex), 
+  counterfactuals_aware_ot_women |> mutate(S_origin = "Female")
+)
+unaware_ot_women <- bind_rows(
+  factuals_unaware |> mutate(id_indiv = row_number(), sex_origin = sex), 
+  counterfactuals_unaware_ot_women |> mutate(S_origin = "Female")
+)
+```
+
+:::{.panel-tabset}
+
+
+### Unaware
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Unaware model, Sensitive: Race, Woman -> Man"
+#| label: fig-ot-unaware-sex-ref-men
+#| code-fold: true
+#| fig-width: 7
+#| code-summary: Codes used to create the Figure.
+ggplot(
+  data = unaware_ot_women |> 
+    mutate(
+      group = case_when(
+        sex_origin == "Female" & sex == "Female" ~ "Women (Original)",
+        sex_origin == "Female" & sex == "Male" ~ "Women -> Men (Counterfactual)",
+        sex_origin == "Male" & sex == "Male" ~ "Men (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Women (Original)", "Women -> Men (Counterfactual)", "Men (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~sex) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+### Aware
+
+```{r}
+#| fig-cap: "Aware model, Sensitive: Race, Woman -> Man"
+#| label: fig-ot-aware-sex-ref-men
+#| code-fold: true
+#| fig-width: 7
+#| code-summary: Codes used to create the Figure.
+ggplot(
+  data = aware_ot_women |> 
+    mutate(
+      group = case_when(
+        sex_origin == "Female" & sex == "Female" ~ "Women (Original)",
+        sex_origin == "Female" & sex == "Male" ~ "Women -> Men (Counterfactual)",
+        sex_origin == "Male" & sex == "Male" ~ "Men (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Women (Original)", "Women -> Men (Counterfactual)", "Men (Original)"
+        )
+      )
+    ),
+  aes(x = pred, fill = group, colour = group)
+) +
+  geom_histogram(
+    mapping = aes(
+      y = after_stat(density)), alpha = 0.5, colour = NA,
+    position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  facet_wrap(~sex) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+
+:::
+  
+Then, we focus on the distribution of predicted scores for counterfactual of women and factuals of men.
+
+:::{.panel-tabset}
+
+### Unaware
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Women), Unaware model, Sensitive: Race, Woman -> Man"
+#| label: fig-ot-unaware-sex-ref-men-source-only
+#| code-fold: true
+#| fig-width: 7
+#| code-summary: Codes used to create the Figure.
+ggplot(
+  data = unaware_ot_women |> 
+    mutate(
+      group = case_when(
+        sex_origin == "Female" & sex == "Female" ~ "Women (Original)",
+        sex_origin == "Female" & sex == "Male" ~ "Women -> Men (Counterfactual)",
+        sex_origin == "Male" & sex == "Male" ~ "Men (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Women (Original)", "Women -> Men (Counterfactual)", "Men (Original)"
+        )
+      )
+    ) |> 
+    filter(sex_origin == "Female"),
+  mapping = aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+### Aware
+
+```{r, message=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Predicted Scores for Minority Class (Women), Aware model, Sensitive: Race, Woman -> Man"
+#| label: fig-ot-aware-sex-ref-men-source-only
+#| code-fold: true
+#| fig-width: 7
+#| code-summary: Codes used to create the Figure.
+ggplot(
+  data = aware_ot_women |> 
+    mutate(
+      group = case_when(
+        sex_origin == "Female" & sex == "Female" ~ "Women (Original)",
+        sex_origin == "Female" & sex == "Male" ~ "Women -> Men (Counterfactual)",
+        sex_origin == "Male" & sex == "Male" ~ "Men (Original)"
+      ),
+      group = factor(
+        group, 
+        levels = c(
+          "Women (Original)", "Women -> Men (Counterfactual)", "Men (Original)"
+        )
+      )
+    ) |> 
+    filter(sex_origin == "Female"),
+  mapping = aes(x = pred, fill = group)
+) +
+  geom_histogram(
+    mapping = aes(y = after_stat(density)), 
+    alpha = 0.5, position = "identity", binwidth = 0.05
+  ) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  scale_colour_manual(
+    NULL, values = c(
+      "Women (Original)" = colours_all[["source"]],
+      "Women -> Men (Counterfactual)" = colours_all[["ot"]],
+      "Men (Original)" = colours_all[["reference"]]
+    )
+  ) +
+  labs(
+    x = "Predictions for Y",
+    y = "Density"
+  ) +
+  global_theme() +
+  theme(legend.position = "bottom")
+```
+
+:::
+
+
 ## Fairadapt {#sec-adult-dataset-fairadapt}
 
 We have already assumed a causal graph (see @fig-causal-graph-adult).
@@ -1508,6 +1937,10 @@ tb_unaware <-
   bind_rows(
     counterfactuals_unaware_naive_women |> mutate(counterfactual = "naive")
   ) |> 
+  # OT
+  bind_rows(
+    counterfactuals_unaware_ot_women |> mutate(counterfactual = "ot")
+  ) |> 
   # Fairadapt
   bind_rows(
     counterfactuals_unaware_fpt_women |> mutate(counterfactual = "fpt")
@@ -1529,6 +1962,10 @@ tb_aware <-
   # Naive
   bind_rows(
     counterfactuals_aware_naive_women |> mutate(counterfactual = "naive")
+  ) |> 
+  # OT
+  bind_rows(
+    counterfactuals_aware_ot_women |> mutate(counterfactual = "ot")
   ) |> 
   # Fairadapt
   bind_rows(
@@ -1566,16 +2003,16 @@ pred_unaware_factuals_men <- tb_unaware_factuals |> filter(sex == "Male") |> pul
 d_unaware_factuals_women <- density(pred_unaware_factuals_women)
 d_unaware_factuals_men <- density(pred_unaware_factuals_men)
 
-par(mfrow = c(3, 1), mar = c(2, 2, 0, 0))
+par(mfrow = c(4, 1), mar = c(2, 2, 0, 0))
 x_lim <- c(0, .8)
 y_lim <- c(0, 10)
 
-# Naive
-tb_unaware_naive <- tb_unaware |> filter(counterfactual == "naive")
+# OT
+tb_unaware_ot <- tb_unaware |> filter(counterfactual == "ot")
 # Predicted values, focusing on Black --> White
-pred_unaware_naive_women_star <- tb_unaware_naive |> filter(sex == "Male") |> pull("pred")
+pred_unaware_ot_women_star <- tb_unaware_ot |> filter(sex_origin == "Female") |> pull("pred")
 # Estimated densities
-d_unaware_naive_women_star <- density(pred_unaware_naive_women_star)
+d_unaware_ot_women_star <- density(pred_unaware_ot_women_star)
 
 plot(
   d_unaware_factuals_women,
@@ -1587,18 +2024,49 @@ axis(1)
 axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
-polygon(d_unaware_naive_women_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-pos_arrow_ref <- .6
-text(x = pos_arrow_ref, y = 8, "Factuals - Men", col = colours_all[["reference"]])
+polygon(d_unaware_ot_women_star, col = alpha(colours_all[["ot"]], .5), border = NA)
+text(x = .2, y = 6.5, "Factuals - Women", col = colours_all[["source"]])
+pos_arrow <- .07
+ind_min <- which.min(abs(d_unaware_factuals_women$x - pos_arrow))
+arrows(
+  x1 = d_unaware_factuals_women$x[ind_min],
+  y1 = d_unaware_factuals_women$y[ind_min],
+  x0 = .2, 
+  y0 = 5,
+  length = 0.05, col = colours_all[["source"]]
+)
+
+pos_arrow_ref <- .5
+text(x = pos_arrow_ref, y = 6.5, "Factuals - Men", col = colours_all[["reference"]])
 ind_min_ref <- which.min(abs(d_unaware_factuals_men$x - pos_arrow_ref))
 arrows(
   x1 = d_unaware_factuals_men$x[ind_min_ref],
   y1 = d_unaware_factuals_men$y[ind_min_ref],
   x0 = pos_arrow_ref, 
-  y0 = 7,
+  y0 = 5,
   length = 0.05, col = colours_all[["reference"]]
 )
-text(x = .7, y = 4, "Naive", col = colours_all[["naive"]])
+text(x = .7, y = 6.5, "Multi. OT", col = colours_all[["ot"]])
+
+
+# Naive
+tb_unaware_naive <- tb_unaware |> filter(counterfactual == "naive")
+# Predicted values, focusing on Black --> White
+pred_unaware_naive_women_star <- tb_unaware_naive |> filter(sex == "Male") |> pull("pred")
+# Estimated densities
+d_unaware_naive_women_star <- density(pred_unaware_naive_women_star)
+plot(
+  d_unaware_factuals_women,
+  main = "", xlab = "", ylab = "",
+  axes = FALSE, col = NA,
+  xlim = x_lim, ylim = y_lim
+)
+axis(1)
+axis(2)
+polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
+lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
+polygon(d_unaware_naive_women_star, col = alpha(colours_all[["naive"]], .5), border = NA)
+text(x = .7, y = 6.5, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1620,17 +2088,7 @@ axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_fpt_women_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .15, y = 6, "Factuals - Women", col = colours_all[["source"]])
-pos_arrow <- .07
-ind_min <- which.min(abs(d_unaware_factuals_women$x - pos_arrow))
-arrows(
-  x1 = d_unaware_factuals_women$x[ind_min],
-  y1 = d_unaware_factuals_women$y[ind_min],
-  x0 = .15, 
-  y0 = 5,
-  length = 0.05, col = colours_all[["source"]]
-)
-text(x = .7, y = 4, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .7, y = 6.5, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1651,7 +2109,7 @@ axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .7, y = 4, "Seq. T.", col = colours_all[["seq"]])
+text(x = .7, y = 6.5, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 ### Aware model
@@ -1663,7 +2121,6 @@ text(x = .7, y = 4, "Seq. T.", col = colours_all[["seq"]])
 #| fig-height: 4
 #| code-fold: true
 #| code-summary: Codes used to create the Figure.
-# Factuals
 tb_aware_factuals <- tb_aware |> filter(counterfactual == "none")
 # Predicted values
 pred_aware_factuals_women <- tb_aware_factuals |> filter(sex == "Female") |> pull("pred")
@@ -1672,9 +2129,51 @@ pred_aware_factuals_men <- tb_aware_factuals |> filter(sex == "Male") |> pull("p
 d_aware_factuals_women <- density(pred_aware_factuals_women)
 d_aware_factuals_men <- density(pred_aware_factuals_men)
 
-par(mfrow = c(3, 1), mar = c(2, 2, 0, 0))
+par(mfrow = c(4, 1), mar = c(2, 2, 1, 0))
 x_lim <- c(0, .8)
-y_lim <- c(0, 16)
+y_lim <- c(0, 15)
+
+
+# OT
+tb_aware_ot <- tb_aware |> filter(counterfactual == "ot")
+# Predicted values, focusing on Black --> White
+pred_aware_ot_women_star <- tb_aware_ot |> filter(sex_origin == "Female") |> pull("pred")
+# Estimated densities
+d_aware_ot_women_star <- density(pred_aware_ot_women_star)
+
+plot(
+  d_aware_factuals_women,
+  main = "", xlab = "", ylab = "",
+  axes = FALSE, col = NA,
+  xlim = x_lim, ylim = y_lim
+)
+axis(1)
+axis(2)
+polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
+lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
+polygon(d_aware_ot_women_star, col = alpha(colours_all[["ot"]], .5), border = NA)
+text(x = .2, y = 12, "Factuals - Women", col = colours_all[["source"]])
+pos_arrow <- .07
+ind_min <- which.min(abs(d_aware_factuals_women$x - pos_arrow))
+arrows(
+  x1 = d_aware_factuals_women$x[ind_min],
+  y1 = d_aware_factuals_women$y[ind_min],
+  x0 = .2, 
+  y0 = 10,
+  length = 0.05, col = colours_all[["source"]]
+)
+
+pos_arrow_ref <- .5
+text(x = pos_arrow_ref, y = 12, "Factuals - Men", col = colours_all[["reference"]])
+ind_min_ref <- which.min(abs(d_aware_factuals_men$x - pos_arrow_ref))
+arrows(
+  x1 = d_aware_factuals_men$x[ind_min_ref],
+  y1 = d_aware_factuals_men$y[ind_min_ref],
+  x0 = pos_arrow_ref, 
+  y0 = 10,
+  length = 0.05, col = colours_all[["reference"]]
+)
+text(x = .7, y = 12, "Multi. OT", col = colours_all[["ot"]])
 
 # Naive
 tb_aware_naive <- tb_aware |> filter(counterfactual == "naive")
@@ -1694,27 +2193,7 @@ axis(2)
 polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_naive_women_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-text(x = .15, y = 13, "Factuals - Women", col = colours_all[["source"]])
-pos_arrow <- .03
-ind_min <- which.min(abs(d_aware_factuals_women$x - pos_arrow))
-arrows(
-  x1 = d_aware_factuals_women$x[ind_min],
-  y1 = d_aware_factuals_women$y[ind_min],
-  x0 = .15, 
-  y0 = 11,
-  length = 0.05, col = colours_all[["source"]]
-)
-pos_arrow_ref <- .6
-text(x = pos_arrow_ref, y = 13, "Factuals - Men", col = colours_all[["reference"]])
-ind_min_ref <- which.min(abs(d_aware_factuals_men$x - pos_arrow_ref))
-arrows(
-  x1 = d_aware_factuals_men$x[ind_min_ref],
-  y1 = d_aware_factuals_men$y[ind_min_ref],
-  x0 = pos_arrow_ref, 
-  y0 = 11,
-  length = 0.05, col = colours_all[["reference"]]
-)
-text(x = .7, y = 5, "Naive", col = colours_all[["naive"]])
+text(x = .7, y = 12, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1736,7 +2215,7 @@ axis(2)
 polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_fpt_women_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .7, y = 5, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .7, y =12, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1757,7 +2236,7 @@ axis(2)
 polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .7, y = 5, "Seq. T.", col = colours_all[["seq"]])
+text(x = .7, y = 12, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 :::
@@ -1765,315 +2244,162 @@ text(x = .7, y = 5, "Seq. T.", col = colours_all[["seq"]])
 
 ## Metrics
 
-:::{.callout-warning}
+We now turn to some metrics based on the predictions made for each model, based on the factual values in each group $\boldsymbol{x}$, and on the counterfactual values $\boldsymbol{x}^\star$ for individuals from the group of Women $\mathcal{D}_0$. For most metrics, the scoring classifier $m(\cdot)$ is transformed into a threshold-based classifier $m_t(\cdot)$, where $m_t(\cdot)=1$ if $m(\cdot) > t$, and $m_t(\cdot)=0$ otherwise. We set the threshold to $t=.5$.
 
-This section is still under construction. Results may not correct. The metrics used should be changed soon.
+```{r define-threshold}
+threshold <- .5
+```
 
-:::
+Let us get vectors of observes values $x_i \in \mathcal{D}$ as well as predicted scores for factual observations $m(s_i, \boldsymbol{x}_i)$ and for counterfactual observations for individuals in $\mathcal{D_0}$, i.e., $m(1, \boldsymbol{x}_i^\star)$.
 
-Let us compute a few metrics metrics, such as the accuracy, the log-loss, and the Brier Score, as well as the counterfactual demographic parity. For the accuracy, we define the set the probability threshold to .5.
-
-
-
-The **counterfactual demographic** parity writes:
-
-$$
-\mathrm{CDP}=\frac{1}{n_0}\sum_{i\in\mathcal{D}_0}m(1,\boldsymbol{x}_{i}^\star) - m(0,\boldsymbol{x}_{i}),
-$$
-where $n_0$ is the number of women in the sample, $m()$ is the classifier, with $m(1,\boldsymbol{x}_{i}^\star)$ the score returned when the sensitive attribute is $S=1$, i.e., "Male" and $\boldsymbol{x}_{i}^\star$ are the counterfactual values, $m(0,\boldsymbol{x}_{i})$ is the score returned by the model when using the factuals.
-
-We compute the Equalized Odds criterion as the absolute difference between true positive rate (TPR) across the two groups (Women/Men):
-
-$$
-EO = | TPR_{\text{Women}} - TPR_{\text{Men}} |
-$$
-
-
-A binary predictor $\hat{Y}$ satisfies **equal opportunity** with respect to $S$ and $Y$ if @hardt2016equality:
-$$
-P\big(\hat{Y} = 1 | S=0, Y=1 \big) = P\big(\hat{Y} = 1 | S=1, Y=1 \big)
-$$
-
-
-
-```{r}
-prob_threshold <- .5
-
-#' Log loss
-#' 
-#' @param y vector or binary obsevations
-#' @param s vector of predicted scores
-calculate_log_loss <- function(y, s){
-  s_pred <- pmin(pmax(s, 1e-15), 1 - 1e-15)
-  mean(-y*log(s_pred) - (1-y)*log(1-s_pred))
-}
-
-#' Brier Score
-#'
-#' The Brier Score \citep{brier_1950}, is expressed as: \deqn{\text{BS} =
-#' \frac{1}{n}\sum_{i=1}^{n} \big(\hat{s}(\mathbf{x}_i) - d_i\big)^{2}} where
-#' \eqn{d_i \in \{0,1\}} is the observed event for observation \eqn{i}.
-#'
-#' @param obs vector of observed binary events
-#' @param scores vector of scores
-#'
-#' @references Brier, G. W. (1950). Verification of forecasts expressed in terms
-#' of probability. Monthly Weather Review 78: 1–3.
-#'
-#' @export
-brier_score <- function(obs, scores) mean((scores - obs)^2)
+```{r define-obs_0}
+# Observed target variable
+obs_0 <- factuals_aware |> filter(sex_origin == "Female") |> pull("income")
+obs_1 <- factuals_aware |> filter(sex_origin == "Male") |> pull("income")
+# Scores using factuals
+pred_0_aware <- factuals_aware |> filter(sex_origin == "Female") |> pull("pred")
+pred_1_aware <- factuals_aware |> filter(sex_origin == "Male") |> pull("pred")
+pred_0_unaware <- factuals_unaware |> filter(sex_origin == "Female") |> pull("pred")
+pred_1_unaware <- factuals_unaware |> filter(sex_origin == "Male") |> pull("pred")
+# Scores in groups S="Female" using naive counterfactuals
+pred_0_naive_aware <- pred_aware_naive_women
+pred_0_naive_unaware <- pred_unaware_naive_women
+# Scores in groups S="Female" using multivariate optimal transport counterfactuals
+pred_0_ot_aware <- pred_ot_aware
+pred_0_ot_unaware <- pred_ot_unaware
+# Scores in groups S="Female" using fairadapt counterfactuals
+pred_0_fpt_aware <- pred_aware_fpt_women
+pred_0_fpt_unaware <- pred_unaware_fpt_women
+# Scores in groups S="Female" using sequential transport counterfactuals
+pred_0_seq_aware <- pred_seq_aware
+pred_0_seq_unaware <- pred_seq_unaware
 ```
 
 
-We will then put in a table all the predictions made in each case: without using counterfactuals, and with using each counterfactual technique applied on women's characteristics. Since we do not get counterfactual values for men, their predictions remain unchanged in each case. We will therefore complete the dataset with their unchanged predictions.
-```{r define-tb_complement_men}
-tb_complement_men <- 
-  factuals_aware |> 
-  select(id_indiv, sex, sex_origin, income, pred) |> 
-  filter(sex_origin == "Male")
+Then, we use the `counter_fair_metrics()`{.R} function from our package to compute the metrics presented in @sec-cf-comparison-metrics.
+
+```{r define-metrics_all}
+names_pred <- rep(c("naive", "ot", "fpt", "seq"), each = 2)
+names_model <- rep(c("aware", "unaware"), length(names_pred)/2)
+metrics_all <- map2(
+  .x = list(
+    pred_0_naive_aware, pred_0_naive_unaware,
+    pred_0_ot_aware, pred_0_ot_unaware,
+    pred_0_fpt_aware, pred_0_fpt_unaware,
+    pred_0_seq_aware, pred_0_seq_unaware
+  ),
+  .y = names_model,
+  .f = ~{
+    if (.y == "aware") {
+      pred_0 <- pred_0_aware
+      pred_1 <- pred_1_aware
+    } else {
+      pred_0 <- pred_0_unaware
+      pred_1 <- pred_1_unaware
+    }
+    counter_fair_metrics(
+      obs_0 = obs_0, obs_1 = obs_1, 
+      pred_0 = pred_0, 
+      pred_0_t = .x, 
+      pred_1 = pred_1, 
+      threshold = threshold
+    )
+  }
+)
+names(metrics_all) <- str_c(names_pred, "_", names_model)
 ```
 
-We put the predicted values in a table named `tb_pred`.
 
-```{r define-tb_pred}
+Then, we format the results to be able to procude a summary table.
+
+```{r define-tb_metrics}
 #| code-fold: true
-#| code-summary: Codes to create `tb_pred`.
-tb_pred_aware <- 
-  factuals_aware |> 
-  select(id_indiv, sex, sex_origin, income, pred) |> 
-  mutate(type = "factual") |> 
-  bind_rows(
-    counterfactuals_aware_naive_women |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      bind_rows(tb_complement_men) |> 
-      mutate(type = "naive")
-  ) |> 
-  bind_rows(
-    counterfactuals_aware_fpt_women |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      bind_rows(tb_complement_men) |> 
-      mutate(type = "fairadapt")
-  ) |> 
-  bind_rows(
-    counterfactuals_aware_seq_women |> 
-      left_join(
-        adult |> mutate(id_indiv = row_number()) |> 
-          select(id_indiv, income), by = "id_indiv"
-      ) |> 
-      bind_rows(tb_complement_men) |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      mutate(type = "seq")
-  ) |> 
+#| code-summary: Format results.
+group_metrics <-
+  map(metrics_all, "group_metrics") |> 
+  list_rbind(names_to = "model") |> 
   mutate(
-    y_binary = as.numeric(income) - 1,
-    pred_class = ifelse(
-      pred > prob_threshold, levels(adult$income)[2], 
-      levels(adult$income)[1]
-    ),
-    pred_correct = income == pred_class
-  )
-
-tb_pred_unaware <- 
-  factuals_unaware |> 
-  select(id_indiv, sex, sex_origin, income, pred) |> 
-  mutate(type = "factual") |> 
-  bind_rows(
-    counterfactuals_unaware_naive_women |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      bind_rows(tb_complement_men) |> 
-      mutate(type = "naive")
-  ) |> 
-  bind_rows(
-    counterfactuals_unaware_fpt_women |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      bind_rows(tb_complement_men) |> 
-      mutate(type = "fairadapt")
-  ) |> 
-  bind_rows(
-    counterfactuals_unaware_seq_women |> 
-      left_join(
-        adult |> mutate(id_indiv = row_number()) |> 
-          select(id_indiv, income), by = "id_indiv") |> 
-      bind_rows(tb_complement_men) |> 
-      select(id_indiv, sex, sex_origin, income, pred) |> 
-      mutate(type = "seq")
-  ) |> 
-  mutate(
-    y_binary = as.numeric(income) - 1,
-    pred_class = ifelse(
-      pred > prob_threshold, levels(adult$income)[2], 
-      levels(adult$income)[1]
-    ),
-    pred_correct = income == pred_class
-  )
-
-tb_pred <- 
-  tb_pred_aware |> mutate(model = "aware") |> 
-  bind_rows(
-    tb_pred_unaware |> mutate(model = "unaware")
+    cf_type = str_extract(model, "^(.*)_") |> str_remove("_$"),
+    model = str_remove(model, "^(.*)_")
   ) |> 
   mutate(
     model = factor(
-      model, levels = c("aware", "unaware"),
-      labels = c("Aware model", "Unware model")
-    ),
-    type = factor(type, levels = c("factual", "naive", "fairadapt", "seq"))
-  )
-```
-
-
-We compute some metrics on the whole sample, in each case:
-```{r define-overall_perf_metrics}
-overall_perf_metrics <- 
-  tb_pred |> 
-  group_by(model, type) |> 
-  summarise(
-    mean = mean(pred),
-    eq_opp_pos = sum(pred * (y_binary == 1)) / (sum(y_binary == 1)),
-    eq_opp_neg = sum(pred * (y_binary == 0)) / (sum(y_binary == 0)),
-    acc = mean(pred_correct),
-    ll = calculate_log_loss(y_binary, pred),
-    bs = brier_score(y_binary, pred),
-    .groups = "drop"
+      model, levels = c("aware", "unaware"), labels = c("Aware", "Unaware")
+    )
   ) |> 
-  mutate(sex_origin = "Whole")
-overall_perf_metrics
+  filter(
+    metric %in% c("n_obs", "TPR", "FPR")
+  ) |>
+  pivot_wider(names_from = "cf_type", values_from = "group_0_t") |> 
+  relocate(group_1, .after = "seq")
+
+counter_metrics <-
+  map(metrics_all, ~enframe(.x[["counter_metrics_0"]])) |> 
+  list_rbind(names_to = "model") |> 
+  mutate(
+    cf_type = str_extract(model, "^(.*)_") |> str_remove("_$"),
+    model = str_remove(model, "^(.*)_")
+  ) |> 
+  mutate(
+    model = factor(
+      model, levels = c("aware", "unaware"), labels = c("Aware", "Unaware")
+    )
+  ) |> 
+  pivot_wider(names_from = "cf_type", values_from = "value") |> 
+  rename(metric = name) |> 
+  filter(metric %in% c("c_demog_parity", "c_eq_op", "class_bal_fnr", "c_eq_treatment"))
+
+tb_metrics <- 
+  group_metrics |> mutate(type = "groups") |> 
+  bind_rows(counter_metrics |> mutate(type = "cf")) |> 
+  mutate(
+    metric = factor(
+      metric, 
+      levels = c(
+        "TPR", "FPR", "c_demog_parity", "c_eq_op", "class_bal_fnr",
+        "c_eq_treatment", "n_obs"
+      )
+    ),
+    type = factor(type, levels = c("groups", "cf"))
+  ) |> 
+  arrange(model, type, metric) |> 
+  relocate(type, .after = "model")
+
 ```
 
-And then we compute the same metrics but within the group of women and within the group of men.
-
-```{r define-group_perf_metrics}
-group_perf_metrics <- 
-  tb_pred |> 
-  group_by(model, type, sex_origin) |> 
-  summarise(
-    mean = mean(pred),
-    eq_opp_pos = sum(pred * (y_binary == 1)) / (sum(y_binary == 1)),
-    eq_opp_neg = sum(pred * (y_binary == 0)) / (sum(y_binary == 0)),
-    acc = mean(pred_correct),
-    ll = calculate_log_loss(y_binary, pred),
-    bs = brier_score(y_binary, pred),
-    .groups = "drop"
-  )
-group_perf_metrics
-```
-
-
-We compute the Counterfactual Demographic Parity:
-```{r}
-pred_women_factuals <- 
-  tb_pred |> filter(type == "factual") |> 
-  filter(sex_origin == "Female") |> 
-  select(model, id_indiv, pred_origin = pred)
-
-cdp <- tb_pred |> 
-  filter(sex_origin == "Female") |> 
-  left_join(pred_women_factuals, by = c("id_indiv", "model")) |> 
-  group_by(model, type) |> 
-  summarise(
-    CDP = mean(pred - pred_origin),
-    .groups = "drop"
-  )
-```
-
-
-The summary of the metrics are shown in @tbl-metrics-adult.
+The results are shown in @tbl-fairness-metrics-adult
 
 ```{r}
 #| code-fold: true
 #| code-summary: Codes used to create the Table.
-#| tbl-cap: Metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
-#| label: tbl-metrics-adult
-tbl_print <- 
-  group_perf_metrics |> filter(sex_origin == "Female") |> 
-  left_join(cdp, by = c("model", "type")) |> 
-  pivot_longer(cols = -c("model", "type", "sex_origin")) |> 
-  pivot_wider(names_from = type, values_from = value) |> 
-  select(-sex_origin) |> 
-  left_join(
-    group_perf_metrics |> filter(sex_origin == "Male" & type == "factual") |> 
-      pivot_longer(cols = -c("model", "type", "sex_origin"), values_to = "factual_men") |> 
-      select(model, name, factual_men),
-    by = c("model", "name")
-  ) |> 
-  left_join(
-    overall_perf_metrics |> 
-      pivot_longer(cols = -c("model", "type", "sex_origin"), values_to = "factual_whole") |> 
-      filter(sex_origin == "Whole", type == "factual") |> 
-      select(model, name, factual_whole),
-    by = c("model", "name")
-  ) |> 
-  select(
-    model, name, factual_whole, factual_men, factual_women = factual,
-    naive, fairadapt, seq
-  ) |> 
-  mutate(
-    name = factor(
-      name,
-      levels = c("CDP", "mean", "eq_opp_pos", "eq_opp_neg", "acc", "ll", "bs"),
-      labels = c("CDP", "Mean", "Eq. Opp. Y=1", "Eq. Opp Y=0", "Accuracy", "Log-loss", "Brier Score")
-    )
-  ) |> 
-  arrange(model, name)
+#| tbl-cap: Metrics to Assess Fairness of the Model (adult dataset).
+#| label: tbl-fairness-metrics-adult
+options(knitr.kable.NA = '')
 
-tbl_print[, -1] |> 
+tb_metrics |>
+  select(-model, -type) |>
+  # select(-type) |>
   knitr::kable(
+    col.names = c("", "S=0", "Naive", "OT", "Fairadapt", "Seq", "S=1"),
     digits = 2,
-    col.names = c(
-      "Metric", "Factual", "Factual", "Factual", "Naive", "Fairadapt", 
-      "Seq. Transport"
-    )
+    booktabs = TRUE
   ) |> 
   kableExtra::kable_styling() |> 
-  # kableExtra::pack_rows(index = table(tbl_print$sex_origin))
-  # kableExtra::collapse_rows(columns = 1, valign = "top")
-  kableExtra::add_header_above(
-    c(" " = 1, "Whole" = "1", "Men" = 1, "Women" = 4)
-  ) |> 
-  kableExtra::pack_rows(index = table(tbl_print$model))
+  kableExtra::pack_rows(index = table(tb_metrics$model))
 ```
 
 
-```{r, eval=FALSE}
+```{r metrics-latex-table, eval=FALSE}
 #| code-fold: true
-#| code-summary: LaTeX code
-knitr::kable(
-  tbl_print[, -1], format = "latex", booktabs = TRUE, digits = 2,
-) |> 
-  kableExtra::kable_styling("striped", full_width = F) %>%
-  kableExtra::add_header_above(
-    c(" " = 1, "Whole" = 1, "Men" = 1, "Women" = 4)
+#| code-summary: LaTeX code for the table.
+tb_metrics |>
+  select(-model, -type) |>
+  # select(-type) |>
+  knitr::kable(
+    col.names = c("Metric", "S=0", "Naive", "OT", "Fairadapt", "Seq", "S=1"),
+    digits = 2, format = "latex",
+    booktabs = TRUE
   ) |> 
-  kableExtra::pack_rows(index = table(tbl_print$model))
+  kableExtra::kable_styling() |> 
+  kableExtra::pack_rows(index = table(tb_metrics$model))
 ```
-
-
-```{r}
-# Brouillon
-tb_pred$type |> unique()
-
-lvl_neg <- levels(tb_pred$income)[1]
-lvl_pos <- levels(tb_pred$income)[2]
-
-tb_pred |> 
-  group_by(model, type, sex_origin) |> 
-  summarise(
-    TP = sum(income == lvl_pos & pred_class == lvl_pos),
-    FP = sum(income == lvl_neg & pred_class == lvl_pos),
-    FN = sum(income == lvl_pos & pred_class == lvl_neg),
-    TN = sum(income == lvl_neg & pred_class == lvl_neg),
-    P = TP + FN,
-    N = FP + TN
-  ) |> 
-  rowwise() |> 
-  mutate(
-    TPR = TP/P,
-    FPR = FN / N
-  ) |> 
-  group_by(model, type) |> 
-  mutate(
-    eq_odds_diff = abs(diff(TPR))
-  )
-```
-
-
