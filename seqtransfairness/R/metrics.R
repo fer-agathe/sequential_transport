@@ -69,7 +69,8 @@ metrics_bin_classif <- function(obs,
     "N" = N,
     "TPR" = TPR,
     "FPR" = FPR,
-    "TNR" = TNR
+    "TNR" = TNR,
+    "FNR" = FNR
   )
 }
 
@@ -196,7 +197,7 @@ counter_fair_metrics <- function(obs_0,
     demog_par = m_0[["P"]]/m_0[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
     eq_opp = m_0[["TPR"]] - m_1[["TPR"]],
     class_bal_true = m_0[["FPR"]] / m_1[["FPR"]],
-    class_bal_false = m_0[["TNR"]] / m_1[["TNR"]],
+    class_bal_false = m_0[["FNR"]] / m_1[["FNR"]],
     eq_treatment = (m_0[["FPR"]] / m_0[["FN"]]) - (m_1[["FPR"]] / m_1[["FN"]])
   )
   # Group 1 vs. Group 0_t
@@ -204,7 +205,7 @@ counter_fair_metrics <- function(obs_0,
     demog_par = m_0_t[["P"]]/m_0_t[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
     eq_opp = m_0_t[["TPR"]] - m_1[["TPR"]],
     class_bal_true = m_0_t[["FPR"]] / m_1[["FPR"]],
-    class_bal_false = m_0_t[["TNR"]] / m_1[["TNR"]],
+    class_bal_false = m_0_t[["FNR"]] / m_1[["FNR"]],
     eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FN"]]) -
       (m_1[["FPR"]] / m_1[["FN"]])
   )
@@ -214,9 +215,9 @@ counter_fair_metrics <- function(obs_0,
     c_demog_parity = m_0_t[["mean_pred"]] - m_0[["mean_pred"]],
     c_eq_op = m_0_t[["TPR"]] - m_0[["TPR"]],
     c_class_bal_true = m_0_t[["FPR"]] / m_0[["FPR"]],
-    c_class_bal_false = m_0_t[["TNR"]] / m_0[["TNR"]],
-    c_eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FN"]]) -
-      (m_0[["FPR"]] / m_0[["FN"]])
+    c_class_bal_false = m_0_t[["FNR"]] / m_0[["FNR"]],
+    c_eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FNR"]]) -
+      (m_0[["FPR"]] / m_0[["FNR"]])
   )
 
   group_metrics <- tibble::enframe(m_0, name = "metric", value = "group_0") |>
