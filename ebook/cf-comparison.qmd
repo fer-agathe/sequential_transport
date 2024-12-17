@@ -60,7 +60,7 @@ colours_all <- c(
 
 ## Load Data and Classifier
 
-We load the dataset where the sensitive attribute (\(S\)) is the race, obtained [Chapter -@sec-data-save]:
+We load the dataset where the sensitive attribute ($S$) is the race, obtained [Chapter -@sec-data-save]:
 ```{r}
 load("../data/df_race.rda")
 ```
@@ -98,6 +98,14 @@ load("../data/pred_unaware.rda")
 load("../data/pred_aware_all.rda")
 load("../data/pred_unaware_all.rda")
 ```
+
+We load our package:
+```{r}
+devtools::load_all("../seqtransfairness/")
+# If installed:
+# library(seqtransfairness)
+```
+
 
 We create a tibble with the factuals and the predictions by the aware model, an another with the predictions by the unaware model:
 ```{r define-factuals_aware}
@@ -810,160 +818,524 @@ The predictions by the model using the factuals are stored in `factuals_aware` a
 
 
 
-We define a small function, `get_prob()`{.R}, to compute the average score predicted by the model (either the aware model or the unaware model) in sub-groups identified by positions of observations.
-```{r define-get_prob}
+<!-- We define a small function, `get_prob()`{.R}, to compute the average score predicted by the model (either the aware model or the unaware model) in sub-groups identified by positions of observations. -->
+<!-- ```{r define-get_prob} -->
+<!-- #| code-fold: true -->
+<!-- #| code-summary: The `get_prob()`{.R} function. -->
+<!-- get_prob <- function(type, model = "aware", ind, sensitive = "Black") { -->
+<!--   if (type == "factual") { -->
+<!--     x <- get(paste0("factuals_", model)) -->
+<!--   } else if (type == "naive") { -->
+<!--     x <- get(paste0("counterfactuals_", model, "_naive_black")) -->
+<!--   } else if (type == "fairadapt") { -->
+<!--     x <- get(paste0("counterfactuals_", model, "_fpt_black")) -->
+<!--   } else if (type == "ot") { -->
+<!--     x <- get(paste0("counterfactuals_", model, "_ot_black")) -->
+<!--   } else if (type == "seq") { -->
+<!--     x <- get(paste0("counterfactuals_", model, "_seq_black")) -->
+<!--   } else { -->
+<!--     stop("Error type.") -->
+<!--   } -->
+
+<!--   val <- x |> filter(id_indiv %in% ind) |> pull("pred") -->
+
+<!--   tribble( -->
+<!--     ~type, ~model, ~sensitive, ~value_type, ~value, -->
+<!--     type, model, sensitive, "mean", mean(val), -->
+<!--     type, model, sensitive, "sd", sd(val) -->
+<!--   ) -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- We identify the following sub-groups: -->
+
+<!-- ```{r define-subgroups} -->
+<!-- df_race_c <- df_race_c |> mutate(id_indiv = row_number()) -->
+<!-- ind_black <- df_race_c |> filter(S == "Black") |> pull("id_indiv") -->
+<!-- ind_white <- df_race_c |> filter(S == "White") |> pull("id_indiv") -->
+<!-- ind_pos <- df_race_c |> filter(Y == 1) |> pull("id_indiv") -->
+<!-- ind_neg <- df_race_c |> filter(Y == 0) |> pull("id_indiv") -->
+<!-- ind_true_pos <- intersect(ind_pos, ind_black) -->
+<!-- ind_pos_black <- intersect(ind_pos, ind_black) -->
+<!-- ind_pos_white <- intersect(ind_pos, ind_white) -->
+<!-- ind_neg_black <- intersect(ind_neg, ind_black) -->
+<!-- ind_neg_white <- intersect(ind_neg, ind_white) -->
+<!-- ``` -->
+
+
+<!-- Then, we compute the three metrics and merge them in a single table: -->
+<!-- ```{r define-conditional_demographic_parity} -->
+<!-- conditional_demographic_parity <- NULL -->
+<!-- eq_op_pos <- NULL -->
+<!-- eq_op_neg <- NULL -->
+<!-- for (type in c("factual", "naive","ot", "fairadapt", "seq")) { -->
+<!--   for (model in c("aware", "unaware")) { -->
+<!--     if (type == "factual") { -->
+<!--       for (sensitive in c("Black", "White")) { -->
+<!--         # Conditional Demographic Parity -->
+<!--         tmp_cdp <-  -->
+<!--           get_prob(type = type, model = model, ind = ind_black) |>  -->
+<!--           bind_rows( -->
+<!--             get_prob( -->
+<!--               type = type, model = model, ind = ind_white, sensitive = "White" -->
+<!--               ) -->
+<!--           ) -->
+<!--         # ~ Equal Opportunity for Y=1 -->
+<!--         tmp_eq_op_pos <-  -->
+<!--           get_prob(type = type, model = model, ind = ind_pos_black) |>  -->
+<!--           bind_rows( -->
+<!--             get_prob( -->
+<!--               type = type, model = model, ind = ind_pos_white,  -->
+<!--               sensitive = "White" -->
+<!--               ) -->
+<!--           ) -->
+<!--         # ~ Equal Opportunity for Y=0 -->
+<!--         tmp_eq_op_neg <-  -->
+<!--           get_prob(type = type, model = model, ind = ind_neg_black) |>  -->
+<!--           bind_rows( -->
+<!--             get_prob( -->
+<!--               type = type, model = model, ind = ind_neg_white,  -->
+<!--               sensitive = "White" -->
+<!--               ) -->
+<!--           ) -->
+<!--       }  -->
+<!--     } else { -->
+<!--       tmp_cdp <- get_prob(type = type, model = model, ind = ind_black) -->
+<!--       tmp_eq_op_pos <- get_prob(type = type, model = model, ind = ind_pos_black) -->
+<!--       tmp_eq_op_neg <- get_prob(type = type, model = model, ind = ind_neg_black) -->
+<!--     } -->
+<!--     conditional_demographic_parity <-  -->
+<!--       bind_rows(conditional_demographic_parity, tmp_cdp) -->
+<!--     eq_op_pos <- bind_rows(eq_op_pos, tmp_eq_op_pos) -->
+<!--     eq_op_neg <- bind_rows(eq_op_neg, tmp_eq_op_neg) -->
+<!--   } -->
+<!-- } -->
+
+<!-- # Merge those in a single table: -->
+<!-- metrics <-  -->
+<!--   conditional_demographic_parity |> mutate(metric = "CDP") |>  -->
+<!--   bind_rows(eq_op_pos |> mutate(metric = "Eq. Opp. Y=1")) |>  -->
+<!--   bind_rows(eq_op_neg |> mutate(metric = "Eq. Opp. Y=0")) -->
+
+<!-- ``` -->
+
+
+
+
+<!-- ```{r} -->
+<!-- #| code-fold: true -->
+<!-- #| code-summary: Codes used to create the Table. -->
+<!-- #| tbl-cap: Fairness metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier). -->
+<!-- #| label: tbl-fairness-metrics-lawschool -->
+<!-- # digits <- 2 -->
+<!-- num_accuracy <- 0.01 -->
+<!-- tb_res <-  -->
+<!--   metrics |>  -->
+<!--   mutate(type = ifelse( -->
+<!--     type == "factual" & sensitive == "White", "factual_white", type), -->
+<!--     type = factor( -->
+<!--       type,  -->
+<!--       levels = c("factual_white", "factual", "naive", "ot", "fairadapt", "seq") -->
+<!--     ) -->
+<!--   ) |>  -->
+<!--   select(-sensitive) |>  -->
+<!--   pivot_wider(names_from = "value_type", values_from = "value") |>  -->
+<!--   mutate(value = paste0( -->
+<!--     scales::number(mean, accuracy = num_accuracy), -->
+<!--     " (", -->
+<!--     scales::number(sd, accuracy = num_accuracy), -->
+<!--     ")") -->
+<!--   ) |>  -->
+<!--   select(-mean, -sd) |>  -->
+<!--   pivot_wider(names_from = "type", values_from = "value", names_sort = TRUE) |>  -->
+<!--   arrange(model, metric) -->
+
+<!-- knitr::kable( -->
+<!--   tb_res[, -1],  -->
+<!--   col.names = c("Metric", "Factual", "Factual", "Naive", "OT", "Fairadapt", "Seq. Transport") -->
+<!-- ) |>  -->
+<!--   kableExtra::kable_styling("striped", full_width = F) %>% -->
+<!--   kableExtra::add_header_above( -->
+<!--     c(" " = 1, "White"=1, "Black"=5) -->
+<!--   ) |>  -->
+<!--   kableExtra::pack_rows(index = table(tb_res$model)) -->
+<!-- ``` -->
+
+
+<!-- ```{r, eval=FALSE} -->
+<!-- #| code-fold: true -->
+<!-- #| code-summary: LaTeX Table -->
+<!-- knitr::kable( -->
+<!--   tb_res[,-1], format = "latex", booktabs = TRUE -->
+<!-- ) |>  -->
+<!--   kableExtra::kable_styling("striped", full_width = F) %>% -->
+<!--   kableExtra::add_header_above( -->
+<!--     c(" " = 1, "White"=1, "Black"=5) -->
+<!--   ) |>  -->
+<!--   kableExtra::pack_rows(index = table(tb_res$model)) -->
+
+<!-- ``` -->
+
+We now turn to some metrics based on the predictions made for each model, based on the factual values in each group, and on the counterfactual values for individuals from the group of Black individuals. For most metrics, the scoring classifier $ m(\cdot) $ is transformed into a threshold-based classifier $ m_t(\cdot) $, where $ m_t(\cdot)=1 $ if $ m(\cdot) > t $, and $ m_t(\cdot)=0 $ otherwise. We set the threshold to $t=.5$.
+
+```{r define-threshold}
+threshold <- .5
+```
+
+Let us get vectors of observes values as well as predicted scores by the models.
+```{r define-inb_black}
+inb_black <- which(df_race_c$S == "Black")
+# Observed target variable
+obs_0 <- df_race_c |> filter(S == "Black") |> pull("Y")
+obs_1 <- df_race_c |> filter(S == "White") |> pull("Y")
+# Scores using factuals
+pred_0_aware <- factuals_aware |> filter(S_origin == "Black") |> pull("pred")
+pred_1_aware <- factuals_aware |> filter(S_origin == "White") |> pull("pred")
+pred_0_unaware <- factuals_unaware |> filter(S_origin == "Black") |> pull("pred")
+pred_1_unaware <- factuals_unaware |> filter(S_origin == "White") |> pull("pred")
+# Scores in groups S="Black" using naive counterfactuals
+pred_0_naive_aware <- counterfactuals_aware_naive_black$pred
+pred_0_naive_unaware <- counterfactuals_unaware_naive_black$pred
+# Scores in groups S="Black" using OT counterfactuals
+pred_0_ot_aware <- counterfactuals_aware_ot_black$pred[inb_black]
+pred_0_ot_unaware <- counterfactuals_unaware_ot_black$pred[inb_black]
+# Scores in groups S="Black" using fairadapt counterfactuals
+pred_0_fpt_aware <- counterfactuals_aware_fpt_black$pred
+pred_0_fpt_unaware <- counterfactuals_unaware_fpt_black$pred
+# Scores in groups S="Black" using sequential transport counterfactuals
+pred_0_seq_aware <- counterfactuals_aware_seq_black$pred
+pred_0_seq_unaware <- counterfactuals_unaware_seq_black$pred
+```
+
+Then, we can use the `counter_fair_metrics()`{.R} function from our small package, which relies on another functions we defined in the package, `metrics_bin_classif()`{.R}. The latter computes various metrics for a classifier:
+
+- `mean_pred`: Mean predicted scores
+- `n_obs`: Number of observations
+- `TP`: Count of true positives
+- `FP`: Count of false positives
+- `FN`: Count of false negatives
+- `TN`: Count of true negatives
+- `P`: Count of positives (`TP` + `FN`)
+- `N`: Count of positives (`FP` + `TN`)
+- `TPR`: True positive rate (`TP` / `P`)
+- `FPR`: False positive rate (`FP` / `N`)
+- `TNR`: True negative rate (`TN` / `N`)
+- `FNR`: False negative rate (`FN` / `P`)
+
+
+The `counter_fair_metrics()`{.R} applies the `metrics_bin_classif()`{.R} to **three subsets of the data**:
+
+1. The individuals from the protected group (Black individuals).
+2. The individuals from the protected group (Black individuals), where their characteristics are changed to their counterfactual values.
+3. The individuals from the other group (White individuals).
+
+We are particularly interested in the true positive rates (TPR) and the false positive rates (FPR). The `counter_fair_metrics()`{.R} computes a few counterfactual fairness metrics:
+
+1. **Counterfactual Equality of Opportinities**
+  $$\text{CEqOp} = \text{TPR}_0^\star - \text{TPR}_0,$$
+  where $\text{TPR}_0^\star$ is the true positive rate in $\mathcal{D}_0$ when predictions are made using the counterfactuals $m_t(1, \boldsymbol{x}^\star)$, and $\text{TPR}_0$ is the true positive rate in $\mathcal{D}_0$ when predictions are based on the individuals' original values in $\mathcal{D}_0$. A positive value of $\text{CEqOp}$ indicates that the initial model was unfair towards the protected class.
+2. **Counterfactual Class balance (false negative rates)**  
+  $$CCB(F) = \frac{\text{TNR}_0^\star}{\text{TNR}_0}$$
+where $\text{TNR}_0^\star$ is the true negative rate of individuals in $\mathcal{D}_0$ calculated based on $m_t(1, \boldsymbol{x}^\star)$, and $\text{TNR}_0$ is the true negative rate of these individuals computed using $m_t(1, \boldsymbol{x})$
+3. **Counterfactual Equal Treatment**  
+  $$CEqTr = \frac{FPR_0^\star}{FNR_0^\star} - \frac{FPR_0}{FNR_0}$$
+where $FPR_0^\star$ and $FNR_0^\star$ are the false positive rate and false negative rate computed based on the counterfactuals in the protected group, and $FPR_0$ and $FNR_0$ are their counterparts computed using the factual values for the same individuals.
+
+```{r, eval=FALSE}
 #| code-fold: true
-#| code-summary: The `get_prob()`{.R} function.
-get_prob <- function(type, model = "aware", ind, sensitive = "Black") {
-  if (type == "factual") {
-    x <- get(paste0("factuals_", model))
-  } else if (type == "naive") {
-    x <- get(paste0("counterfactuals_", model, "_naive_black"))
-  } else if (type == "fairadapt") {
-    x <- get(paste0("counterfactuals_", model, "_fpt_black"))
-  } else if (type == "ot") {
-    x <- get(paste0("counterfactuals_", model, "_ot_black"))
-  } else if (type == "seq") {
-    x <- get(paste0("counterfactuals_", model, "_seq_black"))
+#| code-summary: The `metrics_bin_classif()`{.R} function.
+#' Metrics for a Scoring Classifier
+#'
+#' @description
+#' From predicted scores of a binary scoring classifier and corresponding
+#' observed outcome (\eqn{Y\in\{0,1\}}), computes various metrics. The scoring
+#' classifier is turned into a binary classifier by setting a threshold above
+#' which individuals are predicted as 1 (or as the second level of the binary
+#' outcome if it is a factor variable).
+#'
+#' @param obs Vector of observed binary (0/1) variable.
+#' @param pred Vector of predicted scores.
+#' @param threshold Threshold above which predicted scores are classified as 1.
+#'
+#' @returns A named numeric vector with the following metrics:
+#' * `mean_pred`: Mean predicted scores
+#' * `n_obs`: Number of observations
+#' * `TP`: Count of true positives
+#' * `FP`: Count of false positives
+#' * `FN`: Count of false negatives
+#' * `TN`: Count of true negatives
+#' * `P`: Count of positives (`TP` + `FN`)
+#' * `N`: Count of positives (`FP` + `TN`)
+#' * `TPR`: True positive rate (`TP` / `P`)
+#' * `FPR`: False positive rate (`FP` / `N`)
+#' * `TNR`: True negative rate (`TN` / `N`)
+#' * `FNR`: False negative rate (`FN` / `P`)
+metrics_bin_classif <- function(obs,
+                                pred,
+                                threshold = .5) {
+  # Values for positive / negative classes
+  if (is.numeric(obs)) {
+    lvl_neg <- 0
+    lvl_pos <- 1
+  } else if (is.factor(obs)) {
+    lvl_neg <- levels(obs)[1]
+    lvl_pos <- levels(obs)[2]
   } else {
-    stop("Error type.")
+    stop("Observed values muste either 0/1 or a binary factor.")
   }
-  
-  val <- x |> filter(id_indiv %in% ind) |> pull("pred")
-  
-  tribble(
-    ~type, ~model, ~sensitive, ~value_type, ~value,
-    type, model, sensitive, "mean", mean(val),
-    type, model, sensitive, "sd", sd(val)
+  pred_class <- ifelse(pred > threshold, lvl_pos, lvl_neg)
+
+  mean_pred <- mean(pred)
+  TP <- sum(obs == lvl_pos & pred_class == lvl_pos)
+  FP <- sum(obs == lvl_neg & pred_class == lvl_pos)
+  FN <- sum(obs == lvl_pos & pred_class == lvl_neg)
+  TN <- sum(obs == lvl_neg & pred_class == lvl_neg)
+  P <- TP + FN
+  N <- FP + TN
+  TPR <- TP / P
+  FPR <- FP / N
+  TNR <- TN / N
+  FNR <- FN / P
+  n_obs <- length(obs)
+
+  c(
+    "mean_pred" = mean_pred,
+    "n_obs" = n_obs,
+    "TP" = TP,
+    "FP" = FP,
+    "FN" = FN,
+    "TN" = TN,
+    "P" = P,
+    "N" = N,
+    "TPR" = TPR,
+    "FPR" = FPR,
+    "TNR" = TNR,
+    "FNR" = FNR
   )
 }
-```
-
-We identify the following sub-groups:
-
-```{r define-subgroups}
-df_race_c <- df_race_c |> mutate(id_indiv = row_number())
-ind_black <- df_race_c |> filter(S == "Black") |> pull("id_indiv")
-ind_white <- df_race_c |> filter(S == "White") |> pull("id_indiv")
-ind_pos <- df_race_c |> filter(Y == 1) |> pull("id_indiv")
-ind_neg <- df_race_c |> filter(Y == 0) |> pull("id_indiv")
-ind_true_pos <- intersect(ind_pos, ind_black)
-ind_pos_black <- intersect(ind_pos, ind_black)
-ind_pos_white <- intersect(ind_pos, ind_white)
-ind_neg_black <- intersect(ind_neg, ind_black)
-ind_neg_white <- intersect(ind_neg, ind_white)
-```
-
-
-Then, we compute the three metrics and merge them in a single table:
-```{r define-conditional_demographic_parity}
-conditional_demographic_parity <- NULL
-eq_op_pos <- NULL
-eq_op_neg <- NULL
-for (type in c("factual", "naive","ot", "fairadapt", "seq")) {
-  for (model in c("aware", "unaware")) {
-    if (type == "factual") {
-      for (sensitive in c("Black", "White")) {
-        # Conditional Demographic Parity
-        tmp_cdp <- 
-          get_prob(type = type, model = model, ind = ind_black) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_white, sensitive = "White"
-              )
-          )
-        # ~ Equal Opportunity for Y=1
-        tmp_eq_op_pos <- 
-          get_prob(type = type, model = model, ind = ind_pos_black) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_pos_white, 
-              sensitive = "White"
-              )
-          )
-        # ~ Equal Opportunity for Y=0
-        tmp_eq_op_neg <- 
-          get_prob(type = type, model = model, ind = ind_neg_black) |> 
-          bind_rows(
-            get_prob(
-              type = type, model = model, ind = ind_neg_white, 
-              sensitive = "White"
-              )
-          )
-      } 
-    } else {
-      tmp_cdp <- get_prob(type = type, model = model, ind = ind_black)
-      tmp_eq_op_pos <- get_prob(type = type, model = model, ind = ind_pos_black)
-      tmp_eq_op_neg <- get_prob(type = type, model = model, ind = ind_neg_black)
-    }
-    conditional_demographic_parity <- 
-      bind_rows(conditional_demographic_parity, tmp_cdp)
-    eq_op_pos <- bind_rows(eq_op_pos, tmp_eq_op_pos)
-    eq_op_neg <- bind_rows(eq_op_neg, tmp_eq_op_neg)
-  }
-}
-
-# Merge those in a single table:
-metrics <- 
-  conditional_demographic_parity |> mutate(metric = "CDP") |> 
-  bind_rows(eq_op_pos |> mutate(metric = "Eq. Opp. Y=1")) |> 
-  bind_rows(eq_op_neg |> mutate(metric = "Eq. Opp. Y=0"))
-
-```
-
-
-
-
-```{r}
-#| code-fold: true
-#| code-summary: Codes used to create the Table.
-#| tbl-cap: Fairness metrics computed on scores predicted by the classifier based on the factuals or the different versions of the counterfactuals, for the aware model (sensitive variable used to train the classifier) and the unaware model (sentitive variable not provided to train the classifier).
-#| label: tbl-fairness-metrics-lawschool
-# digits <- 2
-num_accuracy <- 0.01
-tb_res <- 
-  metrics |> 
-  mutate(type = ifelse(
-    type == "factual" & sensitive == "White", "factual_white", type),
-    type = factor(
-      type, 
-      levels = c("factual_white", "factual", "naive", "ot", "fairadapt", "seq")
-    )
-  ) |> 
-  select(-sensitive) |> 
-  pivot_wider(names_from = "value_type", values_from = "value") |> 
-  mutate(value = paste0(
-    scales::number(mean, accuracy = num_accuracy),
-    " (",
-    scales::number(sd, accuracy = num_accuracy),
-    ")")
-  ) |> 
-  select(-mean, -sd) |> 
-  pivot_wider(names_from = "type", values_from = "value", names_sort = TRUE) |> 
-  arrange(model, metric)
-
-knitr::kable(
-  tb_res[, -1], 
-  col.names = c("Metric", "Factual", "Factual", "Naive", "OT", "Fairadapt", "Seq. Transport")
-) |> 
-  kableExtra::kable_styling("striped", full_width = F) %>%
-  kableExtra::add_header_above(
-    c(" " = 1, "White"=1, "Black"=5)
-  ) |> 
-  kableExtra::pack_rows(index = table(tb_res$model))
 ```
 
 
 ```{r, eval=FALSE}
 #| code-fold: true
-#| code-summary: LaTeX Table
-knitr::kable(
-  tb_res[,-1], format = "latex", booktabs = TRUE
-) |> 
-  kableExtra::kable_styling("striped", full_width = F) %>%
-  kableExtra::add_header_above(
-    c(" " = 1, "White"=1, "Black"=5)
-  ) |> 
-  kableExtra::pack_rows(index = table(tb_res$model))
+#| code-summary: The `counter_fair_metrics()`{.R} function.
+#' Counterfactual Fairness Metrics for Binary Scoring Classifier
+#'
+#' @description
+#' From predicted scores of a binary scoring classifier in two groups (group 0,
+#' and group 1) and corresponding observed outcome (\eqn{Y\in\{0,1\}}), as well
+#' as predicted scores for counterfactual individuals from group 0, computes
+#' various metrics within each group. The scoring classifier is turned into a
+#' binary classifier by setting a threshold above which individuals are
+#' predicted as 1 (or as the second level of the binary outcome if it is a
+#' factor variable).
+#'
+#' @param obs_0 Vector of observed binary (0/1) variable in group 0.
+#' @param obs_1 Vector of observed binary (0/1) variable in group 1.
+#' @param pred_0 Vector of predicted scores in group 0.
+#' @param pred_0_t Vector of predicted scores computed based on counterfactual
+#'        characteristics of individuals from group 0.
+#' @param pred_1 Vector of predicted scores in group 1.
+#' @param threshold Threshold above which predicted scores are classified as 1.
+#'
+#' @returns A tibble with the metrics in rows in each group (in column). The
+#'  following metrics are returned:
+#' * `mean_pred`: Mean predicted scores
+#' * `n_obs`: Number of observations
+#' * `TP`: Count of true positives
+#' * `FP`: Count of false positives
+#' * `FN`: Count of false negatives
+#' * `TN`: Count of true negatives
+#' * `P`: Count of positives (`TP` + `FN`)
+#' * `N`: Count of positives (`FP` + `TN`)
+#' * `TPR`: True positive rate (`TP` / `P`)
+#' * `FPR`: False positive rate (`FP` / `N`)
+#' * `TNR`: True negative rate (`TN` / `N`)
+#' * `FNR`: False negative rate (`FN` / `P`)
+counter_fair_metrics <- function(obs_0,
+                                 obs_1,
+                                 pred_0,
+                                 pred_0_t,
+                                 pred_1,
+                                 threshold) {
+  m_0 <- metrics_bin_classif(
+    obs = obs_0, pred = pred_0, threshold = threshold
+  )
+  m_0_t <- metrics_bin_classif(
+    obs = obs_0, pred = pred_0_t, threshold = threshold
+  )
+  m_1 <- metrics_bin_classif(
+    obs = obs_1, pred = pred_1, threshold = threshold
+  )
 
+  # Group 1 vs. Group 0
+  metrics_1_vs_0 <- c(
+    demog_par = m_0[["P"]]/m_0[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
+    eq_opp = m_0[["TPR"]] - m_1[["TPR"]],
+    class_bal_true = m_0[["FPR"]] / m_1[["FPR"]],
+    class_bal_false = m_0[["FNR"]] / m_1[["FNR"]],
+    eq_treatment = (m_0[["FPR"]] / m_0[["FN"]]) - (m_1[["FPR"]] / m_1[["FN"]])
+  )
+  # Group 1 vs. Group 0_t
+  metrics_1_vs_0_t <- c(
+    demog_par = m_0_t[["P"]]/m_0_t[["n_obs"]] - m_1[["P"]]/m_1[["n_obs"]],
+    eq_opp = m_0_t[["TPR"]] - m_1[["TPR"]],
+    class_bal_true = m_0_t[["FPR"]] / m_1[["FPR"]],
+    class_bal_false = m_0_t[["FNR"]] / m_1[["FNR"]],
+    eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FN"]]) -
+      (m_1[["FPR"]] / m_1[["FN"]])
+  )
+
+  # Group 0 vs Group 0_t
+  metrics_0_vs_0_t <- c(
+    c_demog_parity = m_0_t[["mean_pred"]] - m_0[["mean_pred"]],
+    c_eq_op = m_0_t[["TPR"]] - m_0[["TPR"]],
+    c_class_bal_true = m_0_t[["FPR"]] / m_0[["FPR"]],
+    c_class_bal_false = m_0_t[["FNR"]] / m_0[["FNR"]],
+    c_eq_treatment = (m_0_t[["FPR"]] / m_0_t[["FNR"]]) -
+      (m_0[["FPR"]] / m_0[["FNR"]])
+  )
+
+  group_metrics <- tibble::enframe(m_0, name = "metric", value = "group_0") |>
+    left_join(
+      tibble::enframe(m_0_t, name = "metric", value = "group_0_t"),
+      by = "metric"
+    ) |>
+    left_join(
+      tibble::enframe(m_1, name = "metric", value = "group_1"),
+      by = "metric"
+    )
+  list(
+    group_metrics = group_metrics,
+    factuals_metrics = metrics_1_vs_0,
+    counter_metrics_1 = metrics_1_vs_0_t,
+    counter_metrics_0 = metrics_0_vs_0_t
+  )
+}
 ```
+
+Let us compute these metrics on our different predicted values.
+
+```{r define-metrics_all}
+names_pred <- rep(c("naive", "ot", "fpt", "seq"), each = 2)
+names_model <- rep(c("aware", "unaware"), 4)
+metrics_all <- map2(
+  .x = list(
+    pred_0_naive_aware, pred_0_naive_unaware,
+    pred_0_ot_aware, pred_0_ot_unaware,
+    pred_0_fpt_aware, pred_0_fpt_unaware,
+    pred_0_seq_aware, pred_0_seq_unaware
+  ),
+  .y = names_model,
+  .f = ~{
+    if (.y == "aware") {
+      pred_0 <- pred_0_aware
+      pred_1 <- pred_1_aware
+    } else {
+      pred_0 <- pred_0_unaware
+      pred_1 <- pred_1_unaware
+    }
+    counter_fair_metrics(
+      obs_0 = obs_0, obs_1 = obs_1, 
+      pred_0 = pred_0, 
+      pred_0_t = .x, 
+      pred_1 = pred_1, 
+      threshold = threshold
+    )
+  }
+)
+names(metrics_all) <- str_c(names_pred, "_", names_model)
+```
+
+Then, we format the results to be able to procude a summary table.
+```{r}
+#| code-fold: true
+#| code-summary: Fomat results.
+group_metrics <-
+  map(metrics_all, "group_metrics") |> 
+  list_rbind(names_to = "model") |> 
+  mutate(
+    cf_type = str_extract(model, "^(.*)_") |> str_remove("_$"),
+    model = str_remove(model, "^(.*)_")
+  ) |> 
+  mutate(
+    model = factor(
+      model, levels = c("aware", "unaware"), labels = c("Aware", "Unaware")
+    )
+  ) |> 
+  filter(
+    metric %in% c("n_obs", "TPR", "FPR")
+  ) |>
+  pivot_wider(names_from = "cf_type", values_from = "group_0_t") |> 
+  relocate(group_1, .after = "seq")
+
+counter_metrics <-
+  map(metrics_all, ~enframe(.x[["counter_metrics_0"]])) |> 
+  list_rbind(names_to = "model") |> 
+  mutate(
+    cf_type = str_extract(model, "^(.*)_") |> str_remove("_$"),
+    model = str_remove(model, "^(.*)_")
+  ) |> 
+  mutate(
+    model = factor(
+      model, levels = c("aware", "unaware"), labels = c("Aware", "Unaware")
+    )
+  ) |> 
+  pivot_wider(names_from = "cf_type", values_from = "value") |> 
+  rename(metric = name) |> 
+  filter(metric %in% c("c_demog_parity", "c_eq_op", "c_class_bal_false", "c_eq_treatment"))
+
+tb_metrics <- 
+  group_metrics |> mutate(type = "groups") |> 
+  bind_rows(counter_metrics |> mutate(type = "cf")) |> 
+  mutate(
+    metric = factor(
+      metric, 
+      levels = c(
+        "TPR", "FPR", "c_demog_parity", "c_eq_op", "c_class_bal_false",
+        "c_eq_treatment", "n_obs"
+      )
+    ),
+    type = factor(type, levels = c("groups", "cf"))
+  ) |> 
+  arrange(model, type, metric) |> 
+  relocate(type, .after = "model")
+```
+
+The results are shown in @tbl-fairness-metrics-lawschool.
+
+```{r}
+#| code-fold: true
+#| code-summary: Codes used to create the Table.
+#| tbl-cap: Metrics to Assess Fairness of the Model (law school dataset).
+#| label: tbl-fairness-metrics-lawschool
+options(knitr.kable.NA = '')
+
+tb_metrics |>
+  select(-model, -type) |>
+  # select(-type) |>
+  knitr::kable(
+    col.names = c("", "S=0", "Naive", "OT", "Fairadapt", "Seq", "S=1"),
+    digits = 2,
+    booktabs = TRUE
+  ) |> 
+  kableExtra::kable_styling() |> 
+  kableExtra::pack_rows(index = table(tb_metrics$model))
+```
+
+
+```{r metrics-latex-table, eval=FALSE}
+#| code-fold: true
+#| code-summary: LaTeX code for the table.
+tb_metrics |>
+  select(-model, -type) |>
+  # select(-type) |>
+  knitr::kable(
+    col.names = c("Metric", "S=0", "Naive", "OT", "Fairadapt", "Seq", "S=1"),
+    digits = 2, format = "latex",
+    booktabs = TRUE
+  ) |> 
+  kableExtra::kable_styling() |> 
+  kableExtra::pack_rows(index = table(tb_metrics$model))
+```
+

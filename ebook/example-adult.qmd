@@ -1598,7 +1598,7 @@ arrows(
   y0 = 7,
   length = 0.05, col = colours_all[["reference"]]
 )
-text(x = .09, y = 8, "Naive", col = colours_all[["naive"]])
+text(x = .7, y = 4, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1630,7 +1630,7 @@ arrows(
   y0 = 5,
   length = 0.05, col = colours_all[["source"]]
 )
-text(x = .4, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .7, y = 4, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1651,7 +1651,7 @@ axis(2)
 polygon(d_unaware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
+text(x = .7, y = 4, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 ### Aware model
@@ -1714,7 +1714,7 @@ arrows(
   y0 = 11,
   length = 0.05, col = colours_all[["reference"]]
 )
-text(x = .4, y = 6, "Naive", col = colours_all[["naive"]])
+text(x = .7, y = 5, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1736,7 +1736,7 @@ axis(2)
 polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_fpt_women_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .4, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .7, y = 5, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1757,7 +1757,7 @@ axis(2)
 polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
+text(x = .7, y = 5, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 :::

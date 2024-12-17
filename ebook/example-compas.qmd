@@ -1528,9 +1528,9 @@ pred_unaware_factuals_white <- tb_unaware_factuals |> filter(race == "White") |>
 d_unaware_factuals_nonwhite <- density(pred_unaware_factuals_nonwhite)
 d_unaware_factuals_white <- density(pred_unaware_factuals_white)
 
-par(mfrow = c(3, 1), mar = c(2, 2, 0, 0))
+par(mfrow = c(3, 1), mar = c(2, 2, 1, 0))
 x_lim <- c(0, .8)
-y_lim <- c(0, 10)
+y_lim <- c(0, 3)
 
 # Naive
 tb_unaware_naive <- tb_unaware |> filter(counterfactual == "naive")
@@ -1550,17 +1550,17 @@ axis(2)
 polygon(d_unaware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_naive_nonwhite_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-pos_arrow_ref <- .6
-text(x = pos_arrow_ref, y = 8, "Factuals - White", col = colours_all[["reference"]])
+pos_arrow_ref <- .7
+text(x = pos_arrow_ref, y = 2, "Factuals - White", col = colours_all[["reference"]])
 ind_min_ref <- which.min(abs(d_unaware_factuals_white$x - pos_arrow_ref))
 arrows(
   x1 = d_unaware_factuals_white$x[ind_min_ref],
   y1 = d_unaware_factuals_white$y[ind_min_ref],
   x0 = pos_arrow_ref, 
-  y0 = 7,
+  y0 = 1.7,
   length = 0.05, col = colours_all[["reference"]]
 )
-text(x = .09, y = 8, "Naive", col = colours_all[["naive"]])
+text(x = .3, y = 2.5, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1582,17 +1582,17 @@ axis(2)
 polygon(d_unaware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_fpt_nonwhite_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .15, y = 6, "Factuals - Non-White", col = colours_all[["source"]])
-pos_arrow <- .07
+text(x = .7, y = 2.5, "Factuals - Non-White", col = colours_all[["source"]])
+pos_arrow <- .6
 ind_min <- which.min(abs(d_unaware_factuals_nonwhite$x - pos_arrow))
 arrows(
   x1 = d_unaware_factuals_nonwhite$x[ind_min],
   y1 = d_unaware_factuals_nonwhite$y[ind_min],
-  x0 = .15, 
-  y0 = 5,
+  x0 = .7, 
+  y0 = 2.2,
   length = 0.05, col = colours_all[["source"]]
 )
-text(x = .4, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .3, y = 2.5, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1613,7 +1613,7 @@ axis(2)
 polygon(d_unaware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_unaware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_unaware_seq_nonwhite_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
+text(x = .3, y = 2.5, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 ### Aware model
@@ -1634,9 +1634,9 @@ pred_aware_factuals_white <- tb_aware_factuals |> filter(race == "White") |> pul
 d_aware_factuals_nonwhite <- density(pred_aware_factuals_nonwhite)
 d_aware_factuals_white <- density(pred_aware_factuals_white)
 
-par(mfrow = c(3, 1), mar = c(2, 2, 0, 0))
+par(mfrow = c(3, 1), mar = c(2, 2, 1, 0))
 x_lim <- c(0, .8)
-y_lim <- c(0, 16)
+y_lim <- c(0, 3)
 
 # Naive
 tb_aware_naive <- tb_aware |> filter(counterfactual == "naive")
@@ -1656,27 +1656,27 @@ axis(2)
 polygon(d_aware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_naive_nonwhite_star, col = alpha(colours_all[["naive"]], .5), border = NA)
-text(x = .15, y = 13, "Factuals - Non-White", col = colours_all[["source"]])
-pos_arrow <- .03
+text(x = .15, y = 2.5, "Factuals - Non-White", col = colours_all[["source"]])
+pos_arrow <- .2
 ind_min <- which.min(abs(d_aware_factuals_nonwhite$x - pos_arrow))
 arrows(
   x1 = d_aware_factuals_nonwhite$x[ind_min],
   y1 = d_aware_factuals_nonwhite$y[ind_min],
   x0 = .15, 
-  y0 = 11,
+  y0 = 2,
   length = 0.05, col = colours_all[["source"]]
 )
-pos_arrow_ref <- .6
-text(x = pos_arrow_ref, y = 13, "Factuals - White", col = colours_all[["reference"]])
+pos_arrow_ref <- .1
+text(x = .05, y = 2, "Factuals - White", col = colours_all[["reference"]])
 ind_min_ref <- which.min(abs(d_aware_factuals_white$x - pos_arrow_ref))
 arrows(
   x1 = d_aware_factuals_white$x[ind_min_ref],
   y1 = d_aware_factuals_white$y[ind_min_ref],
-  x0 = pos_arrow_ref, 
-  y0 = 11,
+  x0 = .05, 
+  y0 = 1.5,
   length = 0.05, col = colours_all[["reference"]]
 )
-text(x = .4, y = 6, "Naive", col = colours_all[["naive"]])
+text(x = .7, y = 2, "Naive", col = colours_all[["naive"]])
 
 
 # Fairadapt
@@ -1698,7 +1698,7 @@ axis(2)
 polygon(d_aware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_fpt_nonwhite_star, col = alpha(colours_all[["fairadapt"]], .5), border = NA)
-text(x = .4, y = 6, "fairadapt", col = colours_all[["fairadapt"]])
+text(x = .7, y = 2, "fairadapt", col = colours_all[["fairadapt"]])
 
 
 # Sequential transport
@@ -1719,7 +1719,7 @@ axis(2)
 polygon(d_aware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), border = NA)
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_nonwhite_star, col = alpha(colours_all[["seq"]], .5), border = NA)
-text(x = .4, y = 6, "Seq. T.", col = colours_all[["seq"]])
+text(x = .7, y = 2, "Seq. T.", col = colours_all[["seq"]])
 ```
 
 :::
