@@ -989,35 +989,36 @@ m(x_1,x_2,s)=\big(1+\exp\big[-\big((x_1+x_2)/2 + \boldsymbol{1}(s=1)\big)\big]\b
 <span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
 <span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  f0_2d<span class="sc">$</span>estimate,</span>
 <span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"A"</span>], .<span class="dv">3</span>),</span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique0,</span>
-<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)<span class="sc">/</span><span class="dv">10</span>,</span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
-<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,<span class="at">lwd =</span> <span class="dv">2</span></span>
-<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
-<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
-<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (S=0, x1=-2, x2=-1)</span></span>
-<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords_indep<span class="sc">$</span>start[<span class="dv">1</span>], coords_indep<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
-<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
-<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a>  coords_indep<span class="sc">$</span>start[<span class="dv">1</span>], coords_indep<span class="sc">$</span>start[<span class="dv">2</span>], </span>
-<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(predicted_val[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
-<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
-<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">3</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Group 1</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimated density: level curves for (x1, x2) -&gt; m(1, x1, x2)</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">1</span>]],</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>eval.point[[<span class="dv">2</span>]],</span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>  f1_2d<span class="sc">$</span>estimate,</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(colours[<span class="st">"B"</span>], .<span class="dv">3</span>), <span class="at">add =</span> <span class="cn">TRUE</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(</span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>  vx0, vx0, dlogistique0,</span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)<span class="sc">/</span><span class="dv">10</span>,</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> scl,</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>,<span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual (S=0, x1=-2, x2=-1)</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(coords_indep<span class="sc">$</span>start[<span class="dv">1</span>], coords_indep<span class="sc">$</span>start[<span class="dv">2</span>], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> CeX)</span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="do">## Predicted value for the individual, based on factuals</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a>  coords_indep<span class="sc">$</span>start[<span class="dv">1</span>], coords_indep<span class="sc">$</span>start[<span class="dv">2</span>], </span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(predicted_val[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"%"</span>, <span class="at">sep =</span> <span class="st">""</span>), </span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">1</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> <span class="st">"darkblue"</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-counterfactuals-new-individual-1" class="quarto-float quarto-figure quarto-figure-center anchored">

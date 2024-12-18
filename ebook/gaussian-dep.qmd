@@ -528,7 +528,8 @@ contour(
   f0_2d$eval.point[[2]],
   f0_2d$estimate,
   col = scales::alpha(colours["A"], .3),
-  axes = FALSE, xlab = "", ylab = ""
+  axes = FALSE, xlab = "", ylab = "",
+  xlim = c(-1, 3), ylim = c(-1, 3)
 )
 # Group 1
 ## Estimated density: level curves for (x1, x2) -> m(1, x1, x2)
