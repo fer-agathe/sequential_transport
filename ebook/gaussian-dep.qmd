@@ -506,10 +506,67 @@ predicted_val <- c(
 ```
 
 
+Then, we can plot all this information on a graph. The arrows show the path from the new individual to its counterfactual assuming the two different causal relationships. The red square shows the value obtained with multivariate optimal transport.
+
+```{r}
+#| code-fold: true
+#| fig-cap: "In the background, level curves for $(x_1,x_2)\\mapsto m(0,x_1,x_2)$. The blue point corresponds to the individual $(s,x_1,x_2)=(s=0,-2,-1)$ (predicted 18.2% by model $m$, and 7.6% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged)."
+#| label: fig-counterfactuals-new-individual-1
+#| fig-height: 5
+#| fig-width: 5
+
+# Colour scale from colour of class 0 to class 1
+colfunc <- colorRampPalette(c(colours["0"], colours["1"]))
+scl <- scales::alpha(colfunc(9),.9)
+
+par(mar = c(2, 2, 0, 0))
+# Group 0
+## Estimated density: level curves for (x1, x2) -> m(0, x1, x2)
+CeX <- 1
+contour(
+  f0_2d$eval.point[[1]],
+  f0_2d$eval.point[[2]],
+  f0_2d$estimate,
+  col = scales::alpha(colours["A"], .3),
+  axes = FALSE, xlab = "", ylab = ""
+)
+# Group 1
+## Estimated density: level curves for (x1, x2) -> m(1, x1, x2)
+contour(
+  f1_2d$eval.point[[1]],
+  f1_2d$eval.point[[2]],
+  f1_2d$estimate,
+  col = scales::alpha(colours["B"], .3), add = TRUE
+)
+contour(
+  vx0, vx0, dlogistique0,
+  levels = (1:9)/10,
+  col = scl,
+  add = TRUE,lwd = 2
+)
+axis(1)
+axis(2)
+
+###
+# Individual (S=0, x1=-2, x2=-1)
+###
+points(coords_indep$start[1], coords_indep$start[2], pch = 19, cex = CeX)
+## Predicted value for the individual, based on factuals
+text(
+  coords_indep$start[1], coords_indep$start[2], 
+  paste(round(predicted_val[1] * 100, 1), "%", sep = ""), 
+  pos = 1, cex = CeX, col = "darkblue"
+)
+```
+
+
+
 ```{r}
 #| code-fold: true
 #| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. The dark blue dot represents an individual $(s,x_1,x_2)=(s=0, 0,.5)$ (predicted 32.1% by model $m$, and 56.2% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged). The other dots represent  counterfactuals $(s=1,x_1^\\star,x_2^\\star)$ according to the assumed causal graph where $x_1$ and $x_2$ are independent (correct DAG, predicted 55.8%), $x_2$ depends on $x_1$ (bottom right path, predicted 54.4%), $x_1$ depends on $x_2$ (top left path, predicted 58.8%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 54.4%)."
 #| label: fig-counterfactuals-new-individual
+#| fig-height: 5
+#| fig-width: 5
 colour_start <- "darkblue"
 colour_correct <- "#CC79A7"
 colour_inc_x1_then_x2 <- "darkgray"
@@ -517,9 +574,7 @@ colour_inc_x2_then_x1 <- "#56B4E9"
 colour_ot <- "#C93312"
 colour_naive <- "#000000"
 
-# Colour scale from colour of class 0 to class 1
-colfunc <- colorRampPalette(c(colours["0"], colours["1"]))
-scl <- scales::alpha(colfunc(9),.9)
+
 
 CeX <- 1
 par(mar = c(2, 2, 0, 0))
