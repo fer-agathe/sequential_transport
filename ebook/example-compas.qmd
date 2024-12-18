@@ -1,5 +1,6 @@
 # COMPAS Dataset {#sec-compas-dataset}
 
+
 ::: callout-note
 
 ## Objectives
@@ -566,9 +567,6 @@ ggplot(
   theme(legend.position = "bottom")
 ```
 
----
-title: "Untitled"
----
 
 ## Multivariate Optimal Transport {#sec-compas-dataset-ot}
 
@@ -584,7 +582,7 @@ write.csv(
 )
 ```
 
-In this quarto docment, we work on a virtual environment.
+In this quarto document, we work on a virtual environment.
 
 ```{r}
 library(reticulate)
