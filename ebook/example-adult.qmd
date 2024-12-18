@@ -633,13 +633,14 @@ import numpy as np
 import matplotlib.pyplot as pl
 import ot.plot
 from scipy.spatial.distance import cdist
+import sklearn as sk
 ```
 
 First, we import the data, and drop characteristics that do not need to be transported.
 
 ```{python read-data}
 df_aware = pd.read_csv('../data/factuals_aware-adult.csv')
-x_S = df_aware.drop(columns=['sex_origin', 'pred', 'type', 'id_indiv'])
+x_S = df_aware.drop(columns=['sex_origin', 'pred', 'type', 'id_indiv', 'income'])
 ```
 
 We split the dataset into two subsets based on the sensitive attribute.
@@ -674,6 +675,14 @@ cat_0_encoded, cat_1_encoded = {}, {}
 for col in cat_cols:
     cat_0_encoded[col] = pd.get_dummies(cat_0[col], prefix=col)
     cat_1_encoded[col] = pd.get_dummies(cat_1[col], prefix=col)
+
+    columns_0 = cat_0_encoded[col].columns
+    cat_0_encoded_np_col = sk.preprocessing.scale(cat_0_encoded[col])
+    cat_0_encoded[col] = pd.DataFrame(cat_0_encoded_np_col, columns=columns_0)
+
+    columns_1 = cat_1_encoded[col].columns
+    cat_1_encoded_np_col = sk.preprocessing.scale(cat_1_encoded[col])
+    cat_1_encoded[col] = pd.DataFrame(cat_1_encoded_np_col, columns=columns_1)
     
     # Align categories for the current column
     cat_0_encoded[col], cat_1_encoded[col] = cat_0_encoded[col].align(
@@ -692,7 +701,7 @@ For categorical variables, we use the hamming distance.
 ```{python fill-cat_dists}
 cat_dists = list()
 for col in cat_cols:
-    dist = cdist(cat_0_encoded[col].to_numpy(), cat_1_encoded[col].to_numpy(), metric='hamming')
+    dist = cdist(cat_0_encoded[col].to_numpy(), cat_1_encoded[col].to_numpy(), metric='euclidean')
     cat_dists.append(dist)
 ```
 
@@ -700,13 +709,18 @@ Then we need to combine the two distance matrices. We use weights equal to the p
 
 ```{python define-combined_cost}
 # Weight for numerical distance
-alpha = len(num_cols) / (len(num_cols) + len(cat_cols))
+#alpha = len(num_cols) / (len(num_cols) + len(cat_cols))
 
-combined_cost = alpha * num_dist
+#combined_cost = alpha * num_dist
+
+#for i in range(len(cat_dists)):
+#  beta = .5 / category_counts.iloc[i]
+#  combined_cost += beta * cat_dists[i]
+
+combined_cost = num_dist
 
 for i in range(len(cat_dists)):
-  beta = .5 / category_counts.iloc[i]
-  combined_cost += beta * cat_dists[i]
+  combined_cost += cat_dists[i]
 ```
 
 
