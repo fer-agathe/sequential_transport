@@ -442,13 +442,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -571,13 +571,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -621,6 +621,11 @@ library(reticulate)
 use_virtualenv("~/quarto-python-env", required = TRUE)
 # reticulate::install_miniconda(force = TRUE)
 # py_install("POT")
+# py_install("scikit-learn")
+# py_install("pandas")
+# py_install("numpy")
+# py_install("matplotlib")
+# py_install("scipy")
 ```
 
 Some libraries need to be loaded (including POT called ot).
@@ -958,13 +963,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1011,13 +1016,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1295,13 +1300,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1348,12 +1353,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Male"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Men (Original)" = colours_all[["source"]],
@@ -1570,13 +1576,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1623,12 +1629,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Male"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Men (Original)" = colours_all[["source"]],
@@ -1850,13 +1857,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1903,13 +1910,13 @@ ggplot(
       )
     ) |> 
     filter(sex_origin == "Female"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],

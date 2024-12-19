@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Arthur Charpentier">
 <meta name="author" content="Agathe Fernandes Machado">
 <meta name="author" content="Ewen Gallic">
-<meta name="dcterms.date" content="2024-12-15">
+<meta name="dcterms.date" content="2024-12-18">
 
 <title>Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness</title>
 <style>
@@ -273,7 +273,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./algorithm-3.html" class="sidebar-item-text sidebar-link">
+  <a href="./algorithm-5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Faster Algorithm</span></span></a>
   </div>
 </li>
@@ -383,6 +383,7 @@ window.Quarto = {
   <li><a href="#outline" id="toc-outline" class="nav-link" data-scroll-target="#outline">Outline</a></li>
   <li><a href="#small-package" id="toc-small-package" class="nav-link" data-scroll-target="#small-package">Small Package</a></li>
   <li><a href="#replication-codes" id="toc-replication-codes" class="nav-link" data-scroll-target="#replication-codes">Replication Codes</a></li>
+  <li><a href="#replication-of-figures-and-tables" id="toc-replication-of-figures-and-tables" class="nav-link" data-scroll-target="#replication-of-figures-and-tables">Replication of Figures and Tables</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -432,7 +433,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 15, 2024</p>
+      <p class="date">December 18, 2024</p>
     </div>
   </div>
   
@@ -447,17 +448,17 @@ window.Quarto = {
 <section id="introduction" class="level1 unnumbered">
 <h1 class="unnumbered">Introduction</h1>
 <p>This ebook provides the replication codes to the article titled <em>‘Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.’</em></p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+Extended Version of the Paper
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This ebook is still under construction. We are revising the paper at the moment. The results provided here may not be the final ones.</p>
+<p>An extended version of the paper is available on arXiv: <a href="https://arxiv.org/abs/2408.03425" class="uri">https://arxiv.org/abs/2408.03425</a></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -475,17 +476,17 @@ Note
 </div>
 <section id="abstract" class="level2">
 <h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
-<p>In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in <span class="citation" data-cites="plevcko2020fair">Plečko and Meinshausen (<a href="references.html#ref-plevcko2020fair" role="doc-biblioref">2020</a>)</span> and optimal transport, as in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. We extend “Knothe’s rearrangement” <span class="citation" data-cites="bonnotte2013knothe">Bonnotte (<a href="references.html#ref-bonnotte2013knothe" role="doc-biblioref">2013</a>)</span> and “triangular transport” <span class="citation" data-cites="zech2022sparse1">Zech and Marzouk (<a href="references.html#ref-zech2022sparse1" role="doc-biblioref">2022</a>)</span> to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.</p>
+<p>In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in <span class="citation" data-cites="plevcko2020fair">Plečko and Meinshausen (<a href="references.html#ref-plevcko2020fair" role="doc-biblioref">2020</a>)</span> and optimal transport, as in <span class="citation" data-cites="de2024transport">De Lara et al. (<a href="references.html#ref-de2024transport" role="doc-biblioref">2024</a>)</span>. We extend “Knothe’s rearrangement” <span class="citation" data-cites="bonnotte2013knothe">Bonnotte (<a href="references.html#ref-bonnotte2013knothe" role="doc-biblioref">2013</a>)</span> and “triangular transport” <span class="citation" data-cites="zech2022sparse1">Zech and Marzouk (<a href="references.html#ref-zech2022sparse1" role="doc-biblioref">2022</a>)</span> to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss fairness at the individual level. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.</p>
 <p><strong>Keywords</strong>: Machine Learning (ML) -&gt; ML: Ethics – Bias, Fairness, Transparency &amp; Privacy</p>
 </section>
 <section id="outline" class="level2">
 <h2 class="anchored" data-anchor-id="outline">Outline</h2>
 <p>This ebook is made of fourt parts:</p>
 <ol type="1">
-<li>Optimal Transport We provide some background for optimal transport (<span class="quarto-unresolved-ref">?sec-optimal-transport</span>).</li>
+<li>Optimal Transport We provide some background for optimal transport (<a href="optimal-transport.html" class="quarto-xref">Chapter&nbsp;<span>1&nbsp; Optimal Transport</span></a>).</li>
 <li>Simulations<br>
-Using data simulated from bivariate Gaussian distributions in two subgroups of the population (<span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>), we illustrate the sequential transport algorithm (<span class="quarto-unresolved-ref">?sec-gaussian</span>). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context (<span class="quarto-unresolved-ref">?sec-regression</span>). We then present another algorithm which can be used if the covariates are not all numeric (<span class="quarto-unresolved-ref">?sec-alg-3</span>). Lastly, we explore what happens when assuming a wrong DAG (<span class="quarto-unresolved-ref">?sec-wrong-causal</span>).</li>
-<li>The third part shows an example with real data. The law datatest used as an illustration is first presented (<span class="quarto-unresolved-ref">?sec-data</span>). In this data, the individuals (students) may be part of a protected group (<span class="math inline">\(S=0\)</span>) or not (<span class="math inline">\(S=1\)</span>). Then, a GLM model is estimated to predict a binary outcome (<span class="quarto-unresolved-ref">?sec-classifier</span>). We then present three methods to produce counterfactuals from group <span class="math inline">\(S=0\)</span> to group <span class="math inline">\(S=1\)</span>: fairadapt (<span class="quarto-unresolved-ref">?sec-cf-fairadapt</span>), multivariate optimal transport (<span class="quarto-unresolved-ref">?sec-cf-ot</span>), and sequential transport (<span class="quarto-unresolved-ref">?sec-cf-seq-t</span>). A comparison of the results is presented in (<span class="quarto-unresolved-ref">?sec-cf-comparison</span>).</li>
+Using data simulated from bivariate Gaussian distributions in two subgroups of the population (<span class="math inline">\(S=0\)</span> and <span class="math inline">\(S=1\)</span>), we illustrate the sequential transport algorithm (<a href="gaussian.html" class="quarto-xref">Chapter&nbsp;<span>2&nbsp; Gaussian Simulations</span></a>). Then, we demonstrate how this algorithm can be used in an interpretable counterfactual fairness context (<a href="transport-fast-grid.html" class="quarto-xref">Chapter&nbsp;<span>3&nbsp; Fast Transport on a Grid with Numerical Covariates</span></a>). We then present another algorithm which can be used if the covariates are not all numeric (<a href="algorithm-5.html" class="quarto-xref">Chapter&nbsp;<span>4&nbsp; Faster Algorithm</span></a>). Lastly, we explore what happens when assuming a wrong DAG (<a href="gaussian-dep.html" class="quarto-xref">Chapter&nbsp;<span>5&nbsp; Wrong Causal Assumptions</span></a>).</li>
+<li>The third part shows an example with real data. The law datatest used as an illustration is first presented (<a href="data.html" class="quarto-xref">Chapter&nbsp;<span>6&nbsp; Data</span></a>). In this data, the individuals (students) may be part of a protected group (<span class="math inline">\(S=0\)</span>) or not (<span class="math inline">\(S=1\)</span>). Then, a GLM model is estimated to predict a binary outcome (<a href="classifier.html" class="quarto-xref">Chapter&nbsp;<span>7&nbsp; Classifier</span></a>). We then present three methods to produce counterfactuals from group <span class="math inline">\(S=0\)</span> to group <span class="math inline">\(S=1\)</span>: fairadapt (<a href="cf-fairadapt.html" class="quarto-xref">Chapter&nbsp;<span>9&nbsp; Fairadapt</span></a>), multivariate optimal transport (<a href="cf-ot.html" class="quarto-xref">Chapter&nbsp;<span>10&nbsp; Multivariate Optimal Transport</span></a>), and sequential transport (<a href="cf-seq-transport.html" class="quarto-xref">Chapter&nbsp;<span>11&nbsp; Sequential Transport</span></a>). A comparison of the results is presented in (<a href="cf-comparison.html" class="quarto-xref">Chapter&nbsp;<span>12&nbsp; Counterfactuals: comparison</span></a>).</li>
 <li>The fourth part replicates the analysis from the previous part, using the UCI Adult dataset (<a href="example-adult.html" class="quarto-xref">Chapter&nbsp;<span>13&nbsp; Adult Dataset</span></a>), and the COMPAS dataset (<a href="example-compas.html" class="quarto-xref">Chapter&nbsp;<span>14&nbsp; COMPAS Dataset</span></a>).</li>
 </ol>
 </section>
@@ -502,31 +503,71 @@ Using data simulated from bivariate Gaussian distributions in two subgroups of t
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seqtransfairness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Alternatively, if you have downloaded the Github repository, you will find a copy of the package in the <code>seqtransfairness</code> folder. To load the package, the <code>load_all()</code> function from R package {devtools} can be used. This is what is done inside the scripts.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Help Pages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The functions, placed in the <code>seqtransfairness/R/</code> folder are documented in the package. Hence, once the package is loaded with the <code>load_all()</code> function, the help pages can be accessed (e.g., by typing in the R console: <code>?seqtransfairness</code>, or <code>?seq_trans</code>).</p>
+</div>
+</div>
 </section>
 <section id="replication-codes" class="level2">
 <h2 class="anchored" data-anchor-id="replication-codes">Replication Codes</h2>
 <p>The codes to replicate the results displayed in the paper are presented in this ebook. The following structure is adopted:</p>
-<pre><code>Supplementary-materials
-├ ── replication_book
-│    └── index.html
-│    └── ...
-├ ── data
+<pre><code>├ ── data
+│    └── law_data.csv
 ├ ── functions
 │    └── utils.R
 │    └── graphs.R
+├ ── seqtransfairness
 ├ ── scripts
 |    └── 01_optimal_transport.R
 |    └── 02_gaussian.R
-|    └── 03_regression.R
-|    └── 04_1_law_data.R
-|    └── 04_2_law_classifier.R
-|    └── 04_3_law_fairadapt.R
-|    └── 04_4a_law_optimal_transport.R
-|    └── 04_4b_law_optimal_transport.R
-|    └── 04_5_law_sequential_transport.R
-|    └── 04_6_comparison.R
-|    └── sequential_transport.Rproj</code></pre>
-<p>To replicate the codes, provided you have installed R and Rstudio on your computer, double click on the following file to open RStudio (so that the correct working directory is set): <code>Supplementary-materials/scripts/sequential_transport.Rproj</code>. Then, the scripts can be launched.</p>
+|    └── 03_03_transport-grid.R
+|    └── 04_algorithm-5.R
+|    └── 05_wrong-causal-assumptions.R
+|    └── 05_wrong-causal-assumptions-ot.py
+|    └── 06_real-data-lawschool.R
+|    └── 06_real-data-lawschool-ot.py
+|    └── 07_real-data-adult.R
+|    └── 07_real-data-adult-ot.py
+|    └── 08_real-data-compas.R
+|    └── 08_read-data-compas-ot.py
+|    └── sequential_transport.Rproj
+├ ── README.md</code></pre>
+<p>To replicate the codes, provided you have installed R and Rstudio on your computer, and have also installed python (for multivariate optimal transport), double click on the following file to open RStudio (so that the correct working directory is set): <code>./scripts/sequential_transport.Rproj</code>. Then, you can open the scripts from RStudio.</p>
+</section>
+<section id="replication-of-figures-and-tables" class="level2">
+<h2 class="anchored" data-anchor-id="replication-of-figures-and-tables">Replication of Figures and Tables</h2>
+<p>The following Figures from the paper are produced using R:</p>
+<ul>
+<li>Figure 4: 04_Algorithm-5.R</li>
+<li>Figure 6: 02_gaussian.R</li>
+<li>Figure 7: 04_Algorithm-5.R</li>
+<li>Figure 8: 06_real-data-lawschool.R</li>
+<li>Figure 9: 06_real-data-lawschool.R</li>
+<li>Figure 10 (Appendix): 01_optimal_transport.R</li>
+<li>Figure 11 (Appendix): 01_optimal_transport.R</li>
+<li>Figure 12 (Appendix): 02_gaussian.R</li>
+<li>Figure 13 (Appendix): 02_gaussian.R</li>
+<li>Figure 16 (Appendix): 07_real-data-adult.R (left) and 08_real-data-compas.R (right)</li>
+<li>Figure 18 (Appendix): 05_wrong-causal-assumptions.R</li>
+<li>Figure 19 (Appendix): 05_wrong-causal-assumptions.R</li>
+</ul>
+<p>The other figures are tikz pictures showing DAGs.</p>
+<p>The following Tables are produced using R:</p>
+<ul>
+<li>Table 1: 06_real-data-lawschool.R</li>
+<li>Table 2 (Appendix): 07_real-data-adult.R (top) 08_real-data-compas.R (bottom)</li>
+<li>Table 3 (Appendix): 06_real-data-lawschool.R</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">

@@ -16,7 +16,7 @@
 .Rproj.user/*
 .Rproj.user/**
 # RStudio Project Files
-*.Rproj
+#*.Rproj
 # RStudio settings
 .Rproj.user/
 # Default cache directory for R packages

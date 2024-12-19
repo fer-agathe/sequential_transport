@@ -358,7 +358,7 @@ ggplot(
 
 :::
 
-Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+Then, we focus on the distribution of predicted scores for counterfactual of Black students and factuals of white students.
 
 
 :::{.panel-tabset}
@@ -387,13 +387,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -440,12 +440,12 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],
@@ -657,7 +657,7 @@ ggplot(
 
 :::
 
-Then, we focus on the distribution of predicted scores forcounterfactual of Black students and factuals of white students.
+Then, we focus on the distribution of predicted scores for counterfactual of Black students and factuals of white students.
 
 
 :::{.panel-tabset}
@@ -686,13 +686,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -739,12 +739,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],

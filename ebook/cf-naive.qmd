@@ -234,13 +234,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -310,13 +310,13 @@ ggplot(
       )
     )
   ),
-  aes(x = pred, fill = group)
+  aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), alpha = 0.5,
     position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -357,13 +357,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],

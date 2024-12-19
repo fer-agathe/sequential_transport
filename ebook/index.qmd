@@ -2,19 +2,21 @@
 
 This ebook provides the replication codes to the article titled *'Sequential Conditional (Marginally Optimal) Transport on Probabilistic Graphs for Interpretable Counterfactual Fairness.'*
 
-::: callout-warning
+:::{.callout-important}
 
-This ebook is still under construction. We are revising the paper at the moment. The results provided here may not be the final ones.
+## Extended Version of the Paper
+
+An extended version of the paper is available on arXiv: <https://arxiv.org/abs/2408.03425>
 
 :::
 
-::: callout-note
+:::{.callout-note}
 All the codes are written in R, except for multivariate transport where we switch to python.
 :::
 
 ## Abstract
 
-In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in @plevcko2020fair and optimal transport, as in @de2024transport. We extend  "Knothe's rearrangement" @bonnotte2013knothe and "triangular transport" @zech2022sparse1 to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss individual fairness. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.
+In this paper, we link two existing approaches to derive counterfactuals: adaptations based on a causal graph, as suggested in @plevcko2020fair and optimal transport, as in @de2024transport. We extend  "Knothe's rearrangement" @bonnotte2013knothe and "triangular transport" @zech2022sparse1 to probabilistic graphical models, and use this counterfactual approach, referred to as sequential transport, to discuss fairness at the individual level. After establishing the theoretical foundations of the proposed method, we demonstrate its application through numerical experiments on both synthetic and real datasets.
 
 **Keywords**: Machine Learning (ML) -> ML: Ethics -- Bias, Fairness, Transparency & Privacy
 
@@ -46,6 +48,15 @@ Then, the package can be loaded as follows:
 library(seqtransfairness)
 ```
 
+Alternatively, if you have downloaded the Github repository, you will find a copy of the package in the `seqtransfairness` folder. To load the package, the `load_all()` function from R package {devtools} can be used. This is what is done inside the scripts.
+
+:::{.callout-tip}
+
+## Help Pages
+
+The functions, placed in the `seqtransfairness/R/` folder are documented in the package. Hence, once the package is loaded with the `load_all()` function, the help pages can be accessed (e.g., by typing in the R console: `?seqtransfairness`, or `?seq_trans`).
+
+:::
 
 ## Replication Codes
 
@@ -54,29 +65,53 @@ The codes to replicate the results displayed in the paper are presented in this 
 
 
 ```
-Supplementary-materials
-├ ── replication_book
-│    └── index.html
-│    └── ...
 ├ ── data
+│    └── law_data.csv
 ├ ── functions
 │    └── utils.R
 │    └── graphs.R
+├ ── seqtransfairness
 ├ ── scripts
 |    └── 01_optimal_transport.R
 |    └── 02_gaussian.R
-|    └── 03_regression.R
-|    └── 04_1_law_data.R
-|    └── 04_2_law_classifier.R
-|    └── 04_3_law_fairadapt.R
-|    └── 04_4a_law_optimal_transport.R
-|    └── 04_4b_law_optimal_transport.R
-|    └── 04_5_law_sequential_transport.R
-|    └── 04_6_comparison.R
+|    └── 03_03_transport-grid.R
+|    └── 04_algorithm-5.R
+|    └── 05_wrong-causal-assumptions.R
+|    └── 05_wrong-causal-assumptions-ot.py
+|    └── 06_real-data-lawschool.R
+|    └── 06_real-data-lawschool-ot.py
+|    └── 07_real-data-adult.R
+|    └── 07_real-data-adult-ot.py
+|    └── 08_real-data-compas.R
+|    └── 08_read-data-compas-ot.py
 |    └── sequential_transport.Rproj
+├ ── README.md
 ```
 
+To replicate the codes, provided you have installed R and Rstudio on your computer, and have also installed python (for multivariate optimal transport), double click on the following file to open RStudio (so that the correct working directory is set): `./scripts/sequential_transport.Rproj`. Then, you can open the scripts from RStudio.
 
-To replicate the codes, provided you have installed R and Rstudio on your computer, double click on the following file to open RStudio (so that the correct working directory is set): `Supplementary-materials/scripts/sequential_transport.Rproj`. Then, the scripts can be launched.
 
+## Replication of Figures and Tables
 
+The following Figures from the paper are produced using R:
+
+- Figure 4: 04_Algorithm-5.R
+- Figure 6: 02_gaussian.R
+- Figure 7: 04_Algorithm-5.R
+- Figure 8: 06_real-data-lawschool.R
+- Figure 9: 06_real-data-lawschool.R
+- Figure 10 (Appendix): 01_optimal_transport.R
+- Figure 11 (Appendix): 01_optimal_transport.R
+- Figure 12 (Appendix): 02_gaussian.R
+- Figure 13 (Appendix): 02_gaussian.R
+- Figure 16 (Appendix): 07_real-data-adult.R (left) and 08_real-data-compas.R (right)
+- Figure 18 (Appendix): 05_wrong-causal-assumptions.R
+- Figure 19 (Appendix): 05_wrong-causal-assumptions.R
+
+The other figures are tikz pictures showing DAGs.
+
+The following Tables are produced using R:
+
+- Table 1: 06_real-data-lawschool.R
+- Table 2 (Appendix): 07_real-data-adult.R (top) 08_real-data-compas.R (bottom)
+- Table 3 (Appendix): 06_real-data-lawschool.R

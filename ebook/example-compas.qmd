@@ -409,13 +409,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],
@@ -538,13 +538,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],
@@ -925,13 +925,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin == "Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -978,13 +978,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin == "Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Women (Original)" = colours_all[["source"]],
@@ -1259,13 +1259,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],
@@ -1312,12 +1312,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],
@@ -1534,13 +1535,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],
@@ -1587,12 +1588,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+  ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],
@@ -1815,13 +1817,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],
@@ -1868,13 +1870,13 @@ ggplot(
       )
     ) |> 
     filter(race_origin =="Non-White"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Non-White (Original)" = colours_all[["source"]],

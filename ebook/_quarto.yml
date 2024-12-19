@@ -17,7 +17,7 @@ book:
     orcid: 0000-0003-3740-2620
     affiliations:
       - name: Aix-Marseille School of Economics, Aix-Marseille Univ.
-  date: "12/15/2024"
+  date: "12/18/2024"
   chapters:
     - index.qmd
     - part: I. Optimal Transport
@@ -27,7 +27,7 @@ book:
       chapters:
         - gaussian.qmd
         - transport-fast-grid.qmd
-        - algorithm-3.qmd
+        - algorithm-5.qmd
         - gaussian-dep.qmd
     - part: III. Counterfactuals with Law Dataset
       chapters:

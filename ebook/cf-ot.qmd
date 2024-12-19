@@ -517,13 +517,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -570,12 +570,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],
@@ -615,17 +616,6 @@ factuals_aware <- tibble(
   mutate(id_indiv = row_number())
 ```
 
-
-We bind together the predictions made with the observed values and those made with the counterfactual values.
-```{r define-aware_ot_black}
-aware_ot_black <- 
-  factuals_unaware |> mutate(S_origin = S) |> 
-  bind_rows(counterfactuals_aware_ot_black)
-
-aware_ot_white <- 
-  factuals_unaware |> mutate(S_origin = S) |> 
-  bind_rows(counterfactuals_aware_ot_white)
-```
 
 We merge the two datasets, `factuals_aware` and `counterfactuals_aware_ot` in a single one.
 ```{r define-fairadapt-unaware_ot}
@@ -784,13 +774,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "Black"),
-  mapping = aes(x = pred, fill = group)
+  mapping = aes(x = pred, fill = group, colour = group)
 ) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "Black (Original)" = colours_all[["source"]],
@@ -837,12 +827,13 @@ ggplot(
       )
     ) |> 
     filter(S_origin == "White"),
-  mapping = aes(x = pred, fill = group)) +
+  mapping = aes(x = pred, fill = group, colour = group)
+) +
   geom_histogram(
     mapping = aes(y = after_stat(density)), 
     alpha = 0.5, position = "identity", binwidth = 0.05
   ) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, linewidth = 1) +
   scale_fill_manual(
     NULL, values = c(
       "White (Original)" = colours_all[["source"]],
