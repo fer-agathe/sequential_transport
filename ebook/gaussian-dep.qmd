@@ -448,7 +448,7 @@ $$
 #' @param x2 second numerical predictor
 #' @param s sensitive attribute (0/1)
 logistique_reg <- function(x1, x2, s) {
-  eta <- (x1 + x2) / (2 - s)
+  eta <- (x1 + x2) / 2 + s
   exp(eta) / (1 + exp(eta))
 }
 ```
@@ -701,7 +701,7 @@ points(
 )
 ## New predicted value
 text(
-  coords_indep$inc_x1_then_x2[1], coords_indep$inc_x1_then_x2[2],
+  coords_indep$inc_x1_then_x2[1]+0.6, coords_indep$inc_x1_then_x2[2],
   paste(round(predicted_val[["inc_x1_then_x2"]]*100,1),"%",sep=""),
   pos = 2, cex = CeX, col = colour_inc_x1_then_x2
 )

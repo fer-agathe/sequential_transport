@@ -979,7 +979,7 @@ m(x_1,x_2,s)=\big(1+\exp\big[-\big((x_1+x_2)/2 + \boldsymbol{1}(s=1)\big)\big]\b
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param x2 second numerical predictor</span></span>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param s sensitive attribute (0/1)</span></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>logistique_reg <span class="ot">&lt;-</span> <span class="cf">function</span>(x1, x2, s) {</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> (x1 <span class="sc">+</span> x2) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">-</span> s)</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> (x1 <span class="sc">+</span> x2) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> s</span>
 <span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(eta) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(eta))</span>
 <span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1227,7 +1227,7 @@ Figure&nbsp;5.5: In the background, level curves for <span class="math inline">\
 <span id="cb53-112"><a href="#cb53-112" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb53-113"><a href="#cb53-113" aria-hidden="true" tabindex="-1"></a><span class="do">## New predicted value</span></span>
 <span id="cb53-114"><a href="#cb53-114" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
-<span id="cb53-115"><a href="#cb53-115" aria-hidden="true" tabindex="-1"></a>  coords_indep<span class="sc">$</span>inc_x1_then_x2[<span class="dv">1</span>], coords_indep<span class="sc">$</span>inc_x1_then_x2[<span class="dv">2</span>],</span>
+<span id="cb53-115"><a href="#cb53-115" aria-hidden="true" tabindex="-1"></a>  coords_indep<span class="sc">$</span>inc_x1_then_x2[<span class="dv">1</span>]<span class="sc">+</span><span class="fl">0.6</span>, coords_indep<span class="sc">$</span>inc_x1_then_x2[<span class="dv">2</span>],</span>
 <span id="cb53-116"><a href="#cb53-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">round</span>(predicted_val[[<span class="st">"inc_x1_then_x2"</span>]]<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>),<span class="st">"%"</span>,<span class="at">sep=</span><span class="st">""</span>),</span>
 <span id="cb53-117"><a href="#cb53-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="dv">2</span>, <span class="at">cex =</span> CeX, <span class="at">col =</span> colour_inc_x1_then_x2</span>
 <span id="cb53-118"><a href="#cb53-118" aria-hidden="true" tabindex="-1"></a>)</span>
