@@ -1,6 +1,6 @@
 # Optimal Transport
 # Demonstration of Optimal Transport methodology
-# Applicatin to simulated Gaussian and general marginal distributions.
+# Application to simulated Gaussian and general marginal distributions.
 # The objective is to transport, with OT theory, X=(X1,X2) from group S=0 to S=1
 # where S is the binary sensitive attribute
 
@@ -62,6 +62,8 @@ idx1 <- which(x1_grid <= x1)
 idx1_star <- which(x1_grid <= x1_star)
 
 
+#### Figure 4 (left) in the paper----
+
 # Graph parameters
 limA <- c(-5, 5)
 limB <- c(-5, 5)
@@ -99,8 +101,6 @@ axis(
   label = c(NA, seq(limA[1], limA[2], length = sub)[-1])
 )
 
-
-#### Figure 5 (left) in the paper----
 # Optimal transport from subset S=0 to S=1 (defined with quantile functions)
 par(mar = c(4.5, 4.5, 0.5, 0.5))
 u_grid <- seq(0, 1, length=261)
@@ -173,7 +173,8 @@ x1_star <- Q1(u)
 idx1 <- which(x1_grid <= x1)
 idx1_star <- which(x1_grid <= x1_star)
 
-### Figure 5 (right) in the paper----
+### Figure 4 (right) in the paper----
+
 {
   mat <- matrix(c(1, 2, 0, 3), 2)
   par(mfrow = c(2, 2))
@@ -246,7 +247,7 @@ axis(
 
 # Conditional Gaussian Transport----
 
-### Figure 12 (left), Appendix----
+### Figure 10 (left), Appendix A----
 # Transport along the x-axis first, then the y-axis
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
@@ -476,7 +477,7 @@ colnames(XYopt) = c("start","OT")
 points(opt_ransp[1], opt_ransp[2] + 5, pch = 15, col = "#C93312")
 
 
-### Figure 12 (right), Appendix----
+### Figure 10 (right), Appendix A----
 # Transport along the y-axis first, then the x-axis
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
@@ -711,7 +712,7 @@ points(opt_ransp[1] + 5, opt_ransp[2] + 5, pch = 15, col = "#C93312")
 
 # General Conditional Transport----
 
-### Figure 13 (left), Appendix----
+### Figure 11 (left), Appendix A----
 angle <- function(theta,
                   A = c(-2.2,-2)) {
 
@@ -808,7 +809,7 @@ opt_ransp <- T(c(A[1], A[2]))
 points(opt_ransp[1], opt_ransp[2], pch = 15, col = "#C93312")
 
 
-### Figure 13 (right), Appendix----
+### Figure 11 (right), Appendix A----
 # Consider the following starting point
 A = c(-2.2, .5)
 

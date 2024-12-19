@@ -163,6 +163,7 @@ T_X1 <- function(x) as.numeric(QD1x1(FD0x1(x, denom = FD0x1_denom)))
 x1_grid_t <- seq(-3.5, 1.75, length = 101)
 
 # This code is not run in this document, it was run before
+# Takes about 3min on a 2023 MBPro with M2 chip and 32Gb RAM.
 ncl <- detectCores()-1
 (cl <- makeCluster(ncl))
 clusterEvalQ(cl, {
@@ -200,7 +201,7 @@ x1_star <- T_X1(x1)
 idx1 <- which(d_0$x <= x1)
 idx1_star <- which(d_0$x <= x1_star)
 
-### Figure 8 (top right) in the paper----
+### Figure 6 (top right) in the paper----
 # Graph parameters
 par(mar = c(2,2,0,0))
 limA <- c(-5, 5)
@@ -285,7 +286,7 @@ axis(
 par(op)
 
 
-### Figure 8 (top left) in the paper----
+### Figure 6 (top left) in the paper----
 # Graph parameters
 par(mar = c(2,2,0,0))
 
@@ -413,6 +414,8 @@ clusterEvalQ(cl, {
 clusterExport(cl, c("w0" ,"w1", "D_SXY0", "D_SXY1", "FD0x2_denom", "FD1x2_denom"))
 clusterExport(cl, c("d0x2cx1", "d1x2cx1", "FD0x2", "FD1x2", "QD1x2", "FD0x2"))
 
+# Takes about 3min
+# on a MBPro 2023 with M2 chip, 32Gb RAM.
 x2_star_grid_t <- pblapply(x2_grid_t, T_X2_c_x1, cl = cl)
 
 stopCluster(cl)
@@ -432,7 +435,7 @@ x2_c_x1_star <- T_X2_c_x1(x2)
 idx2 <- which(d_0$x <= x2)
 idx2_star <- which(d_0$x <= x2_c_x1_star)
 
-### Figure 8 (bottom right) in the paper----
+### Figure 6 (bottom right) in the paper----
 # Graph parameters
 par(op)
 par(mar = c(2,2,0,0))
@@ -511,7 +514,7 @@ axis(
 )
 
 
-### Figure 8 (bottom left) in the paper----
+### Figure 6 (bottom left) in the paper----
 par(op)
 # Graph parameters
 par(mar = c(2, 2, 0, 0))
@@ -569,7 +572,7 @@ abline(h = x2_c_x1_star, col = "black", lwd = .5)
 points(x1_star, x2_c_x1_star, pch=19)
 
 
-# Faster Sequential Transport----
+# Faster Sequential Transport (using grid)----
 
 #' Sequential transport
 #'
@@ -732,7 +735,7 @@ seq_functions_grids <- transport_function_2(D_SXY, S_0 = S_0, n_grid = n_grid)
 
 ## Illustration----
 
-### Figure 14 in the Appendix----
+### Figure 12 in the Appendix B----
 # Grid for X1 in subset S=0
 vx1_0 <- seq_functions_grids$vx1_0
 # Midpoints of the cells
@@ -771,7 +774,7 @@ for (i in 1:n_grid) {
   )
 }
 
-### Figure 15 (left) in the paper----
+### Figure 13 (left), Appendix B----
 # Grid for X2 in subset S=0
 vx2_0 <- seq_functions_grids$vx2_0
 # cdf (conditional) of X2|X1 in subset S=0 (matrix)
@@ -805,7 +808,7 @@ for (j in 1:n_grid) {
   )
 }
 
-### Figure 15 (right) in the appendix----
+### Figure 13 (right), Appendix B----
 # Add x-axis and y-axis (for the matrices with cdf's)
 par(op)
 par(mar = c(2,2,0,0))
@@ -845,7 +848,7 @@ x1_star <- T_X1(x1)
 idx1 <- which(d_0$x <= x1)
 idx1_star <- which(d_0$x <= x1_star)
 
-#### Equivalent of Figure 8 (top right) but with faster transport----
+#### Equivalent of Figure 6 (top right) but with faster transport----
 # Graph parameters
 par(mar = c(2,2,0,0))
 limA <- c(-5, 5)
@@ -929,7 +932,7 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
-#### Equivalent of Figure 8 (top left) but with faster transport----
+#### Equivalent of Figure 6 (top left) but with faster transport----
 par(op)
 # Graph parameters
 par(mar = c(2,2,0,0))
@@ -995,7 +998,7 @@ x2_star_grid_t <- Vectorize(function(x) T_X2_c_x1(x, x1))(x2_grid_t)
 # Transported value for individual of interest
 x2_c_x1_star <- T_X2_c_x1(x2, x1)
 
-#### Equivalent of Figure 8 (bottom right) but with faster transport----
+#### Equivalent of Figure 6 (bottom right) but with faster transport----
 par(op)
 # Graph parameters
 {
@@ -1073,7 +1076,7 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
-#### Equivalent of Figure 8 (bottom left) but with faster transport----
+#### Equivalent of Figure 6 (bottom left) but with faster transport----
 par(op)
 # Graph parameters
 par(mar = c(2, 2, 0, 0))

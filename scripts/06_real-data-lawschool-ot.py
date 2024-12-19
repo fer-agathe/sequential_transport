@@ -4,10 +4,9 @@ import numpy as np
 import matplotlib.pyplot as pl
 import ot.plot
 
-df_aware = pd.read_csv('../data/factuals_aware.csv')
 df_unaware = pd.read_csv('../data/factuals_unaware.csv')
 
-x_S = df_aware.drop(columns=['pred', 'type'])
+x_S = df_aware.drop(columns=['pred', 'type', 'id_indiv', 'S_origin', 'Y'])
 x_S.head()
 
 x_white = x_S[x_S['S'] == 'White']
@@ -21,7 +20,6 @@ n_black = len(x_black)
 w_white = (1/n_white)*np.ones(n_white)
 w_black = (1/n_black)*np.ones(n_black)
 
-# Cost matrix between both distributions
 x_white = x_white.to_numpy()
 x_black = x_black.to_numpy()
 C = ot.dist(x_white, x_black)
@@ -32,20 +30,18 @@ pl.plot(x_black[:, 0], x_black[:, 1], 'xr', label='Target samples')
 pl.legend(loc=0)
 pl.title('Source and target distributions')
 
-
 pl.figure(2)
 pl.imshow(C, interpolation='nearest')
 pl.title('Cost matrix C')
 
+# The transport plan: White –> Black
 pi_white_black = ot.emd(w_white, w_black, C, numItermax=1e8)
+# The transport plan: Black -> White
 pi_black_white = pi_white_black.T
 pi_white_black.shape
-
 sum_of_rows = np.sum(pi_white_black, axis=1)
 sum_of_rows*n_white
-
 pi_black_white.shape
-
 sum_of_rows = np.sum(pi_black_white, axis=1)
 sum_of_rows*n_black
 
@@ -60,10 +56,11 @@ pl.plot(x_black[:, 0], x_black[:, 1], 'xr', label='Target samples')
 pl.legend(loc=0)
 pl.title('OT matrix with samples')
 
+# Counterfactuals for White individuals
 transformed_x_white = n_white*pi_white_black@x_black
 transformed_x_white.shape
 transformed_x_white
-
+# Counterfactuals for Black individuals
 transformed_x_black = n_black*pi_black_white@x_white
 transformed_x_black.shape
 transformed_x_black
@@ -71,8 +68,6 @@ transformed_x_black
 counterfactual_x = x_S.drop(columns=['S'])
 counterfactual_x[x_S['S'] == 'White'] = transformed_x_white
 counterfactual_x[x_S['S'] == 'Black'] = transformed_x_black
-
-counterfactual_x.head()
 counterfactual_x.shape
 
 # Export results

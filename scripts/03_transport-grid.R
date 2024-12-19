@@ -1,10 +1,12 @@
 # Regression
 # Demonstration of interpretable counterfactual fairness methodology based on
-# sequantial transport, using simulated data
+# sequantial transport, using simulated data, and the 2nd algorithm
+# (Faster sequential transport on grids)
 
 library(tidyverse)
 library(ks)
 library(dichromat)
+library(expm)
 colours <- c(
   `0` = "#5BBCD6",
   `1` = "#FF0000",
@@ -66,6 +68,13 @@ H1 <- Hpi(D_SXY1[, c("X1","X2")])
 # Calculating multivariate densities in each group
 f0_2d <- kde(D_SXY0[, c("X1","X2")], H = H0, xmin = c(-5, -5), xmax = c(5, 5))
 f1_2d <- kde(D_SXY1[, c("X1","X2")], H = H1, xmin = c(-5, -5), xmax = c(5, 5))
+
+# Optimal Transport----
+AA <- sqrtm(S0) %*% S1 %*% (sqrtm(S0))
+AA <- solve(sqrtm(S0)) %*% sqrtm(AA) %*% solve((sqrtm(S0)))
+OT <- function(x) as.vector(M1 + AA %*% (x - M0))
+transport_ot <- t(apply(D_SXY_0[, c("X1", "X2")], 1, OT))
+head(transport_ot)
 
 # Hypothetical Model----
 
@@ -275,6 +284,10 @@ transport_x2_cond_x1 <-  function(x2, x1){
 # Individual of interest:
 xystart <- c(-2,-1)
 
+# The counterfactual with OT
+(new_obs_ot <- OT(xystart))
+
+
 # Predictions for that individual depending on the values (transported or not)
 
 # First the coordinates
@@ -294,10 +307,12 @@ coords <- data.frame(
   # 4. (T_1(x1), x2)
   x1_intermediaire = c(transport_x1(x1 = xystart[1]), xystart[2]),
   # 5. (x1, T_2(x2))
-  x2_intermediaire = c(xystart[1], transport_x2(xystart[2]))
+  x2_intermediaire = c(xystart[1], transport_x2(xystart[2])),
+  # 6. T*(x1,x2)
+  x_ot = c(new_obs_ot[1], new_obs_ot[2])
 )
 
-# then the predicted values:
+# then the predicted values by the hypothetical model:
 library(plotrix)
 v <- c(
   # 1. Prediction at initial values (S=0, x1, x2)
@@ -311,11 +326,13 @@ v <- c(
   # 5. Prediction if (S = 1, T_1(x1), x2)
   logistique_reg(coords$x1_intermediaire[1], coords$x1_intermediaire[2], 1),
   # 6. Prediction if (S = 1, x1, T_2(x2))
-  logistique_reg(coords$x2_intermediaire[1], coords$x2_intermediaire[2], 1)
+  logistique_reg(coords$x2_intermediaire[1], coords$x2_intermediaire[2], 1),
+  # 7. Prediction if (S=1, T*(x1), T*(x2))
+  logistique_reg(coords$x_ot[1], coords$x_ot[2], 1)
 )
 v
 
-### Figure 9 (left) in the paper----
+### Similar to Figure 7 (left) in the paper----
 par(mar = c(2, 2, 0, 0))
 # Group 0
 ## Estimated density: level curves for (x1, x2) -> m(0, x1, x2)
@@ -355,7 +372,7 @@ text(
   pos = 1, cex = CeX, col = "darkblue"
 )
 
-### Figure 9 (right) in the paper----
+### Similar to Figure 7 (right) in the paper----
 par(mar = c(2, 2, 0, 0))
 # Group 0
 ## Estimated density: level curves for (x1, x2) -> m(0, x1, x2)
@@ -457,7 +474,7 @@ text(
 # New predicted value for (do(s=1), x1, x2), no transport
 ###
 ry <- .2
-draw.circle(
+plotrix::draw.circle(
   x = coords$start[1] - ry, y = coords$start[2] - ry,
   radius = ry * sqrt(2)
 )
@@ -466,3 +483,18 @@ text(
   paste(round(v[2] * 100, 1), "%", sep = ""), pos = 4, cex = CeX
 )
 
+###
+# Transported individual with optimal multivariate transport
+###
+points(coords$x_ot[1],coords$x_ot[2], pch = 15, cex = CeX, col = "#C93312")
+segments(
+  x0 = coords$start[1], y0 = coords$start[2],
+  x1 = coords$x_ot[1], y1 = coords$x_ot[2],
+  lwd = .8,
+  col = "#C93312", lty = 2
+)
+text(
+  coords$x_ot[1], coords$x_ot[2],
+  paste(round(v[7] * 100, 1), "%", sep = ""), pos = 4, cex = CeX,
+  col = "#C93312",
+)
