@@ -1,5 +1,7 @@
 # Real Data Example: Law School Dataset
 
+save_figs <- TRUE
+
 # Source of the data:
 # Wightman, Linda F. 1998. “LSAC National Longitudinal Bar Passage Study.
 # LSAC Research Report Series.”
@@ -2041,7 +2043,11 @@ legend(
   box.lty=0
 )
 
-### Figure 8 (left), with aware model----
+### Figure 9 (left), with aware model----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-9-left.pdf", width = 5, height = 5)
+}
 
 par(mar = c(2, 2, 0, 0))
 # Initial characteristics with the aware model
@@ -2198,6 +2204,9 @@ legend(
   legend = names(colours_all[c("Factual", "Naive", "OT", "Fairadapt", "Seq. T.")]),
   box.lty=0, bg = "transparent"
 )
+
+if (save_figs == TRUE) dev.off()
+
 ## Densities----
 
 ### Figure with unaware model----
@@ -2321,7 +2330,11 @@ lines(d_unaware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd =
 polygon(d_unaware_seq_black_star, col = alpha(colours_all[["Seq. T."]], .5), border = NA)
 text(x = .53, y = 6, "Seq. T.", col = colours_all[["Seq. T."]])
 
-### Figure 8 (right), with aware model----
+### Figure 9 (right), with aware model----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-9-right.pdf", width = 5, height = 5)
+}
 
 # Densities of predicted scores for Black individuals with factuals and with
 # counterfactuals. The yellow dashed line corresponds to the density of
@@ -2442,6 +2455,8 @@ polygon(d_aware_factuals_black, col = alpha(colours_all[["Source"]], .5), border
 lines(d_aware_factuals_white, col = colours_all[["Reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_black_star, col = alpha(colours_all[["Seq. T."]], .5), border = NA)
 text(x = .53, y = 6, "Seq. T.", col = colours_all[["Seq. T."]])
+
+if (save_figs == TRUE) dev.off()
 
 ## Metrics (Table 1, Table 3)----
 

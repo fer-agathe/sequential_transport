@@ -1,6 +1,8 @@
 # Faster Algorithm
 # Uses Algorithm 5 (Sequential transport with weights) form Appendix E
 
+save_figs <- TRUE
+
 library(tidyverse)
 library(ks)
 library(dichromat)
@@ -238,6 +240,12 @@ v <- c(
 )
 
 ## Figure (7), left----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-7-left.pdf", width = 4, height = 4)
+}
+
+
 par(mar = c(2, 2, 0, 0))
 # Group 0
 ## Estimated density: level curves for (x1, x2) -> m(0, x1, x2)
@@ -277,7 +285,14 @@ text(
   pos = 1, cex = CeX, col = "darkblue"
 )
 
-## Figure (7) righe----
+if (save_figs == TRUE) dev.off()
+
+## Figure (7) right----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-7-right.pdf", width = 4, height = 4)
+}
+
 
 par(mar = c(2, 2, 0, 0))
 # Group 0
@@ -403,3 +418,5 @@ text(
   paste(round(v[7] * 100, 1), "%", sep = ""), pos = 4, cex = CeX,
   col = "#C93312",
 )
+
+if (save_figs == TRUE) dev.off()

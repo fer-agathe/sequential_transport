@@ -1,5 +1,7 @@
 # Real Data Example: COMPAS dataset
 
+save_figs <- TRUE
+
 # Source of the data:
 # Larson, Surya, Jeff ans Mattu, Lauren Kirchner, and Julia Angwin. 2016.
 # "How We Analyzed the COMPAS Recidivism Algorithm." Edited by ProPublica.
@@ -1537,6 +1539,10 @@ text(x = .7, y = 3.5, "Seq. T.", col = colours_all[["seq"]])
 
 ## Figure 16 (right), Appendix D, Aware Model ----
 
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-16-right.pdf", width = 5, height = 5)
+}
+
 # Densities of predicted scores for Non-White individuals with factuals and
 # with counterfactuals. The yellow dashed line corresponds to the density of
 # predicted scores for Non-White individuals, using factuals.
@@ -1657,6 +1663,7 @@ polygon(d_aware_factuals_nonwhite, col = alpha(colours_all[["source"]], .5), bor
 lines(d_aware_factuals_white, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_nonwhite_star, col = alpha(colours_all[["seq"]], .5), border = NA)
 text(x = .7, y = 3.5, "Seq. T.", col = colours_all[["seq"]])
+if (save_figs == TRUE) dev.off()
 
 # Metrics (Table 2), Appendix D----
 

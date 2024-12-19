@@ -3,6 +3,8 @@
 # Assume relationship between these on the causal graph
 # Compare when correctly assume no dependence.
 
+save_figs <- TRUE
+
 # Required packages----
 library(tidyverse)
 library(ks)
@@ -314,7 +316,12 @@ predicted_val <- c(
   predicted_val
 )
 
-## Figure (18), Appendix E----
+## Figure (18, left), Appendix E----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-18-left.pdf", width = 5, height = 5)
+}
+
 
 # Colour scale from colour of class 0 to class 1
 colfunc <- colorRampPalette(c(colours["0"], colours["1"]))
@@ -364,7 +371,14 @@ text(
   pos = 1, cex = CeX, col = "darkblue"
 )
 
+if (save_figs == TRUE) dev.off()
+
 ## Figure (18, right), Appenxix E----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-18-right.pdf", width = 5, height = 5)
+}
+
 
 colour_start <- "darkblue"
 colour_correct <- "#CC79A7"
@@ -575,7 +589,14 @@ legend(
   lty = c(NA, NA, 2, 1, 1, 1), bty = "n"
 )
 
+if (save_figs == TRUE) dev.off()
+
 ## Figure (19), Appendix E----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-19.pdf", width = 6, height = 6)
+}
+
 
 tb_transpoort_ot <- counterfactuals_ot |>
   slice(1:nrow(D_SXY)) |> # remove last observation: this is the new point
@@ -719,3 +740,4 @@ legend(
   col = c(colours["A"], colours["B"], colour_inc_x2_then_x1), bty="n"
 )
 
+if (save_figs == TRUE) dev.off()

@@ -3,6 +3,8 @@
 # Gaussian distributions.
 # Objective: transport X = (X_1, X_2) from group S=0 to S=1
 
+save_figs <- TRUE
+
 # Required packages
 library(tidyverse)
 library(igraph)
@@ -202,6 +204,11 @@ idx1 <- which(d_0$x <= x1)
 idx1_star <- which(d_0$x <= x1_star)
 
 ### Figure 6 (top right) in the paper----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-6-top-right.pdf", width = 4, height = 4)
+}
+
 # Graph parameters
 par(mar = c(2,2,0,0))
 limA <- c(-5, 5)
@@ -283,10 +290,16 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
+if (save_figs == TRUE) dev.off()
+
 par(op)
 
-
 ### Figure 6 (top left) in the paper----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-6-top-left.pdf", width = 4, height = 4)
+}
+
 # Graph parameters
 par(mar = c(2,2,0,0))
 
@@ -337,6 +350,9 @@ polygon(
 points(x1, x2, pch = 19)
 abline(v = x1, lwd = .4, col = colours["A"])
 abline(v = x1_star, col = "black", lwd = .5)
+
+if (save_figs == TRUE) dev.off()
+
 
 ## Transport of X2|X1----
 
@@ -436,6 +452,11 @@ idx2 <- which(d_0$x <= x2)
 idx2_star <- which(d_0$x <= x2_c_x1_star)
 
 ### Figure 6 (bottom right) in the paper----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-6-bottom-right.pdf", width = 4, height = 4)
+}
+
 # Graph parameters
 par(op)
 par(mar = c(2,2,0,0))
@@ -513,8 +534,16 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
+if (save_figs == TRUE) dev.off()
+
 
 ### Figure 6 (bottom left) in the paper----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-6-bottom-left.pdf", width = 4, height = 4)
+}
+
+
 par(op)
 # Graph parameters
 par(mar = c(2, 2, 0, 0))
@@ -571,6 +600,7 @@ abline(v = x1_star, col = colours[lab[2]], lwd = .5)
 abline(h = x2_c_x1_star, col = "black", lwd = .5)
 points(x1_star, x2_c_x1_star, pch=19)
 
+if (save_figs == TRUE) dev.off()
 
 # Faster Sequential Transport (using grid)----
 
@@ -736,6 +766,11 @@ seq_functions_grids <- transport_function_2(D_SXY, S_0 = S_0, n_grid = n_grid)
 ## Illustration----
 
 ### Figure 12 in the Appendix B----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-12.pdf", width = 4, height = 4)
+}
+
 # Grid for X1 in subset S=0
 vx1_0 <- seq_functions_grids$vx1_0
 # Midpoints of the cells
@@ -774,7 +809,14 @@ for (i in 1:n_grid) {
   )
 }
 
+if (save_figs == TRUE) dev.off()
+
 ### Figure 13 (left), Appendix B----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-13-left.pdf", width = 4, height = 4)
+}
+
 # Grid for X2 in subset S=0
 vx2_0 <- seq_functions_grids$vx2_0
 # cdf (conditional) of X2|X1 in subset S=0 (matrix)
@@ -808,7 +850,14 @@ for (j in 1:n_grid) {
   )
 }
 
+if (save_figs == TRUE) dev.off()
+
 ### Figure 13 (right), Appendix B----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-13-right.pdf", width = 4, height = 4)
+}
+
 # Add x-axis and y-axis (for the matrices with cdf's)
 par(op)
 par(mar = c(2,2,0,0))
@@ -831,6 +880,8 @@ for (j in 1:n_grid) {
     border = "grey"
   )
 }
+
+if (save_figs == TRUE) dev.off()
 
 
 ## Application to the data----

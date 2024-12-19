@@ -6,7 +6,7 @@ import ot.plot
 
 df_unaware = pd.read_csv('../data/factuals_unaware.csv')
 
-x_S = df_aware.drop(columns=['pred', 'type', 'id_indiv', 'S_origin', 'Y'])
+x_S = df_unaware.drop(columns=['pred', 'type', 'id_indiv', 'S_origin', 'Y'])
 x_S.head()
 
 x_white = x_S[x_S['S'] == 'White']

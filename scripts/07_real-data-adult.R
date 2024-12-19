@@ -1,5 +1,7 @@
 # Real Data Example: Adult dataset
 
+save_figs <- TRUE
+
 # Source of the data:
 # https://archive.ics.uci.edu/dataset/2/adult
 #
@@ -1516,7 +1518,12 @@ lines(d_unaware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2
 polygon(d_unaware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
 text(x = .7, y = 6.5, "Seq. T.", col = colours_all[["seq"]])
 
-### Aware - Figure 16, Appendix D----
+### Aware - Figure 16 (left), Appendix D----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-16-left.pdf", width = 5, height = 5)
+}
+
 
 tb_aware_factuals <- tb_aware |> filter(counterfactual == "none")
 # Predicted values
@@ -1638,6 +1645,8 @@ polygon(d_aware_factuals_women, col = alpha(colours_all[["source"]], .5), border
 lines(d_aware_factuals_men, col = colours_all[["reference"]], lty = 2, lwd = 2)
 polygon(d_aware_seq_women_star, col = alpha(colours_all[["seq"]], .5), border = NA)
 text(x = .7, y = 12, "Seq. T.", col = colours_all[["seq"]])
+
+if (save_figs == TRUE) dev.off()
 
 # Metrics (Table 2, Appendix D)----
 

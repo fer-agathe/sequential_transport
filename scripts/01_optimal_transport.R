@@ -4,6 +4,10 @@
 # The objective is to transport, with OT theory, X=(X1,X2) from group S=0 to S=1
 # where S is the binary sensitive attribute
 
+save_figs <- TRUE
+op <- par()
+if(!dir.exists("../figs/")) dir.create("../figs/")
+
 # Setup----
 
 # Required packages
@@ -64,6 +68,9 @@ idx1_star <- which(x1_grid <= x1_star)
 
 #### Figure 4 (left) in the paper----
 
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig4-left.pdf", width = 4, height = 4)
+}
 # Graph parameters
 limA <- c(-5, 5)
 limB <- c(-5, 5)
@@ -145,6 +152,8 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
+if (save_figs == TRUE) dev.off()
+
 ## General Distribution----
 # General distribution for subset S=0
 x0 <- rnorm(13, m0, s0)
@@ -174,6 +183,10 @@ idx1 <- which(x1_grid <= x1)
 idx1_star <- which(x1_grid <= x1_star)
 
 ### Figure 4 (right) in the paper----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig4-right.pdf", width = 4, height = 4)
+}
 
 {
   mat <- matrix(c(1, 2, 0, 3), 2)
@@ -245,9 +258,17 @@ axis(
   label = c(NA, seq(limB[1], limB[2], length = sub)[-c(1, sub)], NA)
 )
 
+if (save_figs == TRUE) dev.off()
+
 # Conditional Gaussian Transport----
 
 ### Figure 10 (left), Appendix A----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig10-left.pdf", width = 4, height = 4)
+}
+
+
 # Transport along the x-axis first, then the y-axis
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
@@ -476,8 +497,16 @@ colnames(XYopt) = c("start","OT")
 # Drawing the point transported with the different order in the sequence
 points(opt_ransp[1], opt_ransp[2] + 5, pch = 15, col = "#C93312")
 
+if (save_figs == TRUE) dev.off()
+
 
 ### Figure 10 (right), Appendix A----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-10-right.pdf", width = 4, height = 4)
+}
+
+
 # Transport along the y-axis first, then the x-axis
 par(mar = c(2.5, 2.5, 0, 0))
 par(mfrow = c(1, 1))
@@ -709,10 +738,17 @@ opt_ransp <- T(c(a1 - 5, b1 - 5))
 # Drawing the point transported with the different order in the sequence
 points(opt_ransp[1] + 5, opt_ransp[2] + 5, pch = 15, col = "#C93312")
 
+if (save_figs == TRUE) dev.off()
+
 
 # General Conditional Transport----
 
 ### Figure 11 (left), Appendix A----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-11-left.pdf", width = 4, height = 4)
+}
+
 angle <- function(theta,
                   A = c(-2.2,-2)) {
 
@@ -808,8 +844,15 @@ T <- function(x) as.vector(M2 + AA %*% (x - M1))
 opt_ransp <- T(c(A[1], A[2]))
 points(opt_ransp[1], opt_ransp[2], pch = 15, col = "#C93312")
 
+if (save_figs == TRUE) dev.off()
+
 
 ### Figure 11 (right), Appendix A----
+
+if (save_figs == TRUE) {
+  pdf(file = "../figs/fig-11-right.pdf", width = 4, height = 4)
+}
+
 # Consider the following starting point
 A = c(-2.2, .5)
 
@@ -864,3 +907,5 @@ AA <- solve(sqrtm(S1)) %*% sqrtm(AA) %*% solve((sqrtm(S1)))
 T <- function(x) as.vector(M2 + AA %*% (x - M1))
 opt_ransp <- T(c(A[1], A[2]))
 points(opt_ransp[1], opt_ransp[2], pch = 15, col = "#C93312")
+
+if (save_figs == TRUE) dev.off()
