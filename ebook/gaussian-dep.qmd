@@ -76,7 +76,7 @@ These variables are independent from one another.
 
 ```{r draw-x}
 set.seed(123) # set the seed for reproductible results
-n <- 100
+n <- 500
 
 # group s = 0
 X1_0 <- runif(n, 0, 1)
@@ -112,6 +112,24 @@ D_SXY_1 <- tibble(
 )
 
 D_SXY <- bind_rows(D_SXY_0, D_SXY_1)
+
+hist(p_0, 
+     col = "red",
+     breaks = 20,
+     xlim = c(0, 1),
+     ylim = c(0,100),
+     main = "Histogram with probability values for both groups"
+     )
+
+# Ajout du second histogramme
+hist(p_1, 
+     col = "blue",
+     breaks = 10, 
+     add = TRUE)
+
+legend("topleft", 
+       legend = c("p_0", "p_1"), 
+       fill = c(rgb(1, 0, 0, 0.5), rgb(0, 0, 1, 0.5)))
 ```
 
 We can visualize the estimated density of the two covariates in each group ($S=0$ and $S=1$).
@@ -399,7 +417,8 @@ trans_indep_inc_x2_then_x1 <- seq_trans(
 Let us also get a counterfactual for the additional point $(s=0, x_1=0, x_2=0.5)$.
 
 ```{r define-new_obs}
-new_obs <- tibble(S = 0, X1 = 0, X2 = .5)
+#new_obs <- tibble(S = 0, X1 = 0, X2 = .5)
+new_obs <- tibble(S = 0, X1 = .5, X2 = .5)
 ```
 
 ```{r define-new_obs_indep_correct}
@@ -429,7 +448,7 @@ $$
 #' @param x2 second numerical predictor
 #' @param s sensitive attribute (0/1)
 logistique_reg <- function(x1, x2, s) {
-  eta <- (x1 + x2) / 2 - s
+  eta <- (x1 + x2) / (2 - s)
   exp(eta) / (1 + exp(eta))
 }
 ```
@@ -453,36 +472,36 @@ Let us create a table with the coordinates of different points: the new individu
 ```{r}
 coords_indep <- tibble(
   # 1. (x1, x2)
-  start = c(new_obs$X1, new_obs$X2),
+  start = c(new_obs$X1, new_obs$X2, 0),
   #
   # 2. (T_1(x1 | x2), T_2(x2)), correct assumption
   correct = c(
-    new_obs_indep_correct$X1, new_obs_indep_correct$X2
+    new_obs_indep_correct$X1, new_obs_indep_correct$X2, 1
   ),
   # 3. (T_1(x1), T_2(x2 | x1)), assuming X1 -> X2
   inc_x1_then_x2 = c(
-    new_obs_indep_inc_x1_then_x2$X1, new_obs_indep_inc_x1_then_x2$X2
+    new_obs_indep_inc_x1_then_x2$X1, new_obs_indep_inc_x1_then_x2$X2, 1
   ),
   # 4. (T_1(x1 | x2), T_2(x2)), assuming X2 -> X1
   inc_x2_then_x1 = c(
-    new_obs_indep_inc_x2_then_x1$X1, new_obs_indep_inc_x2_then_x1$X2
+    new_obs_indep_inc_x2_then_x1$X1, new_obs_indep_inc_x2_then_x1$X2, 1
   ),
   #
   # 5. (T_1(x1), x2)
-  correct_interm_x2 = c(new_obs_indep_correct$X1, new_obs$X2),
+  correct_interm_x2 = c(new_obs_indep_correct$X1, new_obs$X2, 0.5),
   # 6. (T_1(x1), x2), assuming X1 -> X2
-  inc_x1_then_x2_interm_x2 = c(new_obs_indep_inc_x1_then_x2$X1, new_obs$X2),
+  inc_x1_then_x2_interm_x2 = c(new_obs_indep_inc_x1_then_x2$X1, new_obs$X2, 0.5),
   # 7. (T_1(x1), x2), assuming X2 -> X1
-  inc_x2_then_x1_interm_x2 = c(new_obs_indep_inc_x2_then_x1$X1, new_obs$X2),
+  inc_x2_then_x1_interm_x2 = c(new_obs_indep_inc_x2_then_x1$X1, new_obs$X2, 0.5),
   #
   # 8. (x1, T(x2))
-  correct_interm_x1 = c(new_obs$X1, new_obs_indep_correct$X2),
+  correct_interm_x1 = c(new_obs$X1, new_obs_indep_correct$X2, 0.5),
   # 9. (T_1(x1), x2), assuming X1 -> X2
-  inc_x1_then_x2_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x1_then_x2$X2),
+  inc_x1_then_x2_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x1_then_x2$X2, 0.5),
   # 10. (T_1(x1), x2), assuming X2 -> X1
-  inc_x2_then_x1_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x2_then_x1$X2),
+  inc_x2_then_x1_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x2_then_x1$X2, 0.5),
   # 11. T*(x1,x2)
-  ot = c(last(counterfactuals_ot$X1), last(counterfactuals_ot$X2))
+  ot = c(last(counterfactuals_ot$X1), last(counterfactuals_ot$X2), 1)
 )
 ```
 
@@ -491,7 +510,7 @@ We make "Predictions" by the hypothetical model for the new point, given the cha
 predicted_val <- apply(
   coords_indep, 
   2, 
-  function(column) logistique_reg(x1 = column[1], x2 = column[2], s = 1)
+  function(column) logistique_reg(x1 = column[1], x2 = column[2], s = column[3])
 )
 ```
 
@@ -499,7 +518,7 @@ Then, we add a prediction for the point using the factuals values:
 ```{r predicted_val-factual-add}
 predicted_val <- c(
   naive = logistique_reg(
-    x1 = coords_indep$start[1], x2 = coords_indep$start[2], s = 0
+    x1 = coords_indep$start[1], x2 = coords_indep$start[2], s = 1
   ),
   predicted_val
 )
@@ -551,11 +570,11 @@ axis(2)
 ###
 # Individual (S=0, x1=-2, x2=-1)
 ###
-points(coords_indep$start[1], coords_indep$start[2], pch = 19, cex = CeX)
+points(coords_indep$start[1], coords_indep$start[2], pch = 19, cex = CeX, col = "darkblue")
 ## Predicted value for the individual, based on factuals
 text(
   coords_indep$start[1], coords_indep$start[2], 
-  paste(round(predicted_val[1] * 100, 1), "%", sep = ""), 
+  paste(round(predicted_val[2] * 100, 1), "%", sep = ""), 
   pos = 1, cex = CeX, col = "darkblue"
 )
 ```
@@ -566,8 +585,8 @@ text(
 #| code-fold: true
 #| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. The dark blue dot represents an individual $(s,x_1,x_2)=(s=0, 0,.5)$ (predicted 32.1% by model $m$, and 56.2% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged). The other dots represent  counterfactuals $(s=1,x_1^\\star,x_2^\\star)$ according to the assumed causal graph where $x_1$ and $x_2$ are independent (correct DAG, predicted 55.8%), $x_2$ depends on $x_1$ (bottom right path, predicted 54.4%), $x_1$ depends on $x_2$ (top left path, predicted 58.8%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 54.4%)."
 #| label: fig-counterfactuals-new-individual
-#| fig-height: 5
-#| fig-width: 5
+#| fig-height: 5.5
+#| fig-width: 5.5
 colour_start <- "darkblue"
 colour_correct <- "#CC79A7"
 colour_inc_x1_then_x2 <- "darkgray"
@@ -629,7 +648,7 @@ points(
   pch = 19, cex = CeX, col = colour_correct
 )
 text(
-  coords_indep$correct[1], coords_indep$correct[2],
+  coords_indep$correct[1]-0.1, coords_indep$correct[2]+0.15,
   paste(round(predicted_val[["correct"]]*100,1),"%",sep=""),
   pos = 4, cex = CeX, col = colour_correct
 )
@@ -640,7 +659,7 @@ segments(
 )
 segments(
   x0 = coords_indep$correct_interm_x2[1], y0 = coords_indep$correct_interm_x2[2],
-  x1 = coords_indep$correct[1], y1 = coords_indep$correct[2], ,
+  x1 = coords_indep$correct[1], y1 = coords_indep$correct[2],
   lwd = .8, col = colour_correct
 )
 ## Intermediate point
@@ -716,7 +735,7 @@ points(
 )
 ## New predicted value
 text(
-  coords_indep$inc_x2_then_x1[1], coords_indep$inc_x2_then_x1[2],
+  coords_indep$inc_x2_then_x1[1]+0.3, coords_indep$inc_x2_then_x1[2]-0.1,
   paste(round(predicted_val[["inc_x2_then_x1"]]*100,1),"%",sep=""),
   pos = 3, cex = CeX, col = colour_inc_x2_then_x1
 )
@@ -736,7 +755,7 @@ segments(
 )
 ## New predicted value
 text(
-  coords_indep$ot[1], coords_indep$ot[2]-.2,
+  coords_indep$ot[1]-0.1, coords_indep$ot[2]+0.1,
   paste(round(predicted_val[["ot"]] * 100, 1), "%", sep = ""),
   pos = 4, cex = CeX, col = colour_ot
 )
