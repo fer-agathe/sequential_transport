@@ -710,7 +710,7 @@ Figure&nbsp;4.1: Assumed Causal Graph
 </section>
 <section id="transport-of-the-second-variable" class="level3" data-number="4.3.3">
 <h3 data-number="4.3.3" class="anchored" data-anchor-id="transport-of-the-second-variable"><span class="header-section-number">4.3.3</span> Transport of the Second Variable</h3>
-<p>Now that we have transported <span class="math inline">\(X_1\)</span>, we need to transport <span class="math inline">\(X_2\)</span> which also depends on <span class="math inline">\(S\)</span>, but also on <span class="math inline">\(S_1\)</span>. Again, we will need to consider two cases, depending on the type of <span class="math inline">\(X_2\)</span>.</p>
+<p>Now that we have transported <span class="math inline">\(X_1\)</span>, we need to transport <span class="math inline">\(X_2\)</span> which also depends on <span class="math inline">\(S\)</span>, but also on <span class="math inline">\(X_1\)</span>. Again, we will need to consider two cases, depending on the type of <span class="math inline">\(X_2\)</span>.</p>
 <p>Let us redefine the name of the variable of interest:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x_name <span class="ot">&lt;-</span> <span class="st">"X2"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -831,7 +831,7 @@ Figure&nbsp;4.1: Assumed Causal Graph
 <section id="case-of-a-numeric-variable" class="level4" data-number="4.3.3.1">
 <h4 data-number="4.3.3.1" class="anchored" data-anchor-id="case-of-a-numeric-variable"><span class="header-section-number">4.3.3.1</span> Case of a Numeric Variable</h4>
 <p>If the variable we need to transport is numerical, we can compute the empirical distribution function. For each observation in <span class="math inline">\(S=0\)</span>, we compute :</p>
-<p><span class="math display">\[F_{X_2 | X_1^*, S=0}(x) = \frac{\sum_{i=1}^{n_0} D(x, x_{2,i}) \times \mathrm{I}(x_{2,i} \leq x)}{\sum_{i=1}^{n_0} D(x, x_{2,i})}.\]</span></p>
+<p><span class="math display">\[F_{X_2 | X_1, S=0}(x) = \frac{\sum_{i=1}^{n_0} D(x, x_{2,i}) \times \mathrm{I}(x_{2,i} \leq x)}{\sum_{i=1}^{n_0} D(x, x_{2,i})}.\]</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical distribution function</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(x_S0))</span>

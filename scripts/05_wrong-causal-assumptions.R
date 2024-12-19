@@ -53,7 +53,7 @@ load_all("../seqtransfairness/")
 # Data----
 
 set.seed(123) # set the seed for reproductible results
-n <- 100
+n <- 500
 
 # group s = 0
 X1_0 <- runif(n, 0, 1)
@@ -83,7 +83,24 @@ D_SXY_1 <- tibble(
   X2 = X2_1,
   Y = Y_1
 )
+
 D_SXY <- bind_rows(D_SXY_0, D_SXY_1)
+
+hist(p_0,
+     col = colours[["A"]],
+     breaks = 20,
+     xlim = c(0, 1),
+     ylim = c(0,100),
+     main = "Histogram with probability values for both groups"
+)
+
+# Ajout du second histogramme
+hist(p_1,
+     col = colours[["B"]],
+     breaks = 10,
+     add = TRUE)
+
+legend("topleft", legend = c("p_0", "p_1"), fill = colours[c("A", "B")])
 
 
 # Computation of smoothing parameters (bandwidth) for kernel density estimation
@@ -211,7 +228,7 @@ trans_indep_inc_x2_then_x1 <- seq_trans(
 
 # New Observation----
 
-new_obs <- tibble(S = 0, X1 = 0, X2 = .5)
+new_obs <- tibble(S = 0, X1 = .5, X2 = .5)
 # Transport of this new observation with sequential transport
 new_obs_indep_correct <- seq_trans_new(
   x = trans_indep_correct, newdata = new_obs, data = D_SXY
@@ -249,48 +266,50 @@ dlogistique1 <- matrix(L1, length(vx0), length(vx0))
 # Coordinates of points (new obs and counterfactuals)
 coords_indep <- tibble(
   # 1. (x1, x2)
-  start = c(new_obs$X1, new_obs$X2),
+  start = c(new_obs$X1, new_obs$X2, 0),
   #
   # 2. (T_1(x1 | x2), T_2(x2)), correct assumption
   correct = c(
-    new_obs_indep_correct$X1, new_obs_indep_correct$X2
+    new_obs_indep_correct$X1, new_obs_indep_correct$X2, 1
   ),
   # 3. (T_1(x1), T_2(x2 | x1)), assuming X1 -> X2
   inc_x1_then_x2 = c(
-    new_obs_indep_inc_x1_then_x2$X1, new_obs_indep_inc_x1_then_x2$X2
+    new_obs_indep_inc_x1_then_x2$X1, new_obs_indep_inc_x1_then_x2$X2, 1
   ),
   # 4. (T_1(x1 | x2), T_2(x2)), assuming X2 -> X1
   inc_x2_then_x1 = c(
-    new_obs_indep_inc_x2_then_x1$X1, new_obs_indep_inc_x2_then_x1$X2
+    new_obs_indep_inc_x2_then_x1$X1, new_obs_indep_inc_x2_then_x1$X2, 1
   ),
   #
   # 5. (T_1(x1), x2)
-  correct_interm_x2 = c(new_obs_indep_correct$X1, new_obs$X2),
+  correct_interm_x2 = c(new_obs_indep_correct$X1, new_obs$X2, 0.5),
   # 6. (T_1(x1), x2), assuming X1 -> X2
-  inc_x1_then_x2_interm_x2 = c(new_obs_indep_inc_x1_then_x2$X1, new_obs$X2),
+  inc_x1_then_x2_interm_x2 = c(new_obs_indep_inc_x1_then_x2$X1, new_obs$X2, 0.5),
   # 7. (T_1(x1), x2), assuming X2 -> X1
-  inc_x2_then_x1_interm_x2 = c(new_obs_indep_inc_x2_then_x1$X1, new_obs$X2),
+  inc_x2_then_x1_interm_x2 = c(new_obs_indep_inc_x2_then_x1$X1, new_obs$X2, 0.5),
   #
   # 8. (x1, T(x2))
-  correct_interm_x1 = c(new_obs$X1, new_obs_indep_correct$X2),
+  correct_interm_x1 = c(new_obs$X1, new_obs_indep_correct$X2, 0.5),
   # 9. (T_1(x1), x2), assuming X1 -> X2
-  inc_x1_then_x2_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x1_then_x2$X2),
+  inc_x1_then_x2_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x1_then_x2$X2, 0.5),
   # 10. (T_1(x1), x2), assuming X2 -> X1
-  inc_x2_then_x1_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x2_then_x1$X2),
+  inc_x2_then_x1_interm_x1 = c(new_obs$X1, new_obs_indep_inc_x2_then_x1$X2, 0.5),
   # 11. T*(x1,x2)
-  ot = c(last(counterfactuals_ot$X1), last(counterfactuals_ot$X2))
+  ot = c(last(counterfactuals_ot$X1), last(counterfactuals_ot$X2), 1)
 )
 
 # Predictions with the hypothetical model
 predicted_val <- apply(
   coords_indep,
   2,
-  function(column) logistique_reg(x1 = column[1], x2 = column[2], s = 1)
+  function(column) logistique_reg(
+    x1 = column[1], x2 = column[2], s = column[3]
+  )
 )
 
 predicted_val <- c(
   naive = logistique_reg(
-    x1 = coords_indep$start[1], x2 = coords_indep$start[2], s = 0
+    x1 = coords_indep$start[1], x2 = coords_indep$start[2], s = 1
   ),
   predicted_val
 )
@@ -323,7 +342,7 @@ contour(
 )
 contour(
   vx0, vx0, dlogistique0,
-  levels = (1:9)/10,
+  levels = seq(0.05, 0.95, by = 0.05),
   col = scl,
   add = TRUE,lwd = 2
 )
@@ -331,9 +350,13 @@ axis(1)
 axis(2)
 
 ###
-# Individual (S=0, x1=-2, x2=-1)
+# Individual (S=0, x1=.5, x2=.5)
 ###
-points(coords_indep$start[1], coords_indep$start[2], pch = 19, cex = CeX)
+points(
+  coords_indep$start[1], coords_indep$start[2],
+  pch = 19, cex = CeX, col = "darkblue"
+)
+
 ## Predicted value for the individual, based on factuals
 text(
   coords_indep$start[1], coords_indep$start[2],
@@ -376,14 +399,14 @@ contour(
 # Contour of estimates by the model for s=1
 contour(
   vx0, vx0, dlogistique1,
-  levels = (1:9) / 10,
+  levels = seq(0.05, 0.95, by = 0.05),
   col = scl, lwd=2,
   add = TRUE
 )
 axis(1)
 axis(2)
 ###
-# Individual (s=0, x1=-2, x2=-1)
+# Individual (s=0, x1=.5, x2=.5)
 ###
 points(
   coords_indep$start[1], coords_indep$start[2],
@@ -404,7 +427,7 @@ points(
   pch = 19, cex = CeX, col = colour_correct
 )
 text(
-  coords_indep$correct[1], coords_indep$correct[2],
+  coords_indep$correct[1]-0.1, coords_indep$correct[2]+0.15,
   paste(round(predicted_val[["correct"]]*100,1),"%",sep=""),
   pos = 4, cex = CeX, col = colour_correct
 )
@@ -415,7 +438,7 @@ segments(
 )
 segments(
   x0 = coords_indep$correct_interm_x2[1], y0 = coords_indep$correct_interm_x2[2],
-  x1 = coords_indep$correct[1], y1 = coords_indep$correct[2], ,
+  x1 = coords_indep$correct[1], y1 = coords_indep$correct[2],
   lwd = .8, col = colour_correct
 )
 ## Intermediate point
@@ -457,7 +480,7 @@ points(
 )
 ## New predicted value
 text(
-  coords_indep$inc_x1_then_x2[1], coords_indep$inc_x1_then_x2[2],
+  coords_indep$inc_x1_then_x2[1]+0.6, coords_indep$inc_x1_then_x2[2],
   paste(round(predicted_val[["inc_x1_then_x2"]]*100,1),"%",sep=""),
   pos = 2, cex = CeX, col = colour_inc_x1_then_x2
 )
@@ -491,7 +514,7 @@ points(
 )
 ## New predicted value
 text(
-  coords_indep$inc_x2_then_x1[1], coords_indep$inc_x2_then_x1[2],
+  coords_indep$inc_x2_then_x1[1]+0.3, coords_indep$inc_x2_then_x1[2]-0.1,
   paste(round(predicted_val[["inc_x2_then_x1"]]*100,1),"%",sep=""),
   pos = 3, cex = CeX, col = colour_inc_x2_then_x1
 )
@@ -511,7 +534,7 @@ segments(
 )
 ## New predicted value
 text(
-  coords_indep$ot[1], coords_indep$ot[2]-.2,
+  coords_indep$ot[1]-0.1, coords_indep$ot[2]+0.1,
   paste(round(predicted_val[["ot"]] * 100, 1), "%", sep = ""),
   pos = 4, cex = CeX, col = colour_ot
 )

@@ -112,25 +112,37 @@ D_SXY_1 <- tibble(
 )
 
 D_SXY <- bind_rows(D_SXY_0, D_SXY_1)
-
-hist(p_0, 
-     col = "red",
-     breaks = 20,
-     xlim = c(0, 1),
-     ylim = c(0,100),
-     main = "Histogram with probability values for both groups"
-     )
-
-# Ajout du second histogramme
-hist(p_1, 
-     col = "blue",
-     breaks = 10, 
-     add = TRUE)
-
-legend("topleft", 
-       legend = c("p_0", "p_1"), 
-       fill = c(rgb(1, 0, 0, 0.5), rgb(0, 0, 1, 0.5)))
 ```
+
+Let us have a look at the distribution of the drawn probabilities (and observed thanks to the simulation setup).
+```{r}
+#| fig-cap: Histogram with probability values for both groups
+#| label: fig-hist-drawn-prob
+# Group 0
+par(mar = c(5.1, 4.1, 2.1, 2.1))
+hist(
+  p_0, 
+  col = colours[["A"]],
+  breaks = 20,
+  xlim = c(0, 1),
+  ylim = c(0,100),
+  xlab = "Drawn Probabilities",
+  main = NA
+)
+# Group 1
+hist(
+  p_1, 
+  col = colours[["B"]],
+  breaks = 10, 
+  add = TRUE
+)
+legend(
+  "topleft", 
+  legend = c("p_0", "p_1"), 
+  fill = colours[c("A", "B")]
+)
+```
+
 
 We can visualize the estimated density of the two covariates in each group ($S=0$ and $S=1$).
 
@@ -417,7 +429,6 @@ trans_indep_inc_x2_then_x1 <- seq_trans(
 Let us also get a counterfactual for the additional point $(s=0, x_1=0, x_2=0.5)$.
 
 ```{r define-new_obs}
-#new_obs <- tibble(S = 0, X1 = 0, X2 = .5)
 new_obs <- tibble(S = 0, X1 = .5, X2 = .5)
 ```
 
@@ -529,7 +540,7 @@ Then, we can plot all this information on a graph. The arrows show the path from
 
 ```{r}
 #| code-fold: true
-#| fig-cap: "In the background, level curves for $(x_1,x_2)\\mapsto m(0,x_1,x_2)$. The blue point corresponds to the individual $(s,x_1,x_2)=(s=0,-2,-1)$ (predicted 18.2% by model $m$, and 7.6% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged)."
+#| fig-cap: "In the background, level curves for $(x_1,x_2)\\mapsto m(0,x_1,x_2)$. The blue point corresponds to the individual $(s,x_1,x_2)=(s=0,.5,.5)$ (predicted 62.2% by model $m$)."
 #| label: fig-counterfactuals-new-individual-1
 #| fig-height: 5
 #| fig-width: 5
@@ -560,7 +571,7 @@ contour(
 )
 contour(
   vx0, vx0, dlogistique0,
-  levels = (1:9)/10,
+  levels = seq(0.05, 0.95, by = 0.05),
   col = scl,
   add = TRUE,lwd = 2
 )
@@ -568,7 +579,7 @@ axis(1)
 axis(2)
 
 ###
-# Individual (S=0, x1=-2, x2=-1)
+# Individual (S=0, x1=.5, x2=.5)
 ###
 points(coords_indep$start[1], coords_indep$start[2], pch = 19, cex = CeX, col = "darkblue")
 ## Predicted value for the individual, based on factuals
@@ -583,7 +594,7 @@ text(
 
 ```{r}
 #| code-fold: true
-#| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. The dark blue dot represents an individual $(s,x_1,x_2)=(s=0, 0,.5)$ (predicted 32.1% by model $m$, and 56.2% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged). The other dots represent  counterfactuals $(s=1,x_1^\\star,x_2^\\star)$ according to the assumed causal graph where $x_1$ and $x_2$ are independent (correct DAG, predicted 55.8%), $x_2$ depends on $x_1$ (bottom right path, predicted 54.4%), $x_1$ depends on $x_2$ (top left path, predicted 58.8%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 54.4%)."
+#| fig-cap: "In the background, level curves for$m(1,x_1,x_2)$. The dark blue dot represents an individual $(s,x_1,x_2)=(s=0, 0.5, 0.5)$ (predicted 62.2% by model $m$, and 81.8% if $s$ is set to 1 leaving $x_1$ and $x_2$ unchanged). The other dots represent  counterfactuals $(s=1,x_1^\\star,x_2^\\star)$ according to the assumed causal graph where $x_1$ and $x_2$ are independent (correct DAG, predicted 92.5%), $x_2$ depends on $x_1$ (bottom right path, predicted 91.4%), $x_1$ depends on $x_2$ (top left path, predicted 92.9%). The red square shows the counterfactual obtained with optimal transport (with a predicted value by model $m$ at 90.4%)."
 #| label: fig-counterfactuals-new-individual
 #| fig-height: 5.5
 #| fig-width: 5.5
@@ -593,8 +604,6 @@ colour_inc_x1_then_x2 <- "darkgray"
 colour_inc_x2_then_x1 <- "#56B4E9"
 colour_ot <- "#C93312"
 colour_naive <- "#000000"
-
-
 
 CeX <- 1
 par(mar = c(2, 2, 0, 0))
@@ -620,7 +629,7 @@ contour(
 # Contour of estimates by the model for s=1
 contour(
   vx0, vx0, dlogistique1,
-  levels = (1:9) / 10,
+  levels = seq(0.05, 0.95, by = 0.05),
   col = scl, lwd=2,
   add = TRUE
 )
