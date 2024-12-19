@@ -60,6 +60,9 @@ The functions, placed in the `seqtransfairness/R/` folder are documented in the 
 
 ## Replication Codes
 
+<a href="https://github.com/fer-agathe/sequential_transport/raw/main/replication-codes-v2.zip" class="btn btn-primary btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{< fa brands r-project >}} Download the Replication codes (zip file, 314 KB)</a>
+
+
 
 The codes to replicate the results displayed in the paper are presented in this ebook. The following structure is adopted:
 
@@ -98,7 +101,6 @@ The following Figures from the paper are produced using R:
 - Figure 4: 04_Algorithm-5.R
 - Figure 6: 02_gaussian.R
 - Figure 7: 04_Algorithm-5.R
-- Figure 8: 06_real-data-lawschool.R
 - Figure 9: 06_real-data-lawschool.R
 - Figure 10 (Appendix): 01_optimal_transport.R
 - Figure 11 (Appendix): 01_optimal_transport.R
