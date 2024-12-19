@@ -311,7 +311,7 @@ list_transported[[x_name]] <- transported
 
 ### Transport of the Second Variable
 
-Now that we have transported $X_1$, we need to transport $X_2$ which also depends on $S$, but also on $S_1$. Again, we will need to consider two cases, depending on the type of $X_2$.
+Now that we have transported $X_1$, we need to transport $X_2$ which also depends on $S$, but also on $X_1$. Again, we will need to consider two cases, depending on the type of $X_2$.
 
 Let us redefine the name of the variable of interest:
 ```{r redefine-x_name}
@@ -416,7 +416,7 @@ Then, to transport $X_2$, we need to adopt a different strategy depending on its
 
 If the variable we need to transport is numerical, we can compute the empirical distribution function. For each observation in $S=0$, we compute :
 
-$$F_{X_2 | X_1^*, S=0}(x) = \frac{\sum_{i=1}^{n_0} D(x, x_{2,i}) \times \mathrm{I}(x_{2,i} \leq x)}{\sum_{i=1}^{n_0} D(x, x_{2,i})}.$$
+$$F_{X_2 | X_1, S=0}(x) = \frac{\sum_{i=1}^{n_0} D(x, x_{2,i}) \times \mathrm{I}(x_{2,i} \leq x)}{\sum_{i=1}^{n_0} D(x, x_{2,i})}.$$
 
 ```{r}
 # Empirical distribution function
