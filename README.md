@@ -10,10 +10,7 @@ This repository contains the replication materials for the article titled
 📕 A companion html e-book that explains the codes and provides supplementary materials can be accessed at the following url: 
 <https://fer-agathe.github.io/sequential_transport>.
 
-📄 The new version will soon be uploaded on arXiv. In the meantime, it can be accessed here: 
-https://github.com/fer-agathe/sequential_transport/blob/main/Prep-print-v2.pdf
-
-## Reference of the paper (preprint version 1) (version 2 coming soon)
+## Reference of the paper (preprint on arXiv)
 
 ```
 @misc{fernandesmachado_2024_sequential,
